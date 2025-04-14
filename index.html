@@ -6,28 +6,26 @@
   <title>우무사리가 전하는 말</title>
 
   <!-- 감성 손글씨 폰트 -->
-  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet" />
 
   <style>
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
-      background: url('https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869.jpg
-') no-repeat center center fixed;
-      background-size: cover;
       font-family: 'Gamja Flower', cursive;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
+      transition: background 1s ease-in-out;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.85); /* 반투명 흰색 */
+      background: rgba(255, 255, 255, 0.85); /* 반투명 박스 */
       padding: 30px;
       border-radius: 30px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       max-width: 90%;
       width: 400px;
     }
@@ -45,7 +43,7 @@
       border-radius: 20px;
       font-size: 1.4rem;
       color: #333;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
     }
 
@@ -101,11 +99,27 @@
 
   <div class="container">
     <h1>우무사리가 전하는 말</h1>
-    <div id="message">🐙 잠시만요… 우무사리가 준비 중이에요!</div>
+    <div id="message">🐙 잠시만요… 우무사리가 고민 중이에요!</div>
     <button onclick="showMessage()">다시 들어볼래!</button>
   </div>
 
   <script>
+    // ✅ 1. 배경 이미지 목록
+    const backgrounds = [
+      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869.jpg",
+      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_01.jpg",
+      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_02.jpg",
+      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_03.jpg",
+      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_04.jpg",
+      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_05.jpg"
+    ];
+
+    // ✅ 2. 랜덤 이미지 선택
+    const randomBG = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    document.body.style.background = `url('${randomBG}') no-repeat center center fixed`;
+    document.body.style.backgroundSize = "cover";
+
+    // ✅ 3. 랜덤 메시지
     const messages = [
       "오늘도 고생했어요 🐙",
       "우무사리가 안아줄게요 💛",
