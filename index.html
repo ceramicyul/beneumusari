@@ -116,8 +116,9 @@
 
     // ✅ 2. 랜덤 이미지 선택
     const randomBG = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    document.body.style.background = `url('${randomBG}') no-repeat center center fixed`;
-    document.body.style.backgroundSize = "cover";
+   document.body.style.backgroundSize = "contain";
+document.body.style.backgroundRepeat = "no-repeat";
+document.body.style.backgroundPosition = "center";
 
     // ✅ 3. 랜덤 메시지
     const messages = [
