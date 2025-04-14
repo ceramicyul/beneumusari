@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>우무사리가 전하는 말</title>
+
+  <!-- 감성 손글씨 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: url('https://raw.githubusercontent.com/ceramicyul/umusari-message/main/배경이미지.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Gamja Flower', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.85); /* 반투명 흰색 */
+      padding: 30px;
+      border-radius: 30px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    #message {
+      position: relative;
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      font-size: 1.4rem;
+      color: #333;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+
+    #message::after {
+      content: "";
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 15px 15px 0;
+      border-style: solid;
+      border-color: white transparent transparent;
+    }
+
+    button {
+      background-color: #ffd966;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ffcc33;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        width: 90%;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      #message {
+        font-size: 1.2rem;
+        padding: 15px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>우무사리가 전하는 말</h1>
+    <div id="message">🐙 잠시만요… 우무사리가 준비 중이에요!</div>
+    <button onclick="showMessage()">다시 들어볼래!</button>
+  </div>
+
+  <script>
+    const messages = [
+      "오늘도 고생했어요 🐙",
+      "우무사리가 안아줄게요 💛",
+      "너무 애썼어요, 이제 좀 쉬어요",
+      "괜찮아요, 지금도 충분히 잘하고 있어요",
+      "혼자가 아니에요. 여기 있어요.",
+      "밥은 먹었나요? 안 먹었으면 지금 먹어요!",
+      "지금 이 순간, 당신은 충분히 멋져요.",
+      "우무사리는 당신 편이에요 🐙",
+      "마음이 지칠 땐 하늘을 한 번 올려다보세요 🌤️",
+      "힘들면 기대도 돼요. 우무사리가 옆에 있어요."
+    ];
+
+    function showMessage() {
+      const random = Math.floor(Math.random() * messages.length);
+      document.getElementById("message").innerText = messages[random];
+    }
+
+    window.onload = showMessage;
+  </script>
+</body>
+</html>
