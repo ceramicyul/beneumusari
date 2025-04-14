@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>우무사리가 전하는 말</title>
-
-  <!-- 감성 손글씨 폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" rel="stylesheet" />
-
   <style>
     body {
       margin: 0;
@@ -15,134 +12,100 @@
       height: 100vh;
       font-family: 'Gamja Flower', cursive;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      transition: background 1s ease-in-out;
+      background-color: #fffbe9;
     }
 
-    .container {
-      background: rgba(255, 255, 255, 0.85); /* 반투명 박스 */
-      padding: 30px;
-      border-radius: 30px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      max-width: 90%;
-      width: 400px;
-    }
-
-    h1 {
-      font-size: 2rem;
-      color: #444;
+    h3 {
+      font-size: 1.8rem;
       margin-bottom: 20px;
     }
 
-    #message {
-      position: relative;
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      font-size: 1.4rem;
-      color: #333;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    #moodIcons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
       margin-bottom: 20px;
     }
 
-    #message::after {
-      content: "";
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 15px 15px 0;
-      border-style: solid;
-      border-color: white transparent transparent;
-    }
-
-    button {
-      background-color: #ffd966;
-      border: none;
-      border-radius: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
+    #moodIcons img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
       cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.3s ease;
+      transition: transform 0.2s ease;
     }
 
-    button:hover {
-      background-color: #ffcc33;
-      transform: scale(1.05);
+    #moodIcons img:hover {
+      transform: scale(1.1);
     }
 
-    @media (max-width: 500px) {
-      .container {
-        width: 90%;
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      #message {
-        font-size: 1.2rem;
-        padding: 15px;
-      }
-
-      button {
-        padding: 10px 20px;
-        font-size: 0.95rem;
-      }
+    #messageBox {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      font-size: 1.5rem;
+      max-width: 80%;
+      color: #333;
     }
   </style>
 </head>
 <body>
-
-  <div class="container">
-    <h1>우무사리가 전하는 말</h1>
-    <div id="message">🐙 잠시만요… 우무사리가 고민 중이에요!</div>
-    <button onclick="showMessage()">다시 들어볼래!</button>
+  <h3>지금 우무사리 얼굴 중 하나를 골라봐요 🐙</h3>
+  <div id="moodIcons">
+    <img src="img/KakaoTalk_20250414_173353457_04.jpg" alt="지침" onclick="showMoodMessage('tired')">
+    <img src="img/KakaoTalk_20250414_173353457_02.jpg" alt="슬픔" onclick="showMoodMessage('sad')">
+    <img src="img/KakaoTalk_20250414_173353457_03.jpg" alt="분노" onclick="showMoodMessage('angry')">
+    <img src="img/KakaoTalk_20250414_173353457.jpg.png" alt="외로움" onclick="showMoodMessage('lonely')">
+    <img src="img/KakaoTalk_20250414_173353457_01.png.png" alt="무기력" onclick="showMoodMessage('meh')">
   </div>
+  <div id="messageBox">🐙 우무사리가 준비 중이에요...</div>
 
   <script>
-    // ✅ 1. 배경 이미지 목록
-    const backgrounds = [
-      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869.jpg",
-      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_01.jpg",
-      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_02.jpg",
-      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_03.jpg",
-      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_04.jpg",
-      "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/KakaoTalk_20250322_153719869_05.jpg"
-    ];
+    const moodMessages = {
+      tired: [
+        "너무 애쓰지 마, 조금 쉬자 우무 🧸",
+        "지쳤지? 그럴 땐 그냥 자도 돼 우무 💤",
+        "오늘도 숨만 쉬어줘서 고마워 우무 🫁",
+        "그만해도 돼, 넌 충분히 했어 우무 🌾"
+      ],
+      sad: [
+        "울어도 돼, 참지 마 우무 😭",
+        "네가 아픈 건 진짜 싫어 우무 💔",
+        "마음이 무거울 땐 우무사리한테 기대도 돼 우무 🫂",
+        "눈물 나면 그냥 흘려도 괜찮아 우무 🌧️"
+      ],
+      angry: [
+        "화내도 돼, 그만큼 속상했잖아 우무 🔥",
+        "걔가 이상한 거지, 네가 문제 아냐 우무 😤",
+        "오늘 진짜 잘 참았어 우무 💢",
+        "참느라 너무 고생했어, 이제 나한테 털어놔 우무 🐙"
+      ],
+      lonely: [
+        "혼자 아니야, 나 여기 있어 우무 🐚",
+        "외롭지 않게 옆에 있을게 우무 💫",
+        "토닥토닥, 따뜻하게 감싸줄게 우무 🤗",
+        "네가 웃을 수 있게 내가 옆에 있어줄게 우무 💛"
+      ],
+      meh: [
+        "걍 아무 것도 하기 싫은 날도 있어 우무 😶",
+        "그냥 그런 날엔 아무것도 안 해도 돼 우무 🛌",
+        "멍하게 있어도 괜찮아, 그거 힐링이야 우무 🌊",
+        "마음이 안 움직이는 날도 있어 우무 🐢"
+      ]
+    };
 
-    // ✅ 2. 랜덤 이미지 선택
-    const randomBG = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-
-document.body.style.background = `url('${randomBG}') no-repeat center center fixed`;
-document.body.style.backgroundSize = "contain";
-document.body.style.backgroundRepeat = "no-repeat";
-document.body.style.backgroundPosition = "center";
-document.body.style.backgroundColor = "#fffbe9"; // 배경이 비었을 때 색
-
-    // ✅ 3. 랜덤 메시지
-    const messages = [
-      "오늘도 고생했어요 🐙",
-      "우무사리가 안아줄게요 💛",
-      "너무 애썼어요, 이제 좀 쉬어요",
-      "괜찮아요, 지금도 충분히 잘하고 있어요",
-      "혼자가 아니에요. 여기 있어요.",
-      "밥은 먹었나요? 안 먹었으면 지금 먹어요!",
-      "지금 이 순간, 당신은 충분히 멋져요.",
-      "우무사리는 당신 편이에요 🐙",
-      "마음이 지칠 땐 하늘을 한 번 올려다보세요 🌤️",
-      "힘들면 기대도 돼요. 우무사리가 옆에 있어요."
-    ];
-
-    function showMessage() {
-      const random = Math.floor(Math.random() * messages.length);
-      document.getElementById("message").innerText = messages[random];
+    function showMoodMessage(mood) {
+      const messageList = moodMessages[mood];
+      const randomIndex = Math.floor(Math.random() * messageList.length);
+      const selected = messageList[randomIndex];
+      document.getElementById("messageBox").innerText = selected;
     }
-
-    window.onload = showMessage;
   </script>
 </body>
 </html>
