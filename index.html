@@ -15,10 +15,11 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      transition: background-color 0.3s ease-in-out;
+      background: linear-gradient(135deg, #fffbe9 0%, #ffe8f1 100%);
     }
     .container {
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
       padding: 30px;
       border-radius: 30px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -45,32 +46,27 @@
       100% { transform: rotate(0deg); }
     }
     .bubble {
-      position: relative;
-      background: white;
-      padding: 20px;
-      border-radius: 20px;
-      font-size: 1.4rem;
-      color: #333;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      padding: 20px 24px;
       min-height: 60px;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      max-width: 90%;
+      font-size: 1.3rem;
+      color: #333;
+      transition: all 0.4s ease;
     }
-    .bubble::after {
-      content: "";
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 15px 15px 0;
-      border-style: solid;
-      border-color: white transparent transparent;
-    }
-    .bubble.active {
-      opacity: 1;
-      transform: translateY(0);
+    .umu-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: white;
     }
     .mood-buttons button {
       background-color: #e0f7fa;
@@ -91,63 +87,43 @@
       border: 2px solid #ffcc33;
       box-shadow: 0 0 8px rgba(255, 204, 51, 0.4);
     }
-    button[data-mood="tired"].selected { background-color: #ffe5b4; }
-    button[data-mood="sad"].selected { background-color: #cfe9f1; }
-    button[data-mood="angry"].selected { background-color: #ffd1d1; }
-    button[data-mood="lonely"].selected { background-color: #e3d7ff; }
-    button[data-mood="meh"].selected { background-color: #fff6d6; }
     button.action {
-      background-color: #ffd966;
+      background: linear-gradient(145deg, #fff1a3, #ffe47a);
       border: none;
-      border-radius: 20px;
-      padding: 12px 24px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.3s ease;
-      margin: 5px;
+      border-radius: 30px;
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
       font-family: 'Gamja Flower', cursive;
+      margin-top: 10px;
     }
     button.action:hover {
-      background-color: #ffcc33;
-      transform: scale(1.05);
+      background: linear-gradient(145deg, #ffe36e, #ffd342);
+      transform: scale(1.03);
     }
-    button.bounce {
-      animation: bounce 0.3s ease;
-    }
-    @keyframes bounce {
-      0% { transform: scale(1); }
-      30% { transform: scale(1.15); }
-      50% { transform: scale(0.95); }
-      100% { transform: scale(1); }
-    }
-    body.tired { background-color: #f2e6d9; }
-    body.sad { background-color: #d0e7f9; }
-    body.angry { background-color: #ffe0e0; }
-    body.lonely { background-color: #e5d6ff; }
-    body.meh { background-color: #fdf6e3; }
   </style>
 </head>
-<body class="meh">
+<body>
   <div class="container">
     <h1>우무사리가 전하는 말</h1>
-    <img id="emojiImg" src="https://raw.githubusercontent.com/화남.png" alt="우무사리">
-
-    <button class="action" onclick="toggleMode(); bounceButton(event);" id="toggleButton">모드 전환: 감정 선택</button>
-
-    <div class="mood-buttons" id="moodButtons">
-      <button onclick="showMessage('tired', event); bounceButton(event); wiggleUmu(); blinkUmu('tired'); playPopSound();" data-mood="tired">피곤해요</button>
-      <button onclick="showMessage('sad', event); bounceButton(event); wiggleUmu(); blinkUmu('sad'); playPopSound();" data-mood="sad">속상해요</button>
-      <button onclick="showMessage('angry', event); bounceButton(event); wiggleUmu(); blinkUmu('angry'); playPopSound();" data-mood="angry">화나요</button>
-      <button onclick="showMessage('lonely', event); bounceButton(event); wiggleUmu(); blinkUmu('lonely'); playPopSound();" data-mood="lonely">외로워요</button>
-      <button onclick="showMessage('meh', event); bounceButton(event); wiggleUmu(); blinkUmu('meh'); playPopSound();" data-mood="meh">그냥 그래요</button>
+    <img id="emojiImg" src="img/umu_default.png" alt="우무사리">
+    <div id="message" class="bubble">
+      <img src="img/umu_face_default.png" class="umu-icon" alt="우무아이콘">
+      <span id="messageText">🐙 잠시만요… 우무사리가 고민 중이에요!</span>
     </div>
-
-    <div id="message" class="bubble">🐙 잠시만요… 우무사리가 고민 중이에요!</div>
-    <button class="action" onclick="copyMessage(); bounceButton(event);">복사하기</button>
-    <button class="action" onclick="shareMessage(); bounceButton(event);">친구에게 공유하기</button>
-    <button id="retryButton" class="action" style="display: none;" onclick="resetUmu(); bounceButton(event);">우무에게 또 물어볼래?</button>
-    <audio id="popSound" src="sfx/pop.mp3" preload="auto"></audio>
+    <div class="mood-buttons" id="moodButtons">
+      <button onclick="showMessage('tired', event)" data-mood="tired">피곤해요</button>
+      <button onclick="showMessage('sad', event)" data-mood="sad">속상해요</button>
+      <button onclick="showMessage('angry', event)" data-mood="angry">화나요</button>
+      <button onclick="showMessage('lonely', event)" data-mood="lonely">외로워요</button>
+      <button onclick="showMessage('meh', event)" data-mood="meh">그냥 그래요</button>
+    </div>
+    <button class="action" onclick="copyMessage()">복사하기</button>
+    <button class="action" onclick="shareMessage()">친구에게 공유하기</button>
   </div>
+
+  <audio id="popSound" src="sfx/pop.mp3" preload="auto"></audio>
 
   <script>
     const moodMessages = {
@@ -159,95 +135,55 @@
     };
 
     const emojiImages = {
-      tired: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_sleepy.png",
-      sad: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_crying.png",
-      angry: "angry.png",
-      lonely: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_blank.png",
-      meh: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_default.png"
+      tired: 'img/umu_sleepy.png',
+      sad: 'img/umu_crying.png',
+      angry: 'img/umu_angry.png',
+      lonely: 'img/umu_blank.png',
+      meh: 'img/umu_default.png'
+    };
+
+    const umuFaceIcons = {
+      tired: 'img/umu_face_tired.png',
+      sad: 'img/umu_face_sad.png',
+      angry: 'img/umu_face_angry.png',
+      lonely: 'img/umu_face_lonely.png',
+      meh: 'img/umu_face_default.png'
     };
 
     function showMessage(mood, event) {
-      document.body.className = mood;
-      document.querySelectorAll(".mood-buttons button").forEach(btn => btn.classList.remove("selected"));
-      event.target.classList.add("selected");
+      document.getElementById("emojiImg").src = emojiImages[mood];
+      document.querySelector(".umu-icon").src = umuFaceIcons[mood];
 
-      const messageElement = document.getElementById("message");
-      const umu = document.getElementById("emojiImg");
+      const messageBox = document.getElementById("messageText");
+      const messages = moodMessages[mood];
+      const selected = messages[Math.floor(Math.random() * messages.length)];
 
-      bounceButton(event);
-      setTimeout(() => {
-        blinkUmu(mood);
-        playPopSound();
-      }, 200);
+      messageBox.innerText = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        messageBox.innerText += selected.charAt(i);
+        i++;
+        if (i >= selected.length) clearInterval(interval);
+      }, 40);
 
-      setTimeout(() => {
-        const messages = moodMessages[mood];
-        const selected = messages[Math.floor(Math.random() * messages.length)];
-
-        umu.src = emojiImages[mood];
-        messageElement.classList.remove("active");
-        void messageElement.offsetWidth;
-        messageElement.classList.add("active");
-
-        messageElement.innerText = "";
-        let i = 0;
-        const interval = setInterval(() => {
-          messageElement.innerText += selected.charAt(i);
-          i++;
-          if (i >= selected.length) {
-            clearInterval(interval);
-            setTimeout(() => {
-              document.getElementById("retryButton").style.display = "inline-block";
-            }, 300);
-          }
-        }, 40);
-      }, 400);
-    }
-
-    function bounceButton(event) {
-      const btn = event.currentTarget;
-      btn.classList.remove("bounce");
-      void btn.offsetWidth;
-      btn.classList.add("bounce");
-    }
-
-    function wiggleUmu() {
-      const umu = document.getElementById("emojiImg");
-      umu.classList.remove("wiggle");
-      void umu.offsetWidth;
-      umu.classList.add("wiggle");
-    }
-
-    function blinkUmu(mood) {
-      const umu = document.getElementById("emojiImg");
-      const originalSrc = emojiImages[mood];
-      const blinkSrc = originalSrc.replace(".png", "_blink.png");
-      umu.src = blinkSrc;
-      setTimeout(() => {
-        umu.src = originalSrc;
-      }, 200);
-    }
-
-    function playPopSound() {
-      const audio = document.getElementById("popSound");
-      audio.currentTime = 0;
-      audio.play();
+      playPopSound();
     }
 
     function copyMessage() {
-      const text = document.getElementById("message").innerText;
+      const text = document.getElementById("messageText").innerText;
       navigator.clipboard.writeText(text).then(() => {
         alert("우무의 말이 복사되었어요!");
       });
     }
 
     function shareMessage() {
-      const message = document.getElementById("message").innerText;
+      const message = document.getElementById("messageText").innerText;
       const shareData = {
         title: "우무사리가 전하는 말",
         text: message,
         url: window.location.href
       };
+
       if (navigator.share) {
         navigator.share(shareData).catch(() => {
           alert("공유에 실패했어요 우무!");
@@ -259,18 +195,10 @@
       }
     }
 
-    function resetUmu() {
-      document.getElementById("retryButton").style.display = "none";
-      document.getElementById("message").innerText = "🐙 잠시만요… 우무사리가 고민 중이에요!";
-      document.querySelectorAll(".mood-buttons button").forEach(btn => btn.classList.remove("selected"));
-    }
-
-    function toggleMode() {
-      const moodButtons = document.getElementById("moodButtons");
-      const toggleBtn = document.getElementById("toggleButton");
-      const isVisible = moodButtons.style.display !== "none";
-      moodButtons.style.display = isVisible ? "none" : "block";
-      toggleBtn.innerText = `모드 전환: ${isVisible ? "감정 선택" : "랜덤 위로"}`;
+    function playPopSound() {
+      const audio = document.getElementById("popSound");
+      audio.currentTime = 0;
+      audio.play();
     }
   </script>
 </body>
