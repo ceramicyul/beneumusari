@@ -6,8 +6,64 @@
   <title>우무사리가 전하는 말</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2301@1.0/SinbiFont.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.0/SF_Ssyongsyong.css" />
-  <style>$1
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'SF_Ssyongsyong';
+      background: #fff9eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.5s ease;
+    }
+    body.tired  { background: linear-gradient(135deg, #fffbea, #fff6cc); }
+    body.sad    { background: linear-gradient(135deg, #e0f7ff, #d0ebff); }
+    body.angry  { background: linear-gradient(135deg, #ffe6e6, #ffd6d6); }
+    body.lonely { background: linear-gradient(135deg, #f3eaff, #e5dbff); }
+    body.meh    { background: linear-gradient(135deg, #f8f9fa, #e9ecef); }
 
+    .hidden { display: none !important; }
+    #introScreen {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff9eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 1s ease;
+    }
+    #introScreen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .mode-buttons, .emotion-buttons {
+      display: flex;
+      gap: 10px;
+      margin: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      font-family: 'SF_Ssyongsyong';
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      background-color: #ffe07d;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    button:hover {
+      background-color: #ffcf49;
+    }
     .emotion-buttons button {
       font-size: 1.4rem;
       padding: 12px 20px;
@@ -19,12 +75,75 @@
     .emotion-buttons button:hover {
       transform: scale(1.05);
     }
-    .emotion-buttons button:nth-child(1) { background-color: #fff6cc; color: #8a6d00; } /* tired */
-    .emotion-buttons button:nth-child(2) { background-color: #d0ebff; color: #1c7ed6; } /* sad */
-    .emotion-buttons button:nth-child(3) { background-color: #ffd6d6; color: #d62828; } /* angry */
-    .emotion-buttons button:nth-child(4) { background-color: #e5dbff; color: #5f3dc4; } /* lonely */
-    .emotion-buttons button:nth-child(5) { background-color: #e9ecef; color: #495057; } /* meh */
+    .emotion-buttons button:nth-child(1) { background-color: #fff6cc; color: #8a6d00; }
+    .emotion-buttons button:nth-child(2) { background-color: #d0ebff; color: #1c7ed6; }
+    .emotion-buttons button:nth-child(3) { background-color: #ffd6d6; color: #d62828; }
+    .emotion-buttons button:nth-child(4) { background-color: #e5dbff; color: #5f3dc4; }
+    .emotion-buttons button:nth-child(5) { background-color: #e9ecef; color: #495057; }
 
+    #umu {
+      width: 150px;
+      transition: transform 0.2s ease;
+    }
+    #umu.bounce {
+      animation: bounce 0.4s ease;
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      30% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
+    }
+    #balloon {
+      background: white;
+      padding: 15px 20px;
+      border-radius: 25px;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 80%;
+      font-size: 1.3rem;
+      white-space: pre-wrap;
+      position: relative;
+      font-family: 'SinbiFont';
+    }
+    #balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: white transparent transparent transparent;
+    }
+    #balloon.hidden-style {
+      border: 2px dashed #ff69b4;
+      background: #fff0f8;
+      animation: sparkle 1.5s infinite alternate;
+    }
+    @keyframes sparkle {
+      0% { box-shadow: 0 0 10px #ff9de2; }
+      100% { box-shadow: 0 0 20px #ffa7f0; }
+    }
+    #hidden-label {
+      font-size: 0.8rem;
+      color: #e91e63;
+      position: absolute;
+      top: -18px;
+      left: 12px;
+    }
+  #reselectBtn {
+      font-family: 'SF_Ssyongsyong';
+      font-size: 1.1rem;
+      margin-top: 10px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      background-color: #ffd966;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+$1
 </head>
 <body>
   <div id="introScreen">
@@ -41,7 +160,7 @@
 
   <div id="balloon" class="hidden">
     <div id="hidden-label" class="hidden">✨ hidden! ✨</div>
-    <div id="messageText" style="white-space: pre-wrap; font-family: 'SinbiFont', sans-serif;">우무의 위로가 여기에!</div>
+    <div id="messageText" style="white-space: pre-wrap; font-family: 'SinbiFont';">우무의 위로가 여기에!</div>
   </div>
 
   <div class="emotion-buttons hidden">
@@ -50,9 +169,9 @@
     <button onclick="showMessage('angry')">😠 화났어</button>
     <button onclick="showMessage('lonely')">🥺 외로워</button>
     <button onclick="showMessage('meh')">😶 그냥 그래</button>
-  </div>
+  <button id="reselectBtn" class="hidden" onclick="resetEmotion()">다시 선택하기</button>
 
-  <script>
+$1
     const umuImg = document.getElementById("umu");
     const balloon = document.getElementById("balloon");
     const msgText = document.getElementById("messageText");
@@ -62,24 +181,24 @@
     const introScreen = document.getElementById("introScreen");
 
     const moodMessages = {
-      tired: ["조금 쉬어도 괜찮우무...", "숨만 쉬어줘도 고마워 우무!"],
+      tired: ["조금만 쉬어도 괜찮아 우무...", "오늘도 숨만 쉬어줘서 고마워 우무!"],
       sad: ["속상했지? 안아줄게 우무...", "울어도 괜찮아 우무..."],
-      angry: ["그만 참아도 돼 우무!", "화날만 했우무!"],
-      lonely: ["혼자 아냐 우무가 있어!", "내가 옆에 있우무..."],
-      meh: ["아무것도 안 해도 돼 우무!", "그냥 그런 날도 있우무"]
+      angry: ["그만 참아도 돼 우무!", "화날만 했어 우무!"],
+      lonely: ["혼자 아냐 우무가 있어!", "내가 옆에 있어 우무..."],
+      meh: ["아무것도 안 해도 돼 우무!", "그냥 그런 날도 있어 우무"]
     };
 
     const hiddenMessages = [
       "우무만 알고 있는 비밀 응원이야! ✨",
       "아무도 모르게 널 응원 중이야 우무!",
-      "이건 히든 메시지야 우무만 줄 수 있우무!",
+      "이건 히든 메시지야 우무만 줄 수 있어!",
       "세상에 단 하나, 널 위한 위로 우무!",
-      "조용히 귀 기울여봐, 우무가 말하고 있우무!",
+      "조용히 귀 기울여봐, 우무가 말하고 있어!",
       "마음이 힘들 땐 이 메시지만 생각해 우무",
       "비밀이야! 하지만 넌 알아도 돼 우무",
       "너 진짜 소중한 사람이야, 진짜야 우무",
       "나만 아는 너의 멋진 점, 오늘 말해줄게 우무",
-      "진짜 괜찮아, 우무가 확인했우무!"
+      "진짜 괜찮아, 우무가 확인했어!"
     ];
 
     const umuFaces = {
@@ -102,20 +221,15 @@
       }
     }
 
-    function showMessage(mood) {
-      bounceUmu();
-      umuImg.src = umuFaces[mood] || 'img/umu_default.png';
-      const messages = moodMessages[mood];
-      const msg = messages[Math.floor(Math.random() * messages.length)];
-      hiddenLabel.classList.add("hidden");
-      balloon.classList.remove("hidden-style");
-      typeText(msg);
+    $1
+      document.getElementById("reselectBtn").classList.remove("hidden");
     }
 
     function showRandomMessage() {
-      bounceUmu();
       const allMoods = Object.keys(moodMessages);
       const mood = allMoods[Math.floor(Math.random() * allMoods.length)];
+      document.body.className = mood;
+      bounceUmu();
       umuImg.src = umuFaces[mood] || 'img/umu_default.png';
       const useHidden = Math.random() < 0.1;
       let msg;
@@ -152,6 +266,12 @@
         introScreen.classList.add("fade-out");
       }, 1200);
     };
-  </script>
+      function resetEmotion() {
+      balloon.classList.add("hidden");
+      document.getElementById("reselectBtn").classList.add("hidden");
+      emotions.classList.remove("hidden");
+    }
+
+$1
 </body>
 </html>
