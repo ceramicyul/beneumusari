@@ -1,42 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>우무사리가 전하는 말</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
   <style>
     body {
-  font-family: 'Gowun Dodum', sans-serif;
-  font-size: 1.2rem;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  background-color: #ffe07d;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-}
+      margin: 0;
+      padding: 0;
+      background: #fff9eb;
+      font-family: 'Gowun Dodum', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
     }
-
     h1 {
-      margin-bottom: 20px;
-      font-size: 2rem;
-      color: #333;
+      margin-top: 20px;
     }
-
-    .emotion-buttons, .mode-buttons {
+    .mode-buttons, .emotion-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       margin: 20px;
     }
-
-    .emotion-buttons button, .mode-buttons button, #resetBtn {
-      font-size: 1.2rem;
-      padding: 10px 20px;
+    button {
+      font-family: 'Gowun Dodum', sans-serif;
+      font-size: 1rem;
+      padding: 10px 16px;
       border: none;
       border-radius: 20px;
       background-color: #ffe07d;
@@ -44,57 +39,66 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
     }
-
-    .emotion-buttons button:hover,
-    .mode-buttons button:hover,
-    #resetBtn:hover {
-      background-color: #ffcd38;
-      transform: scale(1.05);
+    button:hover {
+      background-color: #ffd43b;
     }
-
     #umu {
-      width: 150px;
-      margin-bottom: 20px;
+      width: 120px;
       display: none;
+      margin-bottom: 16px;
     }
-
     #messageBox {
-      font-family: 'Gowun Dodum', sans-serif;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       background: white;
-      padding: 20px;
-      border-radius: 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 18px;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       max-width: 80%;
       display: none;
       position: relative;
+      white-space: pre-wrap;
     }
-
     #messageBox::after {
       content: "";
       position: absolute;
-      bottom: -15px;
+      bottom: -12px;
       left: 50%;
       transform: translateX(-50%);
-      border-width: 15px 15px 0;
+      border-width: 12px 12px 0;
       border-style: solid;
       border-color: white transparent transparent;
     }
-
+    #messageBox.hidden {
+      border: 2px dashed #ff69b4;
+      background: #fff0f8;
+      animation: sparkle 1.5s infinite alternate;
+    }
+    @keyframes sparkle {
+      0% { box-shadow: 0 0 10px #ffb3d1; }
+      100% { box-shadow: 0 0 20px #ffa7f0; }
+    }
+    #hidden-label {
+      font-size: 0.9rem;
+      color: #e91e63;
+      margin-bottom: 8px;
+      display: none;
+    }
     #resetBtn {
       display: none;
       margin-top: 20px;
     }
+    @media (max-width: 500px) {
+      #umu { width: 90px; }
+      #messageBox { font-size: 1rem; padding: 14px; }
+    }
   </style>
 </head>
 <body>
-
   <h1>우무사리가 전하는 말</h1>
-
   <div class="mode-buttons">
-    <button onclick="startEmotionMode()">감정 모드</button>
+    <button onclick="setMode('emotion')">감정 모드</button>
+    <button onclick="setMode('random')">랜덤 모드</button>
   </div>
-
   <div class="emotion-buttons" style="display: none;">
     <button onclick="showMessage('tired')">😪 피곤해</button>
     <button onclick="showMessage('sad')">😢 속상해</button>
@@ -102,50 +106,85 @@
     <button onclick="showMessage('lonely')">🥺 외로워</button>
     <button onclick="showMessage('meh')">😶 그냥 그래</button>
   </div>
-
   <img id="umu" src="img/umu_default.png" alt="우무사리">
-  <div id="messageBox">우무의 위로가 여기에!</div>
-  <button id="resetBtn" onclick="resetEmotion()">다시 선택하기</button>
+  <div id="hidden-label">✨ Hidden! ✨</div>
+  <div id="messageBox"></div>
+  <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
 
   <script>
     const messages = {
-      tired: ["많이 지쳤지? 푹 쉬어야 해 우무...", "오늘도 버텨줘서 고마워 우무!"],
+      tired: ["조금만 쉬어도 괜찮아 우무...", "오늘도 버텨줘서 고마워 우무!"],
       sad: ["슬플 땐 울어도 돼 우무...", "마음이 아프면 말해도 괜찮아 우무!"],
       angry: ["화났구나! 참느라 수고했어 우무!", "속상한 일 있었지? 얘기해도 돼 우무!"],
-      lonely: ["혼자 아니야, 우무가 있어!", "외로워도 괜찮아, 여기 함께 있어 우무!"],
-      meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮아 우무."]
+      lonely: ["혼자 아니야, 우무가 있어!", "외로워도 괜찮아, 함께 있어 우무!"],
+      meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮아 우무"]
     };
 
-    function startEmotionMode() {
-      document.querySelector('.mode-buttons').style.display = 'none';
-      document.querySelector('.emotion-buttons').style.display = 'flex';
-      document.getElementById('umu').style.display = 'none';
-      document.getElementById('messageBox').style.display = 'none';
-      document.getElementById('resetBtn').style.display = 'none';
+    const hiddenMessages = [
+      "우무만 알고 있는 비밀 응원이야! ✨",
+      "진짜 괜찮아, 우무가 확인했어!",
+      "이건 히든 메시지야 우무만 줄 수 있어!",
+      "나만 아는 너의 멋진 점, 오늘 말해줄게 우무",
+      "세상에 단 하나, 널 위한 위로 우무!"
+    ];
+
+    const umu = document.getElementById('umu');
+    const msgBox = document.getElementById('messageBox');
+    const resetBtn = document.getElementById('resetBtn');
+    const emotionBtns = document.querySelector('.emotion-buttons');
+    const modeBtns = document.querySelector('.mode-buttons');
+    const hiddenLabel = document.getElementById('hidden-label');
+    let currentMode = '';
+
+    function setMode(mode) {
+      currentMode = mode;
+      modeBtns.style.display = 'none';
+      umu.style.display = 'none';
+      msgBox.style.display = 'none';
+      resetBtn.style.display = 'none';
+      hiddenLabel.style.display = 'none';
+      msgBox.classList.remove("hidden");
+      if (mode === 'emotion') {
+        emotionBtns.style.display = 'flex';
+      } else {
+        const moods = Object.keys(messages);
+        const randomMood = moods[Math.floor(Math.random() * moods.length)];
+        showMessage(randomMood);
+      }
     }
 
     function showMessage(mood) {
-      const umu = document.getElementById('umu');
-      const messageBox = document.getElementById('messageBox');
-      const resetBtn = document.getElementById('resetBtn');
-      const moodList = messages[mood];
-      const randomMsg = moodList[Math.floor(Math.random() * moodList.length)];
-
-      umu.src = `img/umu_${mood}.png`;  // 각 감정 이미지가 img 폴더에 있어야 함
+      const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+      if (isHidden) {
+        hiddenLabel.style.display = 'block';
+        msgBox.classList.add("hidden");
+        msgBox.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+        umu.src = `img/umu_default.png`;
+      } else {
+        hiddenLabel.style.display = 'none';
+        msgBox.classList.remove("hidden");
+        const msgList = messages[mood];
+        msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
+        umu.src = `img/umu_${mood}.png`;
+      }
+      msgBox.style.display = 'block';
       umu.style.display = 'block';
-      messageBox.innerText = randomMsg;
-      messageBox.style.display = 'block';
-      document.querySelector('.emotion-buttons').style.display = 'none';
+      emotionBtns.style.display = 'none';
       resetBtn.style.display = 'inline-block';
     }
 
-    function resetEmotion() {
-      document.querySelector('.emotion-buttons').style.display = 'flex';
-      document.getElementById('messageBox').style.display = 'none';
-      document.getElementById('resetBtn').style.display = 'none';
-      document.getElementById('umu').style.display = 'none';
+    function resetPage() {
+      msgBox.style.display = 'none';
+      umu.style.display = 'none';
+      resetBtn.style.display = 'none';
+      hiddenLabel.style.display = 'none';
+      msgBox.classList.remove("hidden");
+      if (currentMode === 'emotion') {
+        emotionBtns.style.display = 'flex';
+      } else {
+        setMode('random');
+      }
     }
   </script>
-
 </body>
 </html>
