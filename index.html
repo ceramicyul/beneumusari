@@ -9,6 +9,7 @@
   <style>
     * { box-sizing: border-box; }
     body {
+      margin: 0;
       font-family: 'SF_Ssyongsyong';
       background: #fff9eb;
       display: flex;
@@ -18,7 +19,24 @@
       height: 100vh;
       overflow: hidden;
     }
-    .hidden { display: none; }
+    .hidden { display: none !important; }
+    #introScreen {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff9eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 1s ease;
+    }
+    #introScreen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
     .mode-buttons, .emotion-buttons {
       display: flex;
       gap: 10px;
@@ -27,7 +45,7 @@
       justify-content: center;
     }
     button {
-      font-family: 'SinbiFont';
+      font-family: 'SF_Ssyongsyong';
       font-size: 1.2rem;
       padding: 10px 20px;
       border-radius: 25px;
@@ -61,6 +79,7 @@
       font-size: 1.3rem;
       white-space: pre-wrap;
       position: relative;
+      font-family: 'SinbiFont';
     }
     #balloon.hidden-style {
       border: 2px dashed #ff69b4;
@@ -81,12 +100,22 @@
   </style>
 </head>
 <body>
+  <div id="introScreen">
+    <img src="img/umu_intro.png" style="width:180px; opacity:0.6;">
+    <p style="margin-top: 12px; font-size: 1.2rem; color: #444;">우무사리가 기다리고 있어요…</p>
+  </div>
+
   <div class="mode-buttons">
     <button onclick="enterMode('emotion')">감정 모드</button>
     <button onclick="enterMode('random')">랜덤 모드</button>
   </div>
 
   <img id="umu" src="img/umu_default.png" class="hidden" alt="우무사리">
+
+  <div id="balloon" class="hidden">
+    <div id="hidden-label" class="hidden">✨ hidden! ✨</div>
+    <div id="messageText" style="white-space: pre-wrap;">우무의 위로가 여기에!</div>
+  </div>
 
   <div class="emotion-buttons hidden">
     <button onclick="showMessage('tired')">😪 피곤해</button>
@@ -96,17 +125,14 @@
     <button onclick="showMessage('meh')">😶 그냥 그래</button>
   </div>
 
-  <div id="balloon" class="hidden">
-    <div id="hidden-label" class="hidden">✨ hidden! ✨</div>
-    <div id="messageText">우무의 위로가 여기에!</div>
-  </div>
-
   <script>
     const umuImg = document.getElementById("umu");
     const balloon = document.getElementById("balloon");
     const msgText = document.getElementById("messageText");
     const hiddenLabel = document.getElementById("hidden-label");
     const emotions = document.querySelector(".emotion-buttons");
+    const modeButtons = document.querySelector(".mode-buttons");
+    const introScreen = document.getElementById("introScreen");
 
     const moodMessages = {
       tired: ["조금만 쉬어도 괜찮아 우무...", "오늘도 숨만 쉬어줘서 고마워 우무!"],
@@ -138,7 +164,7 @@
     };
 
     function enterMode(mode) {
-      document.querySelector(".mode-buttons").classList.add("hidden");
+      modeButtons.classList.add("hidden");
       umuImg.classList.remove("hidden");
       balloon.classList.remove("hidden");
       if (mode === 'emotion') {
@@ -164,7 +190,7 @@
       const allMoods = Object.keys(moodMessages);
       const mood = allMoods[Math.floor(Math.random() * allMoods.length)];
       umuImg.src = umuFaces[mood] || 'img/umu_default.png';
-      const useHidden = Math.random() < 0.1; // 10% 확률
+      const useHidden = Math.random() < 0.1;
       let msg;
       if (useHidden) {
         msg = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
@@ -179,7 +205,6 @@
     }
 
     function typeText(text) {
-      msgText.style.fontFamily = 'SinbiFont';
       msgText.innerText = "";
       let i = 0;
       const interval = setInterval(() => {
@@ -191,9 +216,15 @@
 
     function bounceUmu() {
       umuImg.classList.remove("bounce");
-      void umuImg.offsetWidth; // 리플로우 트릭
+      void umuImg.offsetWidth;
       umuImg.classList.add("bounce");
     }
+
+    window.onload = function () {
+      setTimeout(() => {
+        introScreen.classList.add("fade-out");
+      }, 1200);
+    };
   </script>
 </body>
 </html>
