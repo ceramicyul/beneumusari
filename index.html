@@ -15,8 +15,16 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      background: linear-gradient(135deg, #fffbe9 0%, #ffe8f1 100%);
+      overflow: hidden;
+      transition: background 0.5s ease-in-out;
     }
+
+    body.tired  { background: linear-gradient(135deg, #fdf2e9, #fdebd0); }
+    body.sad    { background: linear-gradient(135deg, #e6f0fa, #d4e6f1); }
+    body.angry  { background: linear-gradient(135deg, #ffe0e0, #ffd6d6); }
+    body.lonely { background: linear-gradient(135deg, #ede7f6, #e0d7ff); }
+    body.meh    { background: linear-gradient(135deg, #fefae0, #fdf6e3); }
+
     .container {
       background: rgba(255, 255, 255, 0.6);
       backdrop-filter: blur(12px);
@@ -35,15 +43,6 @@
       width: 120px;
       margin-bottom: 20px;
       transition: transform 0.3s ease;
-    }
-    #emojiImg.wiggle {
-      animation: umuWiggle 0.4s ease;
-    }
-    @keyframes umuWiggle {
-      0% { transform: rotate(0deg); }
-      20% { transform: rotate(-5deg); }
-      50% { transform: rotate(5deg); }
-      100% { transform: rotate(0deg); }
     }
     .bubble {
       display: flex;
@@ -68,23 +67,32 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       background: white;
     }
+    .mood-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
     .mood-buttons button {
-      background-color: #e0f7fa;
+      background-color: #fef6d5;
       border: none;
-      border-radius: 12px;
-      padding: 8px 16px;
+      border-radius: 24px;
+      padding: 10px 18px;
       font-size: 1rem;
-      margin: 5px;
-      cursor: pointer;
       font-family: 'Gamja Flower', cursive;
-      transition: background-color 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .mood-buttons button:hover {
-      background-color: #b2ebf2;
+      background-color: #fff0a5;
+      transform: scale(1.05);
     }
     .mood-buttons button.selected {
-      font-weight: bold;
-      border: 2px solid #ffcc33;
+      background-color: #ffd966;
       box-shadow: 0 0 8px rgba(255, 204, 51, 0.4);
     }
     button.action {
@@ -96,11 +104,16 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
       font-family: 'Gamja Flower', cursive;
-      margin-top: 10px;
+      margin-top: 12px;
     }
     button.action:hover {
       background: linear-gradient(145deg, #ffe36e, #ffd342);
       transform: scale(1.03);
+    }
+    #todayLog {
+      margin-top: 10px;
+      font-size: 1rem;
+      color: #666;
     }
   </style>
 </head>
@@ -113,14 +126,15 @@
       <span id="messageText">🐙 잠시만요… 우무사리가 고민 중이에요!</span>
     </div>
     <div class="mood-buttons" id="moodButtons">
-      <button onclick="showMessage('tired', event)" data-mood="tired">피곤해요</button>
-      <button onclick="showMessage('sad', event)" data-mood="sad">속상해요</button>
-      <button onclick="showMessage('angry', event)" data-mood="angry">화나요</button>
-      <button onclick="showMessage('lonely', event)" data-mood="lonely">외로워요</button>
-      <button onclick="showMessage('meh', event)" data-mood="meh">그냥 그래요</button>
+      <button onclick="showMessage('tired', event)">😪 피곤해요</button>
+      <button onclick="showMessage('sad', event)">😢 속상해요</button>
+      <button onclick="showMessage('angry', event)">😠 화나요</button>
+      <button onclick="showMessage('lonely', event)">🥺 외로워요</button>
+      <button onclick="showMessage('meh', event)">😶 그냥 그래요</button>
     </div>
     <button class="action" onclick="copyMessage()">복사하기</button>
     <button class="action" onclick="shareMessage()">친구에게 공유하기</button>
+    <div id="todayLog"></div>
   </div>
 
   <audio id="popSound" src="sfx/pop.mp3" preload="auto"></audio>
@@ -151,8 +165,11 @@
     };
 
     function showMessage(mood, event) {
+      document.body.className = mood;
       document.getElementById("emojiImg").src = emojiImages[mood];
       document.querySelector(".umu-icon").src = umuFaceIcons[mood];
+      document.querySelectorAll(".mood-buttons button").forEach(btn => btn.classList.remove("selected"));
+      event.currentTarget.classList.add("selected");
 
       const messageBox = document.getElementById("messageText");
       const messages = moodMessages[mood];
@@ -167,6 +184,8 @@
       }, 40);
 
       playPopSound();
+      saveMoodLog(mood);
+      updateTodayLog();
     }
 
     function copyMessage() {
@@ -183,7 +202,6 @@
         text: message,
         url: window.location.href
       };
-
       if (navigator.share) {
         navigator.share(shareData).catch(() => {
           alert("공유에 실패했어요 우무!");
@@ -200,6 +218,26 @@
       audio.currentTime = 0;
       audio.play();
     }
+
+    function saveMoodLog(mood) {
+      const today = new Date().toISOString().split('T')[0];
+      const logs = JSON.parse(localStorage.getItem("umuMoodLogs")) || {};
+      logs[today] = mood;
+      localStorage.setItem("umuMoodLogs", JSON.stringify(logs));
+    }
+
+    function updateTodayLog() {
+      const today = new Date().toISOString().split('T')[0];
+      const logs = JSON.parse(localStorage.getItem("umuMoodLogs")) || {};
+      const mood = logs[today];
+      if (mood) {
+        document.getElementById("todayLog").innerText = `오늘의 감정: ${mood} 우무`; 
+      } else {
+        document.getElementById("todayLog").innerText = "";
+      }
+    }
+
+    window.onload = updateTodayLog;
   </script>
 </body>
 </html>
