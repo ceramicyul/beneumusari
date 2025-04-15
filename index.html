@@ -272,7 +272,12 @@
       }
     }
 
-    window.onload = updateTodayLog;
+    window.onload = function () {
+  updateTodayLog();
+  const moods = ['tired', 'sad', 'angry', 'lonely', 'meh'];
+  const randomMood = moods[Math.floor(Math.random() * moods.length)];
+  showMessage(randomMood, { currentTarget: document.querySelector(`[onclick*="${randomMood}"]`) });
+};
   </script>
 </body>
 </html>
