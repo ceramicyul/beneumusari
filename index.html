@@ -77,6 +77,7 @@
       font-size: 1rem;
       margin: 5px;
       cursor: pointer;
+      font-family: 'Gamja Flower', cursive;
     }
 
     .mood-buttons button:hover {
@@ -100,6 +101,7 @@
       cursor: pointer;
       transition: transform 0.2s ease, background-color 0.3s ease;
       margin: 5px;
+      font-family: 'Gamja Flower', cursive;
     }
 
     button.action:hover {
@@ -114,131 +116,3 @@
     body.meh { background-color: #fdf6e3; }
   </style>
 </head>
-<body class="meh">
-  <div class="container">
-    <h1>우무사리가 전하는 말</h1>
-    <img id="emojiImg" src="https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_default.png" alt="우무사리">
-
-    <button class="action" onclick="toggleMode()" id="toggleButton">모드 전환: 감정 선택</button>
-
-    <div class="mood-buttons" id="moodButtons">
-      <button onclick="showMessage('tired', event)">피곤해요</button>
-      <button onclick="showMessage('sad', event)">속상해요</button>
-      <button onclick="showMessage('angry', event)">화나요</button>
-      <button onclick="showMessage('lonely', event)">외로워요</button>
-      <button onclick="showMessage('meh', event)">그냥 그래요</button>
-    </div>
-
-    <div id="message" class="bubble">🐙 잠시만요… 우무사리가 고민 중이에요!</div>
-    <button class="action" onclick="copyMessage()">복사하기</button>
-  </div>
-
-  <script>
-    const moodMessages = {
-      tired: ["많이 힘들었구나 우무 🧸", "하루종일 고생했어 우무 💤"],
-      sad: ["마음이 아프면 울어도 돼 우무 💧", "괜찮아질 거야 우무 🌧️"],
-      angry: ["화내도 괜찮아 우무 🔥", "너무 참지 않아도 돼 우무 💢"],
-      lonely: ["혼자 아냐 우무가 있잖아 🐚", "우무가 안아줄게 우무 🤗"],
-      meh: ["그냥 그런 날도 있는 거야 우무 😶", "아무것도 안 해도 괜찮아 우무 🐢"]
-    };
-
-    const secretMessages = [
-      "오늘의 우무는 특별한 말을 준비했어요 우무 ✨",
-      "넌 아주 귀한 존재야, 진짜야 우무 💖",
-      "아무도 몰라도, 나는 네 편이야 우무 🐙"
-    ];
-
-    const emojiImages = {
-      tired: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_sleepy.png",
-      sad: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_crying.png",
-      angry: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_angry.png",
-      lonely: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_blank.png",
-      meh: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_default.png",
-      secret: "https://raw.githubusercontent.com/ceramicyul/umusari-message/main/img/umu_shiny.png"
-    };
-
-    let mode = "random";
-
-    function toggleMode() {
-      mode = mode === "random" ? "mood" : "random";
-      document.getElementById("moodButtons").style.display = mode === "mood" ? "block" : "none";
-      document.getElementById("toggleButton").innerText = `모드 전환: ${mode === "mood" ? "랜덤 위로" : "감정 선택"}`;
-      if (mode === "random") showDailyRandomMessage();
-    }
-
-    function getRandomDailyMessage() {
-      return Math.random() < 0.1
-        ? { msg: secretMessages[Math.floor(Math.random() * secretMessages.length)], mood: "secret" }
-        : (() => {
-            const all = Object.entries(moodMessages).flatMap(([k, v]) => v.map(m => ({ msg: m, mood: k })));
-            return all[Math.floor(Math.random() * all.length)];
-          })();
-    }
-
-    function showDailyRandomMessage() {
-      const today = new Date().toISOString().slice(0, 10);
-      const stored = JSON.parse(localStorage.getItem("dailyUmuMessage"));
-
-      let selected;
-      if (stored && stored.date === today) {
-        selected = stored;
-      } else {
-        selected = getRandomDailyMessage();
-        localStorage.setItem("dailyUmuMessage", JSON.stringify({ date: today, ...selected }));
-      }
-
-      document.body.className = selected.mood === "secret" ? "meh" : selected.mood;
-      document.querySelectorAll(".mood-buttons button").forEach(btn => btn.classList.remove("selected"));
-      document.getElementById("emojiImg").src = emojiImages[selected.mood] || emojiImages["meh"];
-
-      const messageElement = document.getElementById("message");
-      messageElement.classList.remove("active");
-      void messageElement.offsetWidth;
-      messageElement.classList.add("active");
-
-      messageElement.innerText = "";
-      let i = 0;
-      const interval = setInterval(() => {
-        messageElement.innerText += selected.msg.charAt(i);
-        i++;
-        if (i >= selected.msg.length) clearInterval(interval);
-      }, 40);
-    }
-
-    function showMessage(mood, event) {
-      document.body.className = mood;
-      document.querySelectorAll(".mood-buttons button").forEach(btn => btn.classList.remove("selected"));
-      event.target.classList.add("selected");
-      document.getElementById("emojiImg").src = emojiImages[mood];
-
-      const messages = moodMessages[mood];
-      const randomIndex = Math.floor(Math.random() * messages.length);
-      const selected = messages[randomIndex];
-      const messageElement = document.getElementById("message");
-
-      messageElement.classList.remove("active");
-      void messageElement.offsetWidth;
-      messageElement.classList.add("active");
-
-      messageElement.innerText = "";
-      let i = 0;
-      const interval = setInterval(() => {
-        messageElement.innerText += selected.charAt(i);
-        i++;
-        if (i >= selected.length) clearInterval(interval);
-      }, 40);
-    }
-
-    function copyMessage() {
-      const text = document.getElementById("message").innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("우무의 말이 복사되었어요!");
-      });
-    }
-
-    window.onload = () => {
-      toggleMode(); // 시작 시 랜덤 모드 자동 실행
-    };
-  </script>
-</body>
-</html>
