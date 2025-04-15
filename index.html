@@ -97,10 +97,6 @@
       align-items: center;
       gap: 6px;
     }
-    .mood-buttons button img {
-      width: 24px;
-      height: 24px;
-    }
     .mood-buttons button:hover {
       background-color: #fff0a5;
       transform: scale(1.05);
@@ -131,3 +127,152 @@
     }
   </style>
 </head>
+<body>
+  <div class="container">
+    <h1>우무사리가 전하는 말</h1>
+    <img id="emojiImg" src="img/umu_default.png" alt="우무사리">
+    <div id="message" class="bubble">
+      <img src="img/umu_face_default.png" class="umu-icon" alt="우무아이콘">
+      <span id="messageText">🐙 잠시만요… 우무사리가 고민 중이에요!</span>
+    </div>
+    <div class="mood-buttons" id="moodButtons">
+      <button onclick="showMessage('tired', event)">😪 피곤해요</button>
+      <button onclick="showMessage('sad', event)">😢 속상해요</button>
+      <button onclick="showMessage('angry', event)">😠 화나요</button>
+      <button onclick="showMessage('lonely', event)">🥺 외로워요</button>
+      <button onclick="showMessage('meh', event)">😶 그냥 그래요</button>
+    </div>
+    <button class="action" onclick="copyMessage()">복사하기</button>
+    <button class="action" onclick="shareMessage()">친구에게 공유하기</button>
+    <div id="todayLog"></div>
+  </div>
+
+  <audio id="popSound" src="sfx/pop.mp3" preload="auto"></audio>
+
+  <script>
+    const moodMessages = {
+      tired: [
+        "많이 힘들었구나 우무 🧸",
+        "하루종일 고생했어 우무 💤",
+        "오늘도 숨만 쉬어줘서 고마워 우무 🫁",
+        "너무 애쓰지 마, 조금 쉬자 우무 🌾"
+      ],
+      sad: [
+        "마음이 아프면 울어도 돼 우무 💧",
+        "괜찮아질 거야 우무 🌧️",
+        "울어도 괜찮아, 참지 말자 우무 🫂",
+        "토닥토닥, 우무가 여기 있어 우무 🌙"
+      ],
+      angry: [
+        "화내도 괜찮아 우무 🔥",
+        "너무 참지 않아도 돼 우무 💢",
+        "네가 나빠서가 아니야 우무 😠",
+        "지금 이 감정도 중요해 우무 💬"
+      ],
+      lonely: [
+        "혼자 아냐 우무가 있잖아 🐚",
+        "우무가 안아줄게 우무 🤗",
+        "내가 항상 너 편이야 우무 🌟",
+        "외롭지 않게 옆에 있을게 우무 💛"
+      ],
+      meh: [
+        "그냥 그런 날도 있는 거야 우무 😶",
+        "아무것도 안 해도 괜찮아 우무 🐢",
+        "멍하게 있어도 괜찮아, 그게 힐링이야 우무 🌊",
+        "마음이 안 움직이는 날도 있어 우무 🛌"
+      ]
+    };
+
+    const emojiImages = {
+      tired: 'img/umu_sleepy.png',
+      sad: 'img/umu_crying.png',
+      angry: 'img/umu_angry.png',
+      lonely: 'img/umu_blank.png',
+      meh: 'img/umu_default.png'
+    };
+
+    const umuFaceIcons = {
+      tired: 'img/umu_face_tired.png',
+      sad: 'img/umu_face_sad.png',
+      angry: 'img/umu_face_angry.png',
+      lonely: 'img/umu_face_lonely.png',
+      meh: 'img/umu_face_default.png'
+    };
+
+    function showMessage(mood, event) {
+      document.body.className = mood;
+      document.getElementById("emojiImg").src = emojiImages[mood];
+      document.querySelector(".umu-icon").src = umuFaceIcons[mood];
+      document.querySelectorAll(".mood-buttons button").forEach(btn => btn.classList.remove("selected"));
+      event.currentTarget.classList.add("selected");
+
+      const messageBox = document.getElementById("messageText");
+      const messages = moodMessages[mood];
+      const selected = messages[Math.floor(Math.random() * messages.length)];
+
+      messageBox.innerText = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        messageBox.innerText += selected.charAt(i);
+        i++;
+        if (i >= selected.length) clearInterval(interval);
+      }, 40);
+
+      playPopSound();
+      saveMoodLog(mood);
+      updateTodayLog();
+    }
+
+    function copyMessage() {
+      const text = document.getElementById("messageText").innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("우무의 말이 복사되었어요!");
+      });
+    }
+
+    function shareMessage() {
+      const message = document.getElementById("messageText").innerText;
+      const shareData = {
+        title: "우무사리가 전하는 말",
+        text: message,
+        url: window.location.href
+      };
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {
+          alert("공유에 실패했어요 우무!");
+        });
+      } else {
+        navigator.clipboard.writeText(`${message}\n\n${window.location.href}`).then(() => {
+          alert("링크와 메시지가 복사되었어요! 친구에게 붙여넣어 주세요 우무 🐙");
+        });
+      }
+    }
+
+    function playPopSound() {
+      const audio = document.getElementById("popSound");
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    function saveMoodLog(mood) {
+      const today = new Date().toISOString().split('T')[0];
+      const logs = JSON.parse(localStorage.getItem("umuMoodLogs")) || {};
+      logs[today] = mood;
+      localStorage.setItem("umuMoodLogs", JSON.stringify(logs));
+    }
+
+    function updateTodayLog() {
+      const today = new Date().toISOString().split('T')[0];
+      const logs = JSON.parse(localStorage.getItem("umuMoodLogs")) || {};
+      const mood = logs[today];
+      if (mood) {
+        document.getElementById("todayLog").innerText = `오늘의 감정: ${mood} 우무`; 
+      } else {
+        document.getElementById("todayLog").innerText = "";
+      }
+    }
+
+    window.onload = updateTodayLog;
+  </script>
+</body>
+</html>
