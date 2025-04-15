@@ -133,7 +133,7 @@
     <img id="emojiImg" src="img/umu_default.png" alt="우무사리">
     <div id="message" class="bubble">
       <img src="img/umu_face_default.png" class="umu-icon" alt="우무아이콘">
-      <span id="messageText">🐙 잠시만요… 우무사리가 고민 중이에요!</span>
+   <span id="messageText" style="white-space: pre-wrap;">🐙 잠시만요… 우무사리가 고민 중이에요!</span>
     </div>
     <div class="mood-buttons" id="moodButtons">
       <button onclick="showMessage('tired', event)">😪 피곤해요</button>
@@ -278,7 +278,10 @@
   const moods = ['tired', 'sad', 'angry', 'lonely', 'meh'];
   const randomMood = moods[Math.floor(Math.random() * moods.length)];
   const moodButton = document.querySelector(`[onclick*="${randomMood}"]`);
-  showMessage(randomMood, { currentTarget: moodButton });
+  const originalSave = saveMoodLog;
+saveMoodLog = function(){};
+showMessage(randomMood, { currentTarget: moodButton });
+saveMoodLog = originalSave;
 };
     function showRandomMessage() {
     const moods = Object.keys(moodMessages);
