@@ -186,5 +186,38 @@
       }
     }
   </script>
+  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+    <button onclick="window.open('https://www.instagram.com/umu_life', '_blank')"
+      style="font-family: 'Gowun Dodum', sans-serif; font-size: 0.9rem; padding: 10px 16px; border: none; border-radius: 20px; background-color: #ffb6b9; color: white; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+      우무사리랑 더 친해지기
+    </button>
+  </div>
+
+  <div style="margin-top: 30px;">
+    <button onclick="sharePage()" style="font-family: 'Gowun Dodum', sans-serif; font-size: 0.9rem; padding: 8px 14px; border: none; border-radius: 20px; background-color: #8ecae6; color: white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+      이 페이지 공유하기
+    </button>
+  </div>
+
+  <script>
+    function sharePage() {
+      const shareData = {
+        title: '우무사리가 전하는 말',
+        text: '우무사리에게 감정 위로 받기! 지금 한번 눌러봐요~',
+        url: window.location.href
+      };
+      if (navigator.share) {
+        navigator.share(shareData).then(() => {
+          console.log('공유 완료');
+        }).catch(err => {
+          alert('공유가 취소되었거나 실패했어요.');
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('링크가 복사되었어요!');
+        });
+      }
+    }
+  </script>
 </body>
 </html>
