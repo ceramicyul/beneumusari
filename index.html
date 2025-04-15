@@ -144,7 +144,8 @@
     </div>
     <button class="action" onclick="copyMessage()">복사하기</button>
     <button class="action" onclick="shareMessage()">친구에게 공유하기</button>
-    <div id="todayLog"></div>
+    <button class="action" onclick="showRandomMessage()">랜덤 우무 메시지</button>
+    
   </div>
 
   <audio id="popSound" src="sfx/pop.mp3" preload="auto"></audio>
@@ -276,8 +277,16 @@
   updateTodayLog();
   const moods = ['tired', 'sad', 'angry', 'lonely', 'meh'];
   const randomMood = moods[Math.floor(Math.random() * moods.length)];
-  showMessage(randomMood, { currentTarget: document.querySelector(`[onclick*="${randomMood}"]`) });
+  const moodButton = document.querySelector(`[onclick*="${randomMood}"]`);
+  showMessage(randomMood, { currentTarget: moodButton });
 };
-  </script>
+    function showRandomMessage() {
+    const moods = Object.keys(moodMessages);
+    const randomMood = moods[Math.floor(Math.random() * moods.length)];
+    const moodButton = document.querySelector(`[onclick*="${randomMood}"]`);
+    showMessage(randomMood, { currentTarget: moodButton });
+  }
+
+
 </body>
 </html>
