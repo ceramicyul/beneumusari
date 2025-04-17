@@ -174,8 +174,28 @@
     }
 
     function showMessage(mood) {
-      const isHidden = (currentMode === 'random' && Math.random() < 0.1);
-      const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
+  const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+  const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
+
+  // ✅ 배경 이미지로 적용
+  document.getElementById('background').style.backgroundImage = `url('${randomImg}')`;
+
+  if (isHidden) {
+    hiddenLabel.style.display = 'block';
+    msgBox.classList.add("hidden");
+    msgBox.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+  } else {
+    hiddenLabel.style.display = 'none';
+    msgBox.classList.remove("hidden");
+    const msgList = messages[mood];
+    msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
+  }
+
+  msgBox.style.display = 'block';
+  emotionBtns.style.display = 'none';
+  resetBtn.style.display = 'inline-block';
+}
+
 
       if (isHidden) {
         hiddenLabel.style.display = 'block';
