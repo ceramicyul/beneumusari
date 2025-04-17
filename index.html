@@ -9,18 +9,30 @@
     body {
       margin: 0;
       padding: 0;
-      background: #fff9eb;
       font-family: 'Gowun Dodum', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
       text-align: center;
+      position: relative;
+      overflow: hidden;
     }
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+    }
+
     h1 {
       margin-top: 20px;
+      color: #333;
     }
+
     .mode-buttons, .emotion-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -28,6 +40,7 @@
       gap: 10px;
       margin: 20px;
     }
+
     button {
       font-family: 'Gowun Dodum', sans-serif;
       font-size: 1rem;
@@ -39,31 +52,24 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
     }
+
     button:hover {
       background-color: #ffd43b;
     }
 
-      #umu {
-  max-width: 100vw;
-  max-height: 100vh;
-  width: auto;
-  height: auto;
-  display: none;
-  margin-bottom: 16px;
-  object-fit: contain;
-}
-
     #messageBox {
       font-size: 1.2rem;
-      background: white;
+      background: rgba(255, 255, 255, 0.85);
       padding: 18px;
       border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       max-width: 80%;
+      margin: 20px auto;
       display: none;
       position: relative;
       white-space: pre-wrap;
     }
+
     #messageBox::after {
       content: "";
       position: absolute;
@@ -74,32 +80,38 @@
       border-style: solid;
       border-color: white transparent transparent;
     }
+
     #messageBox.hidden {
       border: 2px dashed #ff69b4;
-      background: #fff0f8;
+      background: rgba(255, 240, 248, 0.9);
       animation: sparkle 1.5s infinite alternate;
     }
+
     @keyframes sparkle {
       0% { box-shadow: 0 0 10px #ffb3d1; }
       100% { box-shadow: 0 0 20px #ffa7f0; }
     }
+
     #hidden-label {
       font-size: 0.9rem;
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
     }
+
     #resetBtn {
       display: none;
       margin-top: 20px;
     }
+
     @media (max-width: 500px) {
-      #umu { width: 90px; }
       #messageBox { font-size: 1rem; padding: 14px; }
     }
   </style>
 </head>
 <body>
+  <div id="background"></div>
+
   <h1>우무사리가 전하는 말</h1>
 
   <div class="mode-buttons">
@@ -115,7 +127,6 @@
     <button onclick="showMessage('meh')">😶 그냥 그래</button>
   </div>
 
-  <img id="umu" src="" alt="우무사리" />
   <div id="hidden-label">✨ Hidden! ✨</div>
   <div id="messageBox"></div>
   <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
@@ -148,18 +159,17 @@
       'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874_04.jpg?raw=true'
     ];
 
-    const umu = document.getElementById('umu');
     const msgBox = document.getElementById('messageBox');
     const resetBtn = document.getElementById('resetBtn');
     const emotionBtns = document.querySelector('.emotion-buttons');
     const modeBtns = document.querySelector('.mode-buttons');
     const hiddenLabel = document.getElementById('hidden-label');
+    const backgroundDiv = document.getElementById('background');
     let currentMode = '';
 
     function setMode(mode) {
       currentMode = mode;
       modeBtns.style.display = 'none';
-      umu.style.display = 'none';
       msgBox.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
@@ -174,28 +184,9 @@
     }
 
     function showMessage(mood) {
-  const isHidden = (currentMode === 'random' && Math.random() < 0.1);
-  const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
-
-  // ✅ 배경 이미지로 적용
-  document.getElementById('background').style.backgroundImage = `url('${randomImg}')`;
-
-  if (isHidden) {
-    hiddenLabel.style.display = 'block';
-    msgBox.classList.add("hidden");
-    msgBox.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
-  } else {
-    hiddenLabel.style.display = 'none';
-    msgBox.classList.remove("hidden");
-    const msgList = messages[mood];
-    msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
-  }
-
-  msgBox.style.display = 'block';
-  emotionBtns.style.display = 'none';
-  resetBtn.style.display = 'inline-block';
-}
-
+      const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+      const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
+      backgroundDiv.style.backgroundImage = `url('${randomImg}')`;
 
       if (isHidden) {
         hiddenLabel.style.display = 'block';
@@ -208,8 +199,6 @@
         msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
       }
 
-      umu.src = randomImg;
-      umu.style.display = 'block';
       msgBox.style.display = 'block';
       emotionBtns.style.display = 'none';
       resetBtn.style.display = 'inline-block';
@@ -217,10 +206,10 @@
 
     function resetPage() {
       msgBox.style.display = 'none';
-      umu.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
       msgBox.classList.remove("hidden");
+      backgroundDiv.style.backgroundImage = '';
       if (currentMode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
