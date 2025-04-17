@@ -18,26 +18,23 @@
       min-height: 100vh;
       text-align: center;
     }
+
+    #background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(255, 249, 200, 0.6);
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: -1;
+    }
+
     h1 {
       margin-top: 20px;
     }
-    #background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(255, 249, 200, 0.6); /* 은은한 노랑 */
-  background-position: center;
-  background-size: contain; /* 비율 유지 */
-  background-repeat: no-repeat;
-  z-index: -1;
-}
-
-#messageBox {
-  background: rgba(255, 255, 255, 0.4) !important; /* 말풍선 최대한 투명 */
-  backdrop-filter: blur(2px); /* 흐림 효과로 가독성 */
-}
 
     .mode-buttons, .emotion-buttons {
       display: flex;
@@ -46,6 +43,7 @@
       gap: 10px;
       margin: 20px;
     }
+
     button {
       font-family: 'Gowun Dodum', sans-serif;
       font-size: 1rem;
@@ -57,24 +55,15 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
     }
+
     button:hover {
-      #background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(255, 249, 200, 0.6); /* 은은한 노랑 */
-  background-position: center;
-  background-size: contain; /* 비율 유지 */
-  background-repeat: no-repeat;
-  z-index: -1;
-}
+      background-color: #ffd43b;
+    }
+
     #messageBox {
       font-size: 1.2rem;
-    background: rgba(255, 255, 255, 0.4) !important; /* 말풍선 최대한 투명 */
-  backdrop-filter: blur(2px); /* 텍스트 가독성 살짝 향상 */
-}
+      background: rgba(255, 255, 255, 0.4) !important;
+      backdrop-filter: blur(2px);
       padding: 18px;
       border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -83,6 +72,7 @@
       position: relative;
       white-space: pre-wrap;
     }
+
     #messageBox::after {
       content: "";
       position: absolute;
@@ -93,28 +83,35 @@
       border-style: solid;
       border-color: white transparent transparent;
     }
+
     #messageBox.hidden {
       border: 2px dashed #ff69b4;
       background: #fff0f8;
       animation: sparkle 1.5s infinite alternate;
     }
+
     @keyframes sparkle {
       0% { box-shadow: 0 0 10px #ffb3d1; }
       100% { box-shadow: 0 0 20px #ffa7f0; }
     }
+
     #hidden-label {
       font-size: 0.9rem;
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
     }
+
     #resetBtn {
       display: none;
       margin-top: 20px;
     }
+
     @media (max-width: 500px) {
-      #umu { width: 90px; }
-      #messageBox { font-size: 1rem; padding: 14px; }
+      #messageBox {
+        font-size: 1rem;
+        padding: 14px;
+      }
     }
   </style>
 </head>
@@ -137,78 +134,21 @@
   <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
 
   <script>
-      const messages = {
-  tired: [
-    "오늘도 여기까지 온 너, 정말 멋져우무! 😌",
-    "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊",
-    "버텨줘서 고마워요. 그게 얼마나 대단한 일인지 알아요. 💛",
-    "지친 하루 끝에 우무가 안아줄게요. 🐙",
-    "지금 그대로도 충분해요. 정말이에요. 🫶",
-    "힘들면 쉬어도 괜찮아요. 우무가 지켜줄게요. 💤",
-    "피곤한 마음, 우무가 살살 토닥토닥... 😪",
-    "무거운 하루였죠? 우무가 따뜻한 물이 되어줄게요. ☕",
-    "잠깐 멈춰도 괜찮아요. 그게 회복의 시작이니까요. 🔄",
-    "오늘도 살아내줘서 고마워요. 🐚",
-    "쉬고 나면 다시 웃을 수 있어요. 우무가 기다릴게요. 🌈",
-    "한 발짝만 가도 충분해요. 천천히 가요. 🚶",
-    "에너지 0%면 우무 충전소에 들러요~ 🔋",
-    "우무 다리에 기대도 돼요. 푹신푹신하게 안아줄게요. 🐙",
-    "아무것도 안 해도 괜찮아요. 지금은 쉬는 시간이니까요. 🛏️",
-    "너무 애쓰지 않아도 괜찮아요. 존재만으로도 고마운 사람이에요. 🤍",
-    "지쳤다면 그저 존재해도 괜찮아요. 🌸",
-    "마음이 지쳤을 땐 우무의 파도에 몸을 맡겨요. 🌊",
-    "깊게 숨 한번 쉬어요. 그것만으로도 잘하고 있는 거예요. 🌬️",
-    "괜찮아질 거예요. 아니, 지금도 괜찮은 중일지도 몰라요. ☁️",
-    "피곤한 마음 위에 따뜻한 우무하트! 💖",
-    "조용히 숨 쉬는 지금도 충분히 의미 있어요. 🌼",
-    "지금 쉬는 건 앞으로 나아가기 위한 준비예요. 🎈",
-    "말 없이 옆에 있을게요. 그게 위로가 될 수 있다면요. 🤗",
-    "당신은 생각보다 훨씬 더 강한 사람이에요. 💪",
-    "세상 누구보다 잘하고 있어요. 우무는 항상 응원해요. 📣",
-    "오늘 힘들었다면, 내일은 조금 더 나을 거예요. 🌅",
-    "천천히 가도 괜찮아요. 멈추지 않으면 돼요. 🚶‍♀️",
-    "감정은 파도처럼 오고 가니까, 잠시 맡겨보아요. 🌊",
-    "불안하지 않아도 돼요. 우무가 함께 있어요. 🫧",
-    "오늘도 잘했어요. 진심으로요. 🐙",
-    "지쳤다면 눈 감고 우무를 떠올려보세요~ 💤",
-    "내가 널 알아요. 얼마나 애쓰고 있는지. 우무가 다 봤어요. 👀",
-    "완벽하지 않아도 괜찮아요. 충분히 멋져요. 🌟",
-    "힘들 땐 뒤도 돌아보고, 하늘도 올려다봐요. ☁️",
-    "지금 멈춘 건 포기가 아니라 충전이에요. 🔋",
-    "모든 감정은 괜찮아요. 우무는 다 받아줄게요. 💌",
-    "차분히, 천천히, 지금은 그게 제일 좋아요. 🍵",
-    "눈부시게 힘낸 하루였어요. 이제 우무가 쉴 자리를 줄게요. 🛌",
-    "자기 자신에게도 다정할 수 있어야 해요. 우무가 도와줄게요. 💗",
-    "잠깐 멍~ 때려도 괜찮아요. 그게 회복의 시작이니까요. 🫠",
-    "말하지 않아도 알 수 있어요. 오늘 많이 애썼죠? 🐚",
-    "조금씩 괜찮아지는 중이에요. 우무도 그렇게 믿어요. ✨",
-    "세상이 어지러울 땐, 우무의 품이 그늘이 될게요. 🌙",
-    "당신은 그 자체로 충분히 멋져요. 우무도 동의해요. ✅",
-    "가끔은 모든 걸 내려놓아도 괜찮아요. 🧺",
-    "우무는 언제나 여기 있어요. 다시 힘내고 싶을 때 불러줘요. 📞",
-    "하루쯤은 우무랑 푹 쉬는 날도 괜찮지 않을까요? 🐙",
-    "한 걸음만 더 가도 돼요. 안되면 우무가 업어줄게요. 🐾",
-    "다 잘 될 거예요. 우무가 그렇게 속삭여요. 🐚"
-  ],
-  sad: [
-    "감정은 숨기지 않아도 돼... 말 없이 곁을 지켜줄게. 🌊",
-    "혼자라고 느껴질 때는... 그 마음, 내가 안아줄게. 💧",
-    "혼자라고 느껴질 때는... 눈물 닦아줄 작은 다리가 되어줄게. 🌊",
-    "지금 울고 있다면 괜찮아... 네가 울 때면, 바다도 함께 울어. ⛅",
-    "혼자라고 느껴질 때는... 지금 감정은 지나가고, 너는 더 단단해질 거야. 🦑",
-    "오늘도 많이 애썼구나... 살며시 꼬옥 안아줄게. 🐚"
-  ],
+    const messages = {
+      tired: ["오늘도 여기까지 온 너, 정말 멋져우무! 😌", "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"],
+      sad: ["감정은 숨기지 않아도 돼... 말 없이 곁을 지켜줄게. 🌊", "오늘도 많이 애썼구나... 살며시 꼬옥 안아줄게. 🐚"],
       angry: ["화났구나! 참느라 수고했우무!", "속상한 일 있었지? 얘기해도 돼 우무!"],
       lonely: ["혼자 아니야, 우무가 있우무!", "외로워도 괜찮아, 함께 있우무!"],
       meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮우무"]
     };
-const umuImages = [
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_01.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_02.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_03.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
-];
+
+    const umuImages = [
+      'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869.jpg?raw=true',
+      'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_01.jpg?raw=true',
+      'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_02.jpg?raw=true',
+      'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_03.jpg?raw=true',
+      'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
+    ];
 
     const hiddenMessages = [
       "우무만 알고 있는 비밀 응원이야! 우무무!✨",
@@ -218,12 +158,12 @@ const umuImages = [
       "당신은 사슴이에요 우무!내 마음을 녹용~🫎"
     ];
 
-    const umu = document.getElementById('umu');
     const msgBox = document.getElementById('messageBox');
     const resetBtn = document.getElementById('resetBtn');
     const emotionBtns = document.querySelector('.emotion-buttons');
     const modeBtns = document.querySelector('.mode-buttons');
     const hiddenLabel = document.getElementById('hidden-label');
+    const backgroundDiv = document.getElementById('background');
     let currentMode = '';
 
     function setMode(mode) {
@@ -243,73 +183,41 @@ const umuImages = [
     }
 
     function showMessage(mood) {
-  const isHidden = (currentMode === 'random' && Math.random() < 0.1);
-  const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
-  document.body.style.backgroundImage = `url('${randomImg}')`;
-  document.body.style.backgroundSize = 'cover';
-  document.body.style.backgroundPosition = 'center';
-  document.body.style.backgroundRepeat = 'no-repeat';
+      const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+      const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
-  if (isHidden) {
-    hiddenLabel.style.display = 'block';
-    msgBox.classList.add("hidden");
-    msgBox.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
-  } else {
-    hiddenLabel.style.display = 'none';
-    msgBox.classList.remove("hidden");
-    const msgList = messages[mood];
-    msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
-  }
+      backgroundDiv.style.backgroundImage = `url('${randomImg}')`;
+      backgroundDiv.style.backgroundSize = 'contain';
+      backgroundDiv.style.backgroundRepeat = 'no-repeat';
+      backgroundDiv.style.backgroundPosition = 'center';
+      backgroundDiv.style.backgroundColor = 'rgba(255, 249, 200, 0.6)';
 
-  msgBox.style.display = 'block';
-  umu.style.display = 'none'; // 
-  emotionBtns.style.display = 'none';
-  resetBtn.style.display = 'inline-block';
-}
+      if (isHidden) {
+        hiddenLabel.style.display = 'block';
+        msgBox.classList.add("hidden");
+        msgBox.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+      } else {
+        hiddenLabel.style.display = 'none';
+        msgBox.classList.remove("hidden");
+        const msgList = messages[mood];
+        msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
+      }
+
+      msgBox.style.display = 'block';
+      emotionBtns.style.display = 'none';
+      resetBtn.style.display = 'inline-block';
+    }
 
     function resetPage() {
       msgBox.style.display = 'none';
-      umu.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
       msgBox.classList.remove("hidden");
+      backgroundDiv.style.backgroundImage = '';
       if (currentMode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
         setMode('random');
-      }
-    }
-  </script>
-  <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-    <button onclick="window.open('https://www.instagram.com/umu_life', '_blank')"
-      style="font-family: 'Gowun Dodum', sans-serif; font-size: 0.9rem; padding: 10px 16px; border: none; border-radius: 20px; background-color: #ffb6b9; color: white; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
-      📸우무사리랑 더 친해지기
-    </button>
-  </div>
-
-  <div style="margin-top: 30px;">
-    <button onclick="sharePage()" style="font-family: 'Gowun Dodum', sans-serif; font-size: 0.9rem; padding: 8px 14px; border: none; border-radius: 20px; background-color: #8ecae6; color: white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-      이 페이지 공유하기
-    </button>
-  </div>
-
-  <script>
-    function sharePage() {
-      const shareData = {
-        title: '우무사리가 전하는 말',
-        text: '우무사리에게 감정 위로 받기! 지금 한번 눌러봐요~',
-        url: window.location.href
-      };
-      if (navigator.share) {
-        navigator.share(shareData).then(() => {
-          console.log('공유 완료');
-        }).catch(err => {
-          alert('공유가 취소되었거나 실패했어요.');
-        });
-      } else {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-          alert('링크가 복사되었어요!');
-        });
       }
     }
   </script>
