@@ -21,6 +21,24 @@
     h1 {
       margin-top: 20px;
     }
+    #background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 249, 200, 0.6); /* 은은한 노랑 */
+  background-position: center;
+  background-size: contain; /* 비율 유지 */
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+#messageBox {
+  background: rgba(255, 255, 255, 0.4) !important; /* 말풍선 최대한 투명 */
+  backdrop-filter: blur(2px); /* 흐림 효과로 가독성 */
+}
+
     .mode-buttons, .emotion-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -40,16 +58,23 @@
       transition: all 0.2s ease;
     }
     button:hover {
-      background-color: #ffd43b;
-    }
-    #umu {
-      width: 120px;
-      display: none;
-      margin-bottom: 16px;
-    }
+      #background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 249, 200, 0.6); /* 은은한 노랑 */
+  background-position: center;
+  background-size: contain; /* 비율 유지 */
+  background-repeat: no-repeat;
+  z-index: -1;
+}
     #messageBox {
       font-size: 1.2rem;
-      background: white;
+    background: rgba(255, 255, 255, 0.4) !important; /* 말풍선 최대한 투명 */
+  backdrop-filter: blur(2px); /* 텍스트 가독성 살짝 향상 */
+}
       padding: 18px;
       border-radius: 20px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -94,6 +119,7 @@
   </style>
 </head>
 <body>
+  <div id="background"></div>
   <h1>우무사리가 전하는 말</h1>
   <div class="mode-buttons">
     <button onclick="setMode('emotion')">감정 모드</button>
@@ -106,7 +132,6 @@
     <button onclick="showMessage('lonely')">🥺 외로워</button>
     <button onclick="showMessage('meh')">😶 그냥 그래</button>
   </div>
-  <img id="umu" src="img/umu_default.png" alt="우무사리">
   <div id="hidden-label">✨ Hidden! ✨</div>
   <div id="messageBox"></div>
   <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
@@ -204,7 +229,6 @@ const umuImages = [
     function setMode(mode) {
       currentMode = mode;
       modeBtns.style.display = 'none';
-      umu.style.display = 'none';
       msgBox.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
