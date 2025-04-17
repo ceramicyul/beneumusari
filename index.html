@@ -32,7 +32,7 @@
       z-index: -1;
     }
 
-    h1 {
+    #title {
       margin-top: 20px;
     }
 
@@ -71,6 +71,7 @@
       display: none;
       position: relative;
       white-space: pre-wrap;
+      min-height: 60px;
     }
 
     #messageBox::after {
@@ -117,7 +118,7 @@
 </head>
 <body>
   <div id="background"></div>
-  <h1>우무사리가 전하는 말</h1>
+  <h1 id="title">우무사리가 전하는 말</h1>
   <div class="mode-buttons">
     <button onclick="setMode('emotion')">감정 모드</button>
     <button onclick="setMode('random')">랜덤 모드</button>
@@ -164,6 +165,7 @@
     const modeBtns = document.querySelector('.mode-buttons');
     const hiddenLabel = document.getElementById('hidden-label');
     const backgroundDiv = document.getElementById('background');
+    const title = document.getElementById('title');
     let currentMode = '';
 
     function setMode(mode) {
@@ -172,6 +174,7 @@
       msgBox.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
+      title.style.display = 'none';
       msgBox.classList.remove("hidden");
       if (mode === 'emotion') {
         emotionBtns.style.display = 'flex';
@@ -180,6 +183,19 @@
         const randomMood = moods[Math.floor(Math.random() * moods.length)];
         showMessage(randomMood);
       }
+    }
+
+    function typeMessage(element, text, speed = 40) {
+      element.innerText = "";
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.innerText += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
     }
 
     function showMessage(mood) {
@@ -195,12 +211,12 @@
       if (isHidden) {
         hiddenLabel.style.display = 'block';
         msgBox.classList.add("hidden");
-        msgBox.innerText = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+        typeMessage(msgBox, hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]);
       } else {
         hiddenLabel.style.display = 'none';
         msgBox.classList.remove("hidden");
         const msgList = messages[mood];
-        msgBox.innerText = msgList[Math.floor(Math.random() * msgList.length)];
+        typeMessage(msgBox, msgList[Math.floor(Math.random() * msgList.length)]);
       }
 
       msgBox.style.display = 'block';
@@ -214,6 +230,7 @@
       hiddenLabel.style.display = 'none';
       msgBox.classList.remove("hidden");
       backgroundDiv.style.backgroundImage = '';
+      title.style.display = 'block';
       if (currentMode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
