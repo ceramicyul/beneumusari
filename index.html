@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>우무사리가 전하는 말</title>
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
   <style>
@@ -167,6 +167,7 @@
     const backgroundDiv = document.getElementById('background');
     const title = document.getElementById('title');
     let currentMode = '';
+    let hasTitleShown = false;
 
     function setMode(mode) {
       currentMode = mode;
@@ -174,8 +175,16 @@
       msgBox.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
-      title.style.display = 'none';
       msgBox.classList.remove("hidden");
+
+      // 타이틀은 첫 진입 시 한 번만 표시
+      if (!hasTitleShown) {
+        title.style.display = 'block';
+        hasTitleShown = true;
+      } else {
+        title.style.display = 'none';
+      }
+
       if (mode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
@@ -202,6 +211,7 @@
       const isHidden = (currentMode === 'random' && Math.random() < 0.1);
       const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
+      // 배경은 메시지 표시 직전에 무조건 변경
       backgroundDiv.style.backgroundImage = `url('${randomImg}')`;
       backgroundDiv.style.backgroundSize = 'contain';
       backgroundDiv.style.backgroundRepeat = 'no-repeat';
@@ -230,7 +240,7 @@
       hiddenLabel.style.display = 'none';
       msgBox.classList.remove("hidden");
       backgroundDiv.style.backgroundImage = '';
-      title.style.display = 'block';
+      title.style.display = 'none';
       if (currentMode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
