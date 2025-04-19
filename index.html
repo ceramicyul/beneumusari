@@ -247,21 +247,24 @@
     let hasModeEntered = false;
 
     function setMode(mode) {
-      currentMode = mode;
-      modeBtns.style.display = 'none';
-      msgBox.style.display = 'none';
-      resetBtn.style.display = 'none';
-      hiddenLabel.style.display = 'none';
-      title.style.display = 'none';
-      msgBox.classList.remove("hidden");
-      if (mode === 'emotion') {
-        emotionBtns.style.display = 'flex';
-      } else {
-        const moods = Object.keys(messages);
-        const randomMood = moods[Math.floor(Math.random() * moods.length)];
-        showMessage(randomMood);
-      }
-    }
+  currentMode = mode;
+  modeBtns.style.display = 'none';
+  msgBox.style.display = 'none';
+  resetBtn.style.display = 'none';
+  hiddenLabel.style.display = 'none';
+  title.style.display = 'none';
+  msgBox.classList.remove("hidden");
+
+  if (mode === 'emotion') {
+    emotionBtns.style.display = 'flex';
+    emotionBtns.style.opacity = '1';
+    emotionBtns.style.pointerEvents = 'auto';
+  } else {
+    const moods = Object.keys(messages);
+    const randomMood = moods[Math.floor(Math.random() * moods.length)];
+    showMessage(randomMood);
+  }
+}
 
     function typeMessage(element, text, speed = 40) {
       element.innerText = "";
@@ -326,13 +329,12 @@
         modeBtns.style.opacity = '1';
         modeBtns.style.pointerEvents = 'auto';
       } else {
-        setTimeout(() => {
-          welcomeOverlay.style.display = 'none';
-          modeBtns.style.opacity = '1';
-          modeBtns.style.pointerEvents = 'auto';
-          localStorage.setItem('welcomeShown', 'true');
-        }, 3500);
-      }
+            setTimeout(() => {
+      welcomeOverlay.style.display = 'none';
+      modeBtns.style.opacity = '1';
+      modeBtns.style.pointerEvents = 'auto';
+      localStorage.setItem('welcomeShown', 'true');
+    }, 2000); // ← 2초로 변경
     });
 
     // 다시 보기
