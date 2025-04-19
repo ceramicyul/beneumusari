@@ -41,21 +41,21 @@
       gap: 10px;
       margin: 20px;
       opacity: 0;
-      transition: opacity 1s ease;
       pointer-events: none;
+      transition: opacity 1s ease;
     }
 
     button {
       font-family: 'Gowun Dodum', sans-serif;
       font-size: 1rem;
-      padding: 12px 20px;
+      padding: 10px 16px;
       border: none;
       border-radius: 20px;
       background-color: #ffe07d;
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
-      min-width: 120px;
+      min-width: 100px;
     }
 
     button:hover {
@@ -173,11 +173,9 @@
       border-color: white transparent transparent;
     }
 
-    @media (max-width: 400px) {
-      .speech-bubble {
-        font-size: 0.95rem;
-        padding: 14px;
-      }
+    @media (max-width: 500px) {
+      .speech-bubble { font-size: 0.95rem; padding: 14px; }
+      #messageBox { font-size: 1rem; padding: 14px; }
     }
   </style>
 </head>
@@ -241,6 +239,7 @@
     const msgBox = document.getElementById('messageBox');
     const resetBtn = document.getElementById('resetBtn');
     const emotionBtns = document.querySelector('.emotion-buttons');
+    const modeBtns = document.querySelector('.mode-buttons');
     const hiddenLabel = document.getElementById('hidden-label');
     const backgroundDiv = document.getElementById('background');
     const title = document.getElementById('title');
@@ -249,19 +248,12 @@
 
     function setMode(mode) {
       currentMode = mode;
-      document.querySelector('.mode-buttons').style.display = 'none';
+      modeBtns.style.display = 'none';
       msgBox.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
+      title.style.display = 'none';
       msgBox.classList.remove("hidden");
-
-      if (!hasModeEntered) {
-        title.style.display = 'block';
-        hasModeEntered = true;
-      } else {
-        title.style.display = 'none';
-      }
-
       if (mode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
@@ -316,7 +308,7 @@
       hiddenLabel.style.display = 'none';
       msgBox.classList.remove("hidden");
       backgroundDiv.style.backgroundImage = '';
-      title.style.display = 'none';
+      title.style.display = 'block';
       if (currentMode === 'emotion') {
         emotionBtns.style.display = 'flex';
       } else {
@@ -324,10 +316,9 @@
       }
     }
 
-    // 웰컴 메시지: 첫 방문자만 표시
+    // 웰컴 메시지 제어
     window.addEventListener('load', () => {
       const welcomeOverlay = document.getElementById('welcome-overlay');
-      const modeBtns = document.querySelector('.mode-buttons');
       const welcomeShown = localStorage.getItem('welcomeShown');
 
       if (welcomeShown) {
@@ -344,7 +335,7 @@
       }
     });
 
-    // 다시 보기 버튼: 웰컴 초기화
+    // 다시 보기
     function replayWelcome() {
       localStorage.removeItem('welcomeShown');
       location.reload();
