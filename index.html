@@ -21,10 +21,8 @@
 
     #background {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       background-color: rgba(255, 249, 200, 0.6);
       background-position: center;
       background-size: contain;
@@ -47,13 +45,14 @@
     button {
       font-family: 'Gowun Dodum', sans-serif;
       font-size: 1rem;
-      padding: 10px 16px;
+      padding: 12px 20px;
       border: none;
       border-radius: 20px;
       background-color: #ffe07d;
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
+      min-width: 120px;
     }
 
     button:hover {
@@ -108,9 +107,72 @@
       margin-top: 20px;
     }
 
-    @media (max-width: 500px) {
-      #messageBox {
-        font-size: 1rem;
+    /* --- 웰컴 오버레이 추가 --- */
+    #welcome-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: rgba(255, 249, 200, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOut 1.5s 3s forwards;
+    }
+
+    .welcome-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .umu-illustration {
+      width: 40vw;
+      max-width: 180px;
+      margin-bottom: 20px;
+    }
+
+    .speech-bubble {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      max-width: 80vw;
+      font-size: 1rem;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 20px 20px 0;
+      border-style: solid;
+      border-color: white transparent transparent;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .mode-buttons {
+      opacity: 0;
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
+
+    @media (max-width: 400px) {
+      .speech-bubble {
+        font-size: 0.95rem;
         padding: 14px;
       }
     }
@@ -133,6 +195,14 @@
   <div id="hidden-label">✨ Hidden! ✨</div>
   <div id="messageBox"></div>
   <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
+
+  <!-- 웰컴 오버레이 -->
+  <div id="welcome-overlay">
+    <div class="welcome-content">
+      <img src="https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_03.jpg?raw=true" alt="우무사리" class="umu-illustration" />
+      <div class="speech-bubble">안녕! 나는 우무사리야.<br>오늘 너에게 힘이 되는 말을 전해줄게!</div>
+    </div>
+  </div>
 
   <script>
     const messages = {
@@ -167,7 +237,7 @@
     const backgroundDiv = document.getElementById('background');
     const title = document.getElementById('title');
     let currentMode = '';
-    let hasTitleShown = false;
+    let hasModeEntered = false;
 
     function setMode(mode) {
       currentMode = mode;
@@ -177,10 +247,9 @@
       hiddenLabel.style.display = 'none';
       msgBox.classList.remove("hidden");
 
-      // 타이틀은 첫 진입 시 한 번만 표시
-      if (!hasTitleShown) {
+      if (!hasModeEntered) {
         title.style.display = 'block';
-        hasTitleShown = true;
+        hasModeEntered = true;
       } else {
         title.style.display = 'none';
       }
@@ -211,7 +280,6 @@
       const isHidden = (currentMode === 'random' && Math.random() < 0.1);
       const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
-      // 배경은 메시지 표시 직전에 무조건 변경
       backgroundDiv.style.backgroundImage = `url('${randomImg}')`;
       backgroundDiv.style.backgroundSize = 'contain';
       backgroundDiv.style.backgroundRepeat = 'no-repeat';
@@ -247,6 +315,27 @@
         setMode('random');
       }
     }
+
+    // 웰컴 메시지: 첫 방문자만 보여주기
+window.addEventListener('load', () => {
+  const welcomeShown = localStorage.getItem('welcomeShown');
+
+  if (welcomeShown) {
+    // 이미 본 사용자: 오버레이 제거, 모드 버튼 바로 표시
+    document.getElementById('welcome-overlay').style.display = 'none';
+    modeBtns.style.opacity = '1';
+    modeBtns.style.pointerEvents = 'auto';
+  } else {
+    // 처음 방문자: 오버레이 보여주고 기록 저장
+    setTimeout(() => {
+      document.getElementById('welcome-overlay').style.display = 'none';
+      modeBtns.style.opacity = '1';
+      modeBtns.style.pointerEvents = 'auto';
+      localStorage.setItem('welcomeShown', 'true');
+    }, 3500);
+  }
+});
+    });
   </script>
 </body>
 </html>
