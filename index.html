@@ -320,23 +320,23 @@
     }
 
     // 웰컴 메시지 제어
-    window.addEventListener('load', () => {
-      const welcomeOverlay = document.getElementById('welcome-overlay');
-      const welcomeShown = localStorage.getItem('welcomeShown');
+window.addEventListener('load', () => {
+  const welcomeOverlay = document.getElementById('welcome-overlay');
+  const welcomeShown = localStorage.getItem('welcomeShown');
 
-      if (welcomeShown) {
-        welcomeOverlay.style.display = 'none';
-        modeBtns.style.opacity = '1';
-        modeBtns.style.pointerEvents = 'auto';
-      } else {
-            setTimeout(() => {
+  if (welcomeShown) {
+    welcomeOverlay.style.display = 'none';
+    modeBtns.style.opacity = '1';
+    modeBtns.style.pointerEvents = 'auto';
+  } else {
+    setTimeout(() => {
       welcomeOverlay.style.display = 'none';
       modeBtns.style.opacity = '1';
       modeBtns.style.pointerEvents = 'auto';
       localStorage.setItem('welcomeShown', 'true');
-    }, 2000); // ← 2초로 변경
-}
-    });
+    }, 2000); // 2초 후 사라지게 설정
+  }
+});
 
     // 다시 보기
     function replayWelcome() {
