@@ -40,6 +40,9 @@
       justify-content: center;
       gap: 10px;
       margin: 20px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      pointer-events: none;
     }
 
     button {
@@ -61,7 +64,7 @@
 
     #messageBox {
       font-size: 1.2rem;
-      background: rgba(255, 255, 255, 0.4) !important;
+      background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(2px);
       padding: 18px;
       border-radius: 20px;
@@ -107,7 +110,21 @@
       margin-top: 20px;
     }
 
-    /* --- 웰컴 오버레이 추가 --- */
+    #replayBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 0.9rem;
+      padding: 8px 14px;
+      background-color: #f3d45d;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 10000;
+    }
+
+    /* 웰컴 오버레이 */
     #welcome-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -117,7 +134,6 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      animation: fadeOut 1.5s 3s forwards;
     }
 
     .welcome-content {
@@ -157,19 +173,6 @@
       border-color: white transparent transparent;
     }
 
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    .mode-buttons {
-      opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
-
     @media (max-width: 400px) {
       .speech-bubble {
         font-size: 0.95rem;
@@ -181,10 +184,12 @@
 <body>
   <div id="background"></div>
   <h1 id="title">우무사리가 전하는 말</h1>
+
   <div class="mode-buttons">
     <button onclick="setMode('emotion')">감정 모드</button>
     <button onclick="setMode('random')">랜덤 모드</button>
   </div>
+
   <div class="emotion-buttons" style="display: none;">
     <button onclick="showMessage('tired')">😪 피곤해</button>
     <button onclick="showMessage('sad')">😢 속상해</button>
@@ -192,6 +197,7 @@
     <button onclick="showMessage('lonely')">🥺 외로워</button>
     <button onclick="showMessage('meh')">😶 그냥 그래</button>
   </div>
+
   <div id="hidden-label">✨ Hidden! ✨</div>
   <div id="messageBox"></div>
   <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
@@ -203,6 +209,9 @@
       <div class="speech-bubble">안녕! 나는 우무사리야.<br>오늘 너에게 힘이 되는 말을 전해줄게!</div>
     </div>
   </div>
+
+  <!-- 다시 보기 버튼 -->
+  <button id="replayBtn" onclick="replayWelcome()">다시 보기</button>
 
   <script>
     const messages = {
@@ -232,7 +241,6 @@
     const msgBox = document.getElementById('messageBox');
     const resetBtn = document.getElementById('resetBtn');
     const emotionBtns = document.querySelector('.emotion-buttons');
-    const modeBtns = document.querySelector('.mode-buttons');
     const hiddenLabel = document.getElementById('hidden-label');
     const backgroundDiv = document.getElementById('background');
     const title = document.getElementById('title');
@@ -241,7 +249,7 @@
 
     function setMode(mode) {
       currentMode = mode;
-      modeBtns.style.display = 'none';
+      document.querySelector('.mode-buttons').style.display = 'none';
       msgBox.style.display = 'none';
       resetBtn.style.display = 'none';
       hiddenLabel.style.display = 'none';
@@ -316,26 +324,31 @@
       }
     }
 
-    // 웰컴 메시지: 첫 방문자만 보여주기
-window.addEventListener('load', () => {
-  const welcomeShown = localStorage.getItem('welcomeShown');
+    // 웰컴 메시지: 첫 방문자만 표시
+    window.addEventListener('load', () => {
+      const welcomeOverlay = document.getElementById('welcome-overlay');
+      const modeBtns = document.querySelector('.mode-buttons');
+      const welcomeShown = localStorage.getItem('welcomeShown');
 
-  if (welcomeShown) {
-    // 이미 본 사용자: 오버레이 제거, 모드 버튼 바로 표시
-    document.getElementById('welcome-overlay').style.display = 'none';
-    modeBtns.style.opacity = '1';
-    modeBtns.style.pointerEvents = 'auto';
-  } else {
-    // 처음 방문자: 오버레이 보여주고 기록 저장
-    setTimeout(() => {
-      document.getElementById('welcome-overlay').style.display = 'none';
-      modeBtns.style.opacity = '1';
-      modeBtns.style.pointerEvents = 'auto';
-      localStorage.setItem('welcomeShown', 'true');
-    }, 3500);
-  }
-});
+      if (welcomeShown) {
+        welcomeOverlay.style.display = 'none';
+        modeBtns.style.opacity = '1';
+        modeBtns.style.pointerEvents = 'auto';
+      } else {
+        setTimeout(() => {
+          welcomeOverlay.style.display = 'none';
+          modeBtns.style.opacity = '1';
+          modeBtns.style.pointerEvents = 'auto';
+          localStorage.setItem('welcomeShown', 'true');
+        }, 3500);
+      }
     });
+
+    // 다시 보기 버튼: 웰컴 초기화
+    function replayWelcome() {
+      localStorage.removeItem('welcomeShown');
+      location.reload();
+    }
   </script>
 </body>
 </html>
