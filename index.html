@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>우무사리가 전하는 말</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
       background: #fff9eb;
-     font-family: 'Dongle', sans-serif;
+      font-family: 'Gaegu', sans-serif;
+      font-size: 1.6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -32,6 +33,7 @@
 
     #title {
       margin-top: 20px;
+      font-size: 2.2rem;
     }
 
     .mode-buttons, .emotion-buttons {
@@ -46,8 +48,8 @@
     }
 
     button {
-      font-family: 'Dongle', sans-serif;
-      font-size: 1.3rem;
+      font-family: 'Gaegu', sans-serif;
+      font-size: 1.6rem;
       padding: 10px 16px;
       border: none;
       border-radius: 20px;
@@ -63,7 +65,7 @@
     }
 
     #messageBox {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(2px);
       padding: 18px;
@@ -99,7 +101,8 @@
     }
 
     #hidden-label {
-      font-size: 1.3rem;
+      font-family: 'Gaegu', sans-serif;
+      font-size: 1.6rem;
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
@@ -114,7 +117,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      font-size: 1.3rem;
+      font-size: 1.6rem;
       padding: 8px 14px;
       background-color: #f3d45d;
       border: none;
@@ -144,17 +147,18 @@
     }
 
     .umu-illustration {
-      width: 40vw;
-      max-width: 180px;
+      width: 60vw;
+      max-width: 260px;
       margin-bottom: 20px;
     }
 
     .speech-bubble {
+      font-family: 'Gaegu', sans-serif;
       background: white;
       border-radius: 20px;
       padding: 16px;
       max-width: 80vw;
-      font-size: 1.4rem;
+      font-size: 1.8rem;
       position: relative;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       white-space: pre-wrap;
@@ -174,8 +178,8 @@
     }
 
     @media (max-width: 500px) {
-      .speech-bubble { font-size: 1.4rem; padding: 14px; }
-      #messageBox { font-size: 1.6rem; padding: 14px; }
+      .speech-bubble { font-size: 1.8rem; padding: 14px; }
+      #messageBox { font-size: 1.8rem; padding: 14px; }
     }
   </style>
 </head>
@@ -200,12 +204,12 @@
   <div id="messageBox"></div>
   <button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
 
-<div id="welcome-overlay">
-  <div class="welcome-content">
-    <div class="speech-bubble">안녕! 내이름은 우무사리! <br>오늘은 어땠어? 나한테 말해봐</div>
-    <img src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" alt="우무사리" class="umu-illustration" />
+  <div id="welcome-overlay">
+    <div class="welcome-content">
+      <div class="speech-bubble">안녕! 내이름은 우무사리! <br>오늘은 어땠어? 나한테 말해봐</div>
+      <img src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" alt="우무사리" class="umu-illustration" />
+    </div>
   </div>
-</div>
 
   <!-- 다시 보기 버튼 -->
   <button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
@@ -246,24 +250,24 @@
     let hasModeEntered = false;
 
     function setMode(mode) {
-  currentMode = mode;
-  modeBtns.style.display = 'none';
-  msgBox.style.display = 'none';
-  resetBtn.style.display = 'none';
-  hiddenLabel.style.display = 'none';
-  title.style.display = 'none';
-  msgBox.classList.remove("hidden");
+      currentMode = mode;
+      modeBtns.style.display = 'none';
+      msgBox.style.display = 'none';
+      resetBtn.style.display = 'none';
+      hiddenLabel.style.display = 'none';
+      title.style.display = 'none';
+      msgBox.classList.remove("hidden");
 
-  if (mode === 'emotion') {
-    emotionBtns.style.display = 'flex';
-    emotionBtns.style.opacity = '1';
-    emotionBtns.style.pointerEvents = 'auto';
-  } else {
-    const moods = Object.keys(messages);
-    const randomMood = moods[Math.floor(Math.random() * moods.length)];
-    showMessage(randomMood);
-  }
-}
+      if (mode === 'emotion') {
+        emotionBtns.style.display = 'flex';
+        emotionBtns.style.opacity = '1';
+        emotionBtns.style.pointerEvents = 'auto';
+      } else {
+        const moods = Object.keys(messages);
+        const randomMood = moods[Math.floor(Math.random() * moods.length)];
+        showMessage(randomMood);
+      }
+    }
 
     function typeMessage(element, text, speed = 40) {
       element.innerText = "";
@@ -317,26 +321,24 @@
       }
     }
 
-    // 웰컴 메시지 제어
-window.addEventListener('load', () => {
-  const welcomeOverlay = document.getElementById('welcome-overlay');
-  const welcomeShown = localStorage.getItem('welcomeShown');
+    window.addEventListener('load', () => {
+      const welcomeOverlay = document.getElementById('welcome-overlay');
+      const welcomeShown = localStorage.getItem('welcomeShown');
 
-  if (welcomeShown) {
-    welcomeOverlay.style.display = 'none';
-    modeBtns.style.opacity = '1';
-    modeBtns.style.pointerEvents = 'auto';
-  } else {
-    setTimeout(() => {
-      welcomeOverlay.style.display = 'none';
-      modeBtns.style.opacity = '1';
-      modeBtns.style.pointerEvents = 'auto';
-      localStorage.setItem('welcomeShown', 'true');
-    }, 1800); // 1.8초 후 사라지게 설정
-  }
-});
+      if (welcomeShown) {
+        welcomeOverlay.style.display = 'none';
+        modeBtns.style.opacity = '1';
+        modeBtns.style.pointerEvents = 'auto';
+      } else {
+        setTimeout(() => {
+          welcomeOverlay.style.display = 'none';
+          modeBtns.style.opacity = '1';
+          modeBtns.style.pointerEvents = 'auto';
+          localStorage.setItem('welcomeShown', 'true');
+        }, 1800);
+      }
+    });
 
-    // 처음부터 다시 보기
     function replayWelcome() {
       localStorage.removeItem('welcomeShown');
       location.reload();
