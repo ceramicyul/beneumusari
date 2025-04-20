@@ -11,7 +11,7 @@
       padding: 0;
       background: #fff9eb;
       font-family: 'Gaegu', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.45rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -33,7 +33,7 @@
 
     #title {
       margin-top: 20px;
-      font-size: 2.2rem;
+      font-size: 2rem;
     }
 
     .mode-buttons, .emotion-buttons {
@@ -49,7 +49,7 @@
 
     button {
       font-family: 'Gaegu', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.45rem;
       padding: 10px 16px;
       border: none;
       border-radius: 20px;
@@ -65,7 +65,7 @@
     }
 
     #messageBox {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       background: rgba(255, 255, 255, 0.4);
       backdrop-filter: blur(2px);
       padding: 18px;
@@ -102,7 +102,7 @@
 
     #hidden-label {
       font-family: 'Gaegu', sans-serif;
-      font-size: 1.6rem;
+      font-size: 1.45rem;
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
@@ -117,7 +117,7 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      font-size: 1.6rem;
+      font-size: 1.45rem;
       padding: 8px 14px;
       background-color: #f3d45d;
       border: none;
@@ -127,7 +127,6 @@
       z-index: 10000;
     }
 
-    /* 웰컴 오버레이 */
     #welcome-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -158,7 +157,7 @@
       border-radius: 20px;
       padding: 16px;
       max-width: 80vw;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       position: relative;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       white-space: pre-wrap;
@@ -178,8 +177,8 @@
     }
 
     @media (max-width: 500px) {
-      .speech-bubble { font-size: 1.8rem; padding: 14px; }
-      #messageBox { font-size: 1.8rem; padding: 14px; }
+      .speech-bubble { font-size: 1.6rem; padding: 14px; }
+      #messageBox { font-size: 1.6rem; padding: 14px; }
     }
   </style>
 </head>
@@ -211,7 +210,6 @@
     </div>
   </div>
 
-  <!-- 다시 보기 버튼 -->
   <button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
 
   <script>
