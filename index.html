@@ -6,7 +6,24 @@
   <title>우무사리가 전하는 말</title>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
   <style>
-    body {
+    body <!-- About 우무사리 버튼 -->
+<button id="aboutBtn" style="position: fixed; top: 20px; right: 20px; z-index: 10; background-color: #ffd1dc; border: none; padding: 10px 16px; border-radius: 20px; font-family: 'Gaegu', cursive; font-size: 16px; cursor: pointer;">
+  About 우무사리
+</button>
+
+<!-- 모달 팝업 -->
+<div id="aboutModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 100;">
+  <div style="background: white; max-width: 400px; margin: 10% auto; padding: 20px; border-radius: 15px; font-family: 'Gaegu', cursive; line-height: 1.5; text-align: center; position: relative;">
+    <h2 style="margin-bottom: 10px;">우무사리란?</h2>
+    <p>
+      우무사리는 부끄럼 많은 작은 문어예요.<br/>
+      바닷속에서 육지로 올라온 뒤, 사람들의 감정을 듣고 위로를 전하는 일을 시작했어요.<br/>
+      조용히 곁에 있어주며, 누구보다 당신의 감정을 잘 이해한답니다.
+    </p>
+    <button id="closeModal" style="margin-top: 15px; background-color: #ffd1dc; border: none; padding: 6px 14px; border-radius: 10px; font-family: 'Gaegu', cursive; cursor: pointer;">
+      닫기
+    </button>
+  </div>{
       margin: 0;
       padding: 0;
       background: #fff9eb;
