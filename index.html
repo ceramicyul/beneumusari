@@ -226,7 +226,7 @@
 </div>
 
 <div class="emotion-buttons" style="display: none;">
-  <button id="tiredBtn" onclick="showMessage('tired')">😪 피곤해</button>
+  <button id="tiredBtn" onclick="showMessage('tired')"><img src="https://github.com/ceramicyul/umusari-message/blob/main/angry.png?raw=true" style="height:1em; vertical-align:middle;"> 피곤해</button>
   <button id="sadBtn" onclick="showMessage('sad')">😢 속상해</button>
   <button id="angryBtn" onclick="showMessage('angry')">😠 화났어</button>
   <button id="lonelyBtn" onclick="showMessage('lonely')">🥺 외로워</button>
@@ -326,7 +326,7 @@ function typeMessage(element, text, speed = 40) {
   let i = 0;
   function type() {
     if (i < text.length) {
-      element.innerText += text.charAt(i);
+      element.innerHTML += text.charAt(i);
       i++;
       setTimeout(type, speed);
     }
