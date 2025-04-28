@@ -209,16 +209,19 @@
       border-style: solid;
       border-color: white transparent transparent;
     }
-    @media (max-width: 900px) {
-    #randomUmuImage {
-      max-width: 80vw; /* 모바일에서는 더 크게 */
-    }
-      @media (max-width: 900px) {
+   @media (max-width: 768px) {
+  /* 말풍선 크기 줄이기 */
   .speech-bubble {
-    max-width: 60vw;
-    font-size: 1.0rem;
+    max-width: 80vw;
+    font-size: 1.2rem;
     padding: 12px;
   }
+
+  /* 랜덤 이미지 더 키우기 */
+  #randomUmuImage {
+    max-width: 90vw;
+  }
+}
 
   #randomUmuImage {
     max-width: 80vw;
