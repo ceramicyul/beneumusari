@@ -77,8 +77,6 @@
     button:active {
       transform: scale(0.96);
     }
-
-    /* 감정별 버튼 파스텔 색 */
     #tiredBtn { background-color: #ffffff; }
     #tiredBtn:hover { background-color: #d1c7ec; }
     #sadBtn { background-color: #ffffff; }
@@ -89,8 +87,7 @@
     #lonelyBtn:hover { background-color: #f4b2c1; }
     #mehBtn { background-color: #ffffff; }
     #mehBtn:hover { background-color: #c7e3c4; }
-
-    #resetBtn, #replayBtn, #aboutBtn {
+    #resetBtn, #replayBtn, #aboutBtn, #saveImageBtn {
       position: fixed;
       font-family: 'Gaegu', sans-serif;
       font-size: 1rem;
@@ -105,16 +102,16 @@
       text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
       transition: all 0.2s ease;
     }
-    #resetBtn:hover, #replayBtn:hover, #aboutBtn:hover {
+    #resetBtn:hover, #replayBtn:hover, #aboutBtn:hover, #saveImageBtn:hover {
       background-color: #ffc6a3;
     }
-    #resetBtn:active, #replayBtn:active, #aboutBtn:active {
+    #resetBtn:active, #replayBtn:active, #aboutBtn:active, #saveImageBtn:active {
       transform: scale(0.96);
     }
     #resetBtn { bottom: 20px; right: 20px; display: none; }
     #replayBtn { bottom: 20px; left: 20px; }
     #aboutBtn { top: 20px; right: 20px; }
-
+    #saveImageBtn { top: 20px; left: 20px; } /* ✅ 이미지 저장 버튼 */
     #messageBox {
       font-size: 1.6rem;
       background: rgba(255,255,255,0.4);
@@ -145,8 +142,6 @@
       margin-bottom: 8px;
       display: none;
     }
-
-    /* 웰컴 오버레이 */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -200,8 +195,6 @@
       border-style: solid;
       border-color: white transparent transparent;
     }
-
-    /* ✅ 모바일 반응형 */
     @media (max-width: 768px) {
       #randomUmuImage {
         width: 100vw;
@@ -215,6 +208,29 @@
         padding: 12px;
       }
     }
+    @media (max-width: 480px) {
+  #saveImageBtn, #replayBtn, #aboutBtn, #resetBtn {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+    border-radius: 15px;
+  }
+  #saveImageBtn {
+    top: 10px;
+    left: 10px;
+  }
+  #aboutBtn {
+    top: 10px;
+    right: 10px;
+  }
+  #replayBtn {
+    bottom: 10px;
+    left: 10px;
+  }
+  #resetBtn {
+    bottom: 10px;
+    right: 10px;
+  }
+}
   </style>
 </head>
 
@@ -227,6 +243,7 @@
 <h1 id="title">우무사리가 전하는 말</h1>
 
 <button id="aboutBtn">About 우무사리</button>
+<button id="saveImageBtn">이미지 저장</button>
 
 <div class="mode-buttons">
   <button onclick="setMode('emotion')">감정 모드</button>
@@ -267,7 +284,8 @@
   </div>
 </div>
 
-<!-- ✅ 스크립트 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script>
 const messages = {
   tired: ["오늘도 여기까지 온 너, 정말 멋져우무! 😌", "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"],
@@ -293,7 +311,6 @@ const umuImages = [
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
 ];
 
-// 요소 연결
 const msgBox = document.getElementById('messageBox');
 const resetBtn = document.getElementById('resetBtn');
 const emotionBtns = document.querySelector('.emotion-buttons');
@@ -301,8 +318,8 @@ const modeBtns = document.querySelector('.mode-buttons');
 const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
 
-// 모드
 let currentMode = '';
+let selectedEmotion = '';
 
 function setMode(mode) {
   currentMode = mode;
@@ -330,32 +347,59 @@ function typeMessage(element, text, speed = 40) {
   type();
 }
 
+function getTodayDate() {
+  const today = new Date();
+  return today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+}
+
+function loadSavedMessage(mood, isHidden) {
+  const today = getTodayDate();
+  const savedData = JSON.parse(localStorage.getItem('savedMessage'));
+
+  if (savedData && savedData.date === today && savedData.mood === mood) {
+    return savedData.message;
+  }
+
+  let selectedMessage = '';
+  if (isHidden) {
+    selectedMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+  } else {
+    const msgList = messages[mood];
+    selectedMessage = msgList[Math.floor(Math.random() * msgList.length)];
+  }
+
+  localStorage.setItem('savedMessage', JSON.stringify({
+    date: today,
+    mood: mood,
+    message: selectedMessage
+  }));
+
+  return selectedMessage;
+}
+
 function showMessage(mood) {
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
-  // ✅ 먼저 랜덤 이미지 띄우기
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
   
-  // ✅ 텍스트 타이핑은 이미지 띄운 직후 시작
+  const messageToShow = loadSavedMessage(mood, isHidden);
+
   if (isHidden) {
     hiddenLabel.style.display = 'block';
     msgBox.classList.add("hidden");
-    msgBox.style.display = 'block'; 
-    typeMessage(msgBox, hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]);
   } else {
     hiddenLabel.style.display = 'none';
     msgBox.classList.remove("hidden");
-    msgBox.style.display = 'block'; 
-    const msgList = messages[mood];
-    typeMessage(msgBox, msgList[Math.floor(Math.random() * msgList.length)]);
   }
+  
+  msgBox.style.display = 'block';
+  typeMessage(msgBox, messageToShow);
 
   emotionBtns.style.display = 'none';
   resetBtn.style.display = 'inline-block';
 }
-
 
 function resetPage() {
   msgBox.style.display = 'none';
@@ -391,7 +435,92 @@ window.onclick = function(e) {
     document.getElementById('aboutModal').style.display = 'none';
   }
 };
-</script>
 
-</body>
-</html>
+// 감정 버튼 클릭 시 선택 감정 저장
+document.getElementById('tiredBtn').addEventListener('click', function() {
+  selectedEmotion = "피곤해";
+});
+document.getElementById('sadBtn').addEventListener('click', function() {
+  selectedEmotion = "속상해";
+});
+document.getElementById('angryBtn').addEventListener('click', function() {
+  selectedEmotion = "화났어";
+});
+document.getElementById('lonelyBtn').addEventListener('click', function() {
+  selectedEmotion = "외로워";
+});
+document.getElementById('mehBtn').addEventListener('click', function() {
+  selectedEmotion = "그냥 그래";
+});
+
+// 이미지 저장
+document.getElementById('saveImageBtn').addEventListener('click', function() {
+  const target = document.body;
+
+  html2canvas(target, { backgroundColor: null, scale: 2 }).then(function(canvas) {
+    const ctx = canvas.getContext('2d');
+    const today = new Date();
+    const dateStr = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    const emotionText = selectedEmotion || "우무사리";
+
+    ctx.font = 'bold 30px Gaegu, sans-serif';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${emotionText} - ${dateStr}`, canvas.width - 20, canvas.height - 20);
+
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `${emotionText}_${dateStr}.png`;
+    link.click();
+
+    // ✅ 저장 후 알림창
+    showSaveAlert();
+  });
+});
+
+// ✅ 저장 완료 알림창 함수
+function showSaveAlert() {
+  const alertBox = document.createElement('div');
+  alertBox.textContent = '오늘의 감정 기록이 완료되었습니다!';
+  alertBox.style.position = 'fixed';
+  alertBox.style.bottom = '50px';
+  alertBox.style.left = '50%';
+  alertBox.style.transform = 'translateX(-50%)';
+  alertBox.style.background = 'rgba(255, 255, 255, 0.9)';
+  alertBox.style.padding = '12px 24px';
+  alertBox.style.borderRadius = '20px';
+  alertBox.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+  alertBox.style.fontFamily = 'Gaegu, sans-serif';
+  alertBox.style.fontSize = '1.2rem';
+  alertBox.style.zIndex = '10001';
+
+  document.body.appendChild(alertBox);
+
+  setTimeout(() => {
+    alertBox.remove();
+  }, 2000);
+}
+});
+</script>
+// ✅ 저장 완료 알림창 함수
+function showSaveAlert() {
+  const alertBox = document.createElement('div');
+  alertBox.textContent = '오늘의 감정 기록이 완료되었습니다!';
+  alertBox.style.position = 'fixed';
+  alertBox.style.bottom = '50px';
+  alertBox.style.left = '50%';
+  alertBox.style.transform = 'translateX(-50%)';
+  alertBox.style.background = 'rgba(255, 255, 255, 0.9)';
+  alertBox.style.padding = '12px 24px';
+  alertBox.style.borderRadius = '20px';
+  alertBox.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+  alertBox.style.fontFamily = 'Gaegu, sans-serif';
+  alertBox.style.fontSize = '1.2rem';
+  alertBox.style.zIndex = '10001';
+
+  document.body.appendChild(alertBox);
+
+  setTimeout(() => {
+    alertBox.remove();
+  }, 2000);
+}
