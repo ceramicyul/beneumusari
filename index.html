@@ -499,28 +499,5 @@ function showSaveAlert() {
   setTimeout(() => {
     alertBox.remove();
   }, 2000);
-}
-});
+
 </script>
-// ✅ 저장 완료 알림창 함수
-function showSaveAlert() {
-  const alertBox = document.createElement('div');
-  alertBox.textContent = '오늘의 감정 기록이 완료되었습니다!';
-  alertBox.style.position = 'fixed';
-  alertBox.style.bottom = '50px';
-  alertBox.style.left = '50%';
-  alertBox.style.transform = 'translateX(-50%)';
-  alertBox.style.background = 'rgba(255, 255, 255, 0.9)';
-  alertBox.style.padding = '12px 24px';
-  alertBox.style.borderRadius = '20px';
-  alertBox.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
-  alertBox.style.fontFamily = 'Gaegu, sans-serif';
-  alertBox.style.fontSize = '1.2rem';
-  alertBox.style.zIndex = '10001';
-
-  document.body.appendChild(alertBox);
-
-  setTimeout(() => {
-    alertBox.remove();
-  }, 2000);
-}
