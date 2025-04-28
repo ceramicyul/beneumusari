@@ -6,6 +6,7 @@
   <title>우무사리가 전하는 말</title>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
   <style>
+    /* 기본 스타일 */
     body {
       margin: 0;
       padding: 0;
@@ -18,7 +19,6 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
-      overflow: hidden;
     }
     #background {
       position: fixed;
@@ -28,25 +28,26 @@
       height: 100vh;
       background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
       background-size: cover;
-      background-position: center;
       background-repeat: no-repeat;
+      background-position: center;
       z-index: -2;
     }
     #randomUmuImage {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-      z-index: -1;
       display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 60vw;
+      height: auto;
+      z-index: -1;
+      pointer-events: none;
     }
-    h1 {
+    #title {
       margin-top: 20px;
       font-size: 2rem;
     }
-    .mode-buttons {
+    .mode-buttons, .emotion-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -64,6 +65,7 @@
       border-radius: 20px;
       background-color: #ffedc2;
       color: #5c4631;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
@@ -72,16 +74,47 @@
     button:hover {
       background-color: #ffc6a3;
     }
-    #aboutBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
+    button:active {
+      transform: scale(0.96);
     }
-    #saveBtn {
+
+    /* 감정별 버튼 파스텔 색 */
+    #tiredBtn { background-color: #ffffff; }
+    #tiredBtn:hover { background-color: #d1c7ec; }
+    #sadBtn { background-color: #ffffff; }
+    #sadBtn:hover { background-color: #b7d8f4; }
+    #angryBtn { background-color: #ffffff; }
+    #angryBtn:hover { background-color: #f3b58a; }
+    #lonelyBtn { background-color: #ffffff; }
+    #lonelyBtn:hover { background-color: #f4b2c1; }
+    #mehBtn { background-color: #ffffff; }
+    #mehBtn:hover { background-color: #c7e3c4; }
+
+    #resetBtn, #replayBtn, #aboutBtn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      font-family: 'Gaegu', sans-serif;
+      font-size: 1rem;
+      padding: 8px 14px;
+      background-color: #ffedc2;
+      color: #5c4631;
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+      z-index: 10000;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+      transition: all 0.2s ease;
     }
+    #resetBtn:hover, #replayBtn:hover, #aboutBtn:hover {
+      background-color: #ffc6a3;
+    }
+    #resetBtn:active, #replayBtn:active, #aboutBtn:active {
+      transform: scale(0.96);
+    }
+    #resetBtn { bottom: 20px; right: 20px; display: none; }
+    #replayBtn { bottom: 20px; left: 20px; }
+    #aboutBtn { top: 20px; right: 20px; }
+
     #messageBox {
       font-size: 1.6rem;
       background: rgba(255,255,255,0.4);
@@ -91,10 +124,19 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       max-width: 80%;
       display: none;
+      position: relative;
       white-space: pre-wrap;
       min-height: 60px;
-      position: relative;
-      z-index: 1;
+    }
+    #messageBox::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 12px 12px 0;
+      border-style: solid;
+      border-color: rgba(255,255,255,0.4) transparent transparent;
     }
     #hidden-label {
       font-family: 'Gaegu', sans-serif;
@@ -102,20 +144,29 @@
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
-      z-index: 1;
     }
+
+    /* 웰컴 오버레이 */
     #welcome-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #fff9eb;
+      background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       z-index: 9999;
+    }
+    .welcome-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
     }
     .umu-illustration {
       width: 60vw;
@@ -129,13 +180,47 @@
       padding: 16px;
       max-width: 80vw;
       font-size: 1.6rem;
-      text-align: center;
+      position: relative;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .speech-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 20px 20px 0;
+      border-style: solid;
+      border-color: white transparent transparent;
+    }
+
+    /* ✅ 모바일 반응형 */
+    @media (max-width: 768px) {
+      #randomUmuImage {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        object-fit: contain;
+      }
+      .speech-bubble {
+        max-width: 80vw;
+        font-size: 1.2rem;
+        padding: 12px;
+      }
     }
   </style>
 </head>
 
 <body>
+
+<!-- ✅ body 시작 -->
 
 <div id="background"></div>
 <img id="randomUmuImage" />
@@ -143,25 +228,46 @@
 
 <button id="aboutBtn">About 우무사리</button>
 
-<div class="mode-buttons" id="modeButtons">
-  <button onclick="chooseMode('emotion')">감정 모드</button>
-  <button onclick="chooseMode('random')">랜덤 모드</button>
+<div class="mode-buttons">
+  <button onclick="setMode('emotion')">감정 모드</button>
+  <button onclick="setMode('random')">랜덤 모드</button>
+</div>
+
+<div class="emotion-buttons" style="display: none;">
+  <button id="tiredBtn" onclick="showMessage('tired')">😪 피곤해</button>
+  <button id="sadBtn" onclick="showMessage('sad')">😢 속상해</button>
+  <button id="angryBtn" onclick="showMessage('angry')">😠 화났어</button>
+  <button id="lonelyBtn" onclick="showMessage('lonely')">🥺 외로워</button>
+  <button id="mehBtn" onclick="showMessage('meh')">😶 그냥 그래</button>
 </div>
 
 <div id="hidden-label">✨ Hidden! ✨</div>
 <div id="messageBox"></div>
+<button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
 
 <div id="welcome-overlay">
-  <img class="umu-illustration" src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" alt="우무사리 일러스트">
-  <div class="speech-bubble">
-    안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐<br><small>오늘 하루 하나의 이야기만 전해줄게</small>
+  <div class="welcome-content">
+    <div class="speech-bubble">
+      안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐
+    </div>
+    <img src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" class="umu-illustration" />
   </div>
 </div>
 
-<button id="saveBtn" onclick="saveToday()">오늘 감정 저장</button>
+<button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- About 모달 -->
+<div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+  <div style="background:white; max-width:600px; margin:10% auto; padding:20px; border-radius:15px; text-align:center;">
+    <h2>우무사리란?</h2>
+    <p>우무문어를 모티브로<br>항상 머리에 불가사리를 붙이고 다녀<br>'우무사리'라는 이름을 갖게 됐죠.<br/>
+    우무사리는 사람들의 기분을<br/>조용히 들어주고,<br/>
+      말없이 위로를 건네는 감정 친구랍니다.</p>
+    <button id="closeModal" style="margin-top:20px;">닫기</button>
+  </div>
+</div>
 
+<!-- ✅ 스크립트 -->
 <script>
 const messages = {
   tired: ["오늘도 여기까지 온 너, 정말 멋져우무! 😌", "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"],
@@ -179,7 +285,7 @@ const hiddenMessages = [
   "당신은 사슴이에요 우무! 내 마음을 녹용~🫎"
 ];
 
-const images = [
+const umuImages = [
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869.jpg?raw=true',
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_01.jpg?raw=true',
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_02.jpg?raw=true',
@@ -187,70 +293,103 @@ const images = [
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
 ];
 
-let todayData = JSON.parse(localStorage.getItem('umuToday')) || null;
+// 요소 연결
+const msgBox = document.getElementById('messageBox');
+const resetBtn = document.getElementById('resetBtn');
+const emotionBtns = document.querySelector('.emotion-buttons');
+const modeBtns = document.querySelector('.mode-buttons');
+const hiddenLabel = document.getElementById('hidden-label');
+const randomUmuImage = document.getElementById('randomUmuImage');
 
-function getToday() {
-  const today = new Date();
-  return today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-}
+// 모드
+let currentMode = '';
 
-function chooseMode(mode) {
-  const today = getToday();
-  if (!todayData || todayData.date !== today) {
-    const mood = Object.keys(messages)[Math.floor(Math.random() * 5)];
-    const isHidden = Math.random() < 0.1;
-    const message = isHidden
-      ? hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]
-      : messages[mood][Math.floor(Math.random() * messages[mood].length)];
-    const image = images[Math.floor(Math.random() * images.length)];
-    todayData = { date: today, mode, mood, message, isHidden, image };
-    localStorage.setItem('umuToday', JSON.stringify(todayData));
-  }
-  document.getElementById('modeButtons').style.display = 'none';
-  showToday();
-}
-
-function showToday() {
-  document.getElementById('randomUmuImage').src = todayData.image;
-  document.getElementById('randomUmuImage').style.display = 'block';
-
-  if (todayData.isHidden) {
-    document.getElementById('hidden-label').style.display = 'block';
+function setMode(mode) {
+  currentMode = mode;
+  modeBtns.style.display = 'none';
+  title.style.display = 'none';
+  if (mode === 'emotion') {
+    emotionBtns.style.display = 'flex';
+    emotionBtns.style.opacity = '1';
+    emotionBtns.style.pointerEvents = 'auto';
   } else {
-    document.getElementById('hidden-label').style.display = 'none';
+    showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
+  }
+}
+
+function typeMessage(element, text, speed = 40) {
+  element.innerHTML = '';
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+function showMessage(mood) {
+  const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+  const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
+
+  // ✅ 먼저 랜덤 이미지 띄우기
+  randomUmuImage.src = randomImg;
+  randomUmuImage.style.display = 'block';
+  
+  // ✅ 텍스트 타이핑은 이미지 띄운 직후 시작
+  if (isHidden) {
+    hiddenLabel.style.display = 'block';
+    msgBox.classList.add("hidden");
+    msgBox.style.display = 'block'; 
+    typeMessage(msgBox, hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]);
+  } else {
+    hiddenLabel.style.display = 'none';
+    msgBox.classList.remove("hidden");
+    msgBox.style.display = 'block'; 
+    const msgList = messages[mood];
+    typeMessage(msgBox, msgList[Math.floor(Math.random() * msgList.length)]);
   }
 
-  document.getElementById('messageBox').textContent = todayData.message;
-  document.getElementById('messageBox').style.display = 'block';
+  emotionBtns.style.display = 'none';
+  resetBtn.style.display = 'inline-block';
 }
 
-function saveToday() {
-  html2canvas(document.body, { backgroundColor: null, scale: 2 }).then(canvas => {
-    const ctx = canvas.getContext('2d');
-    ctx.font = 'bold 30px Gaegu';
-    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-    ctx.textAlign = 'right';
-    ctx.fillText(`${todayData.mood} - ${todayData.date}`, canvas.width - 30, canvas.height - 30);
 
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = `UmuToday_${todayData.date}.png`;
-    link.click();
-  });
+function resetPage() {
+  msgBox.style.display = 'none';
+  randomUmuImage.style.display = 'none';
+  if (currentMode === 'emotion') {
+    emotionBtns.style.display = 'flex';
+  } else {
+    setMode('random');
+  }
 }
 
-window.onload = function() {
+function replayWelcome() {
+  location.reload();
+}
+
+window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('welcome-overlay').style.display = 'none';
-    const today = getToday();
-    if (todayData && todayData.date === today) {
-      document.getElementById('modeButtons').style.display = 'none';
-      showToday();
-    } else {
-      document.getElementById('modeButtons').style.opacity = '1';
-      document.getElementById('modeButtons').style.pointerEvents = 'auto';
-    }
-  }, 2000);
+    modeBtns.style.opacity = '1';
+    modeBtns.style.pointerEvents = 'auto';
+  }, 1800);
+});
+
+// About
+document.getElementById('aboutBtn').onclick = function () {
+  document.getElementById('aboutModal').style.display = 'block';
+};
+document.getElementById('closeModal').onclick = function () {
+  document.getElementById('aboutModal').style.display = 'none';
+};
+window.onclick = function(e) {
+  if (e.target === document.getElementById('aboutModal')) {
+    document.getElementById('aboutModal').style.display = 'none';
+  }
 };
 </script>
 
