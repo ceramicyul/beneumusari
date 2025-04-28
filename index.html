@@ -18,6 +18,7 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      overflow-x: hidden;
     }
     #background {
       position: fixed;
@@ -25,7 +26,10 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: #fff9eb;
+      background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
       z-index: -2;
     }
     #randomUmuImage {
@@ -35,6 +39,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       max-width: 60vw;
+      max-height: 80vh;
       height: auto;
       z-index: -1;
       pointer-events: none;
@@ -61,8 +66,8 @@
       border-radius: 20px;
       background-color: #ffedc2;
       color: #5c4631;
-      cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
       transition: all 0.2s ease;
       min-width: 100px;
     }
@@ -71,9 +76,6 @@
     }
     button:active {
       transform: scale(0.96);
-    }
-    #tiredBtn, #sadBtn, #angryBtn, #lonelyBtn, #mehBtn {
-      background-color: #ffffff;
     }
     #resetBtn, #replayBtn, #aboutBtn, #saveImageBtn {
       position: fixed;
@@ -100,6 +102,16 @@
       position: relative;
       white-space: pre-wrap;
       min-height: 60px;
+    }
+    #messageBox::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 12px 12px 0;
+      border-style: solid;
+      border-color: rgba(255,255,255,0.4) transparent transparent;
     }
     #hidden-label {
       font-size: 1.45rem;
@@ -138,7 +150,15 @@
       line-height: 1.6;
     }
     @media (max-width: 768px) {
-      .speech-bubble { font-size: 1.2rem; padding: 12px; }
+      #randomUmuImage {
+        width: 90vw;
+        max-width: 90vw;
+        height: auto;
+      }
+      .speech-bubble {
+        font-size: 1.2rem;
+        padding: 12px;
+      }
     }
     @media (max-width: 480px) {
       #saveImageBtn, #replayBtn, #aboutBtn, #resetBtn {
@@ -146,10 +166,6 @@
         padding: 6px 10px;
         border-radius: 15px;
       }
-      #saveImageBtn { top: 10px; left: 10px; }
-      #aboutBtn { top: 10px; right: 10px; }
-      #replayBtn { bottom: 10px; left: 10px; }
-      #resetBtn { bottom: 10px; right: 10px; }
     }
   </style>
 </head>
@@ -164,21 +180,21 @@
 <button id="saveImageBtn">이미지 저장</button>
 
 <div class="mode-buttons">
-  <button onclick="setMode('emotion')">감정 모드</button>
-  <button onclick="setMode('random')">랜덤 모드</button>
+  <button id="emotionModeBtn">감정 모드</button>
+  <button id="randomModeBtn">랜덤 모드</button>
 </div>
 
 <div class="emotion-buttons" style="display: none;">
-  <button id="tiredBtn" onclick="showMessage('tired')">😪 피곤해</button>
-  <button id="sadBtn" onclick="showMessage('sad')">😢 속상해</button>
-  <button id="angryBtn" onclick="showMessage('angry')">😠 화났어</button>
-  <button id="lonelyBtn" onclick="showMessage('lonely')">🥺 외로워</button>
-  <button id="mehBtn" onclick="showMessage('meh')">😶 그냥 그래</button>
+  <button id="tiredBtn">😪 피곤해</button>
+  <button id="sadBtn">😢 속상해</button>
+  <button id="angryBtn">😠 화났어</button>
+  <button id="lonelyBtn">🥺 외로워</button>
+  <button id="mehBtn">😶 그냥 그래</button>
 </div>
 
 <div id="hidden-label">✨ Hidden! ✨</div>
 <div id="messageBox"></div>
-<button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
+<button id="resetBtn">다시 선택하기</button>
 
 <div id="welcome-overlay">
   <div class="welcome-content">
@@ -189,17 +205,7 @@
   </div>
 </div>
 
-<button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
-
-<!-- About 모달 -->
-<div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
-  <div style="background:white; max-width:600px; margin:10% auto; padding:20px; border-radius:15px; text-align:center;">
-    <h2>우무사리란?</h2>
-    <p>우무문어를 모티브로<br>항상 머리에 불가사리를 붙이고 다녀<br>'우무사리'라는 이름을 갖게 됐죠.<br/>
-    우무사리는 사람들의 기분을 조용히 들어주고,<br/>말없이 위로를 건네는 감정 친구랍니다.</p>
-    <button id="closeModal" style="margin-top:20px;">닫기</button>
-  </div>
-</div>
+<button id="replayBtn">처음부터 다시 보기</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -228,6 +234,7 @@ const umuImages = [
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
 ];
 
+// 요소 연결
 const msgBox = document.getElementById('messageBox');
 const resetBtn = document.getElementById('resetBtn');
 const emotionBtns = document.querySelector('.emotion-buttons');
@@ -236,44 +243,50 @@ const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
 
 let currentMode = '';
-let selectedEmotion = '';
+let selectedMood = '';
+let todayMessage = '';
+let todayHidden = false;
 
 function getTodayDate() {
   const today = new Date();
   return today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 }
 
+// 하루 하나 랜덤 이미지 고정
 function loadSavedBackground() {
   const today = getTodayDate();
   const savedBackground = JSON.parse(localStorage.getItem('savedBackground'));
-
   if (savedBackground && savedBackground.date === today) {
     return savedBackground.image;
   }
-
   const selectedImage = umuImages[Math.floor(Math.random() * umuImages.length)];
   localStorage.setItem('savedBackground', JSON.stringify({ date: today, image: selectedImage }));
-
   return selectedImage;
 }
 
-function loadSavedMessage(mood, isHidden) {
+// 하루 하나 멘트 고정
+function loadSavedMessage(mood, modeType) {
   const today = getTodayDate();
   const savedData = JSON.parse(localStorage.getItem('savedMessage'));
-
-  if (savedData && savedData.date === today && savedData.mood === mood) {
-    return savedData.message;
+  if (savedData && savedData.date === today && savedData.mood === mood && savedData.mode === modeType) {
+    todayMessage = savedData.message;
+    todayHidden = savedData.hidden;
+    return;
   }
-
-  let selectedMessage = '';
-  if (isHidden) {
-    selectedMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
+  // 새로 랜덤 뽑기
+  todayHidden = (Math.random() < 0.1);
+  if (todayHidden) {
+    todayMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)];
   } else {
-    selectedMessage = messages[mood][Math.floor(Math.random() * messages[mood].length)];
+    todayMessage = messages[mood][Math.floor(Math.random() * messages[mood].length)];
   }
-
-  localStorage.setItem('savedMessage', JSON.stringify({ date: today, mood: mood, message: selectedMessage }));
-  return selectedMessage;
+  localStorage.setItem('savedMessage', JSON.stringify({
+    date: today,
+    mood: mood,
+    mode: modeType,
+    message: todayMessage,
+    hidden: todayHidden
+  }));
 }
 
 function setMode(mode) {
@@ -285,7 +298,8 @@ function setMode(mode) {
     emotionBtns.style.opacity = '1';
     emotionBtns.style.pointerEvents = 'auto';
   } else {
-    showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
+    selectedMood = Object.keys(messages)[Math.floor(Math.random() * 5)];
+    showMessage(selectedMood, 'random');
   }
 }
 
@@ -302,16 +316,15 @@ function typeMessage(element, text, speed = 40) {
   type();
 }
 
-function showMessage(mood) {
-  const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+function showMessage(mood, modeType = 'emotion') {
+  selectedMood = mood;
   const randomImg = loadSavedBackground();
-
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
 
-  const messageToShow = loadSavedMessage(mood, isHidden);
+  loadSavedMessage(mood, modeType);
 
-  if (isHidden) {
+  if (todayHidden) {
     hiddenLabel.style.display = 'block';
     msgBox.classList.add("hidden");
   } else {
@@ -320,68 +333,33 @@ function showMessage(mood) {
   }
 
   msgBox.style.display = 'block';
-  typeMessage(msgBox, messageToShow);
+  typeMessage(msgBox, todayMessage);
 
   emotionBtns.style.display = 'none';
   resetBtn.style.display = 'inline-block';
 }
 
-function resetPage() {
-  msgBox.style.display = 'none';
-  randomUmuImage.style.display = 'none';
-  if (currentMode === 'emotion') {
-    emotionBtns.style.display = 'flex';
-  } else {
-    setMode('random');
-  }
-}
-
-function replayWelcome() {
-  location.reload();
-}
-
-// About modal
-document.getElementById('aboutBtn').onclick = function () {
-  document.getElementById('aboutModal').style.display = 'block';
-};
-document.getElementById('closeModal').onclick = function () {
-  document.getElementById('aboutModal').style.display = 'none';
-};
-window.onclick = function(e) {
-  if (e.target === document.getElementById('aboutModal')) {
-    document.getElementById('aboutModal').style.display = 'none';
-  }
-};
-
-// 감정 버튼 클릭 시 감정 저장
-document.getElementById('tiredBtn').onclick = () => selectedEmotion = "피곤해";
-document.getElementById('sadBtn').onclick = () => selectedEmotion = "속상해";
-document.getElementById('angryBtn').onclick = () => selectedEmotion = "화났어";
-document.getElementById('lonelyBtn').onclick = () => selectedEmotion = "외로워";
-document.getElementById('mehBtn').onclick = () => selectedEmotion = "그냥 그래";
-
-// 저장 버튼
+// 저장
 document.getElementById('saveImageBtn').addEventListener('click', function() {
   html2canvas(document.body, { backgroundColor: null, scale: 2, useCORS: true }).then(function(canvas) {
     const ctx = canvas.getContext('2d');
     const today = getTodayDate();
-    const emotionText = selectedEmotion || "우무사리";
+    const moodText = todayHidden ? 'HIDDEN' : selectedMood || "우무사리";
 
     ctx.font = 'bold 36px Gaegu, sans-serif';
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)'; // 더 진하게
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.textAlign = 'right';
-    ctx.fillText(`${emotionText} - ${today}`, canvas.width - 20, canvas.height - 20);
+    ctx.fillText(`${moodText} - ${today}`, canvas.width - 20, canvas.height - 20);
 
     const link = document.createElement('a');
     link.href = canvas.toDataURL('image/png');
-    link.download = `${emotionText}_${today}.png`;
+    link.download = `${today}_${moodText}.png`;
     link.click();
 
     showSaveAlert();
   });
 });
 
-// 저장 완료 알림
 function showSaveAlert() {
   const alertBox = document.createElement('div');
   alertBox.textContent = '오늘의 감정 기록이 완료되었습니다!';
@@ -400,7 +378,7 @@ function showSaveAlert() {
   setTimeout(() => { alertBox.remove(); }, 2000);
 }
 
-// 매일 자정 초기화
+// 자정마다 초기화
 function clearStorageIfNewDay() {
   const today = getTodayDate();
   const savedData = JSON.parse(localStorage.getItem('savedMessage'));
@@ -411,6 +389,34 @@ function clearStorageIfNewDay() {
   }
 }
 
+// 버튼 연결
+document.getElementById('emotionModeBtn').addEventListener('click', () => setMode('emotion'));
+document.getElementById('randomModeBtn').addEventListener('click', () => setMode('random'));
+document.getElementById('resetBtn').addEventListener('click', resetPage);
+document.getElementById('replayBtn').addEventListener('click', replayWelcome);
+
+document.getElementById('tiredBtn').addEventListener('click', () => showMessage('tired', 'emotion'));
+document.getElementById('sadBtn').addEventListener('click', () => showMessage('sad', 'emotion'));
+document.getElementById('angryBtn').addEventListener('click', () => showMessage('angry', 'emotion'));
+document.getElementById('lonelyBtn').addEventListener('click', () => showMessage('lonely', 'emotion'));
+document.getElementById('mehBtn').addEventListener('click', () => showMessage('meh', 'emotion'));
+
+// 리셋 함수
+function resetPage() {
+  msgBox.style.display = 'none';
+  randomUmuImage.style.display = 'none';
+  if (currentMode === 'emotion') {
+    emotionBtns.style.display = 'flex';
+  } else {
+    setMode('random');
+  }
+}
+
+function replayWelcome() {
+  location.reload();
+}
+
+// 초기화 실행
 window.addEventListener('load', () => {
   clearStorageIfNewDay();
   setTimeout(() => {
@@ -420,6 +426,5 @@ window.addEventListener('load', () => {
   }, 1800);
 });
 </script>
-
 </body>
 </html>
