@@ -376,21 +376,12 @@ function replayWelcome() {
 }
 
 window.addEventListener('load', () => {
-  const welcomeOverlay = document.getElementById('welcome-overlay');
-  const welcomeShown = localStorage.getItem('welcomeShown');
-
-  if (welcomeShown) {
-    welcomeOverlay.style.display = 'none';
-    modeBtns.style.opacity = '1';
-    modeBtns.style.pointerEvents = 'auto';
-  } else {
-    setTimeout(() => {
-      welcomeOverlay.style.display = 'none';
-      modeBtns.style.opacity = '1';
-      modeBtns.style.pointerEvents = 'auto';
-      localStorage.setItem('welcomeShown', 'true');
-    }, 1800);
-  }
+ const welcomeOverlay = document.getElementById('welcome-overlay');
+setTimeout(() => {
+  welcomeOverlay.style.display = 'none';
+  modeBtns.style.opacity = '1';
+  modeBtns.style.pointerEvents = 'auto';
+}, 1800);
 });
 
 // About 모달 열기, 닫기
