@@ -332,23 +332,30 @@ function typeMessage(element, text, speed = 40) {
 
 function showMessage(mood) {
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
-  randomUmuImage.src = umuImages[Math.floor(Math.random() * umuImages.length)];
-  randomUmuImage.style.display = 'block';
+  const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
+  // ✅ 먼저 랜덤 이미지 띄우기
+  randomUmuImage.src = randomImg;
+  randomUmuImage.style.display = 'block';
+  
+  // ✅ 텍스트 타이핑은 이미지 띄운 직후 시작
   if (isHidden) {
     hiddenLabel.style.display = 'block';
     msgBox.classList.add("hidden");
+    msgBox.style.display = 'block'; 
     typeMessage(msgBox, hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]);
   } else {
     hiddenLabel.style.display = 'none';
     msgBox.classList.remove("hidden");
-    typeMessage(msgBox, messages[mood][Math.floor(Math.random() * 2)]);
+    msgBox.style.display = 'block'; 
+    const msgList = messages[mood];
+    typeMessage(msgBox, msgList[Math.floor(Math.random() * msgList.length)]);
   }
 
-  msgBox.style.display = 'block';
   emotionBtns.style.display = 'none';
   resetBtn.style.display = 'inline-block';
 }
+
 
 function resetPage() {
   msgBox.style.display = 'none';
