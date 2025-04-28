@@ -6,6 +6,7 @@
   <title>우무사리가 전하는 말</title>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
   <style>
+    /* ✅ CSS 부분 (생략 없이 완전) */
     body {
       margin: 0;
       padding: 0;
@@ -76,16 +77,22 @@
       transform: scale(0.96);
     }
     /* 감정별 버튼 색 */
-    #tiredBtn { background-color: #d6ccf0; }
-    #tiredBtn:hover { background-color: #c6b6e9; }
-    #sadBtn { background-color: #b0d4f1; }
-    #sadBtn:hover { background-color: #9fc7eb; }
-    #angryBtn { background-color: #f5b183; }
-    #angryBtn:hover { background-color: #f29b64; }
-    #lonelyBtn { background-color: #f3c0c9; }
-    #lonelyBtn:hover { background-color: #ecaab4; }
-    #mehBtn { background-color: #cde3c8; }
-    #mehBtn:hover { background-color: #b8d9b2; }
+/* 감정별 버튼 색 (파스텔 버전) */
+#tiredBtn { background-color: #e0d7f5; }
+#tiredBtn:hover { background-color: #d1c7ec; }
+
+#sadBtn { background-color: #c9e3f8; }
+#sadBtn:hover { background-color: #b7d8f4; }
+
+#angryBtn { background-color: #f7c9a9; }
+#angryBtn:hover { background-color: #f3b58a; }
+
+#lonelyBtn { background-color: #f8c9d4; }
+#lonelyBtn:hover { background-color: #f4b2c1; }
+
+#mehBtn { background-color: #d9eed7; }
+#mehBtn:hover { background-color: #c7e3c4; }
+
     #resetBtn, #replayBtn, #aboutBtn {
       position: fixed;
       font-family: 'Gaegu', sans-serif;
@@ -196,7 +203,8 @@
     }
   </style>
 </head>
-<body>
+
+  <body>
 
 <div id="background"></div>
 <img id="randomUmuImage" />
@@ -223,37 +231,35 @@
 
 <div id="welcome-overlay">
   <div class="welcome-content">
-    <div class="speech-bubble">안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐</div>
+    <div class="speech-bubble">
+      안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐
+    </div>
     <img src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" class="umu-illustration" />
   </div>
 </div>
 
 <button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
 
-<!-- ✨ 여기까지가 HTML + CSS! -->
-  
+<!-- ✅ About 모달 구조 (HTML 먼저 위치) -->
+<div id="aboutModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+  <div style="background: white; max-width: 400px; margin: 10% auto; padding: 20px; border-radius: 15px; font-family: 'Gaegu', sans-serif; line-height: 1.5; text-align: center; position: relative;">
+    <h2>우무사리란?</h2>
+    <p>우무사리는 바다에서 온 부끄럼 많은 작은 문어예요.<br/>
+    사람들의 감정을 조용히 들어주고, 말없이 위로를 건네는 친구랍니다.<br/>
+    힘들 때 곁에 있어주는 존재, 그게 바로 우무사리예요.</p>
+    <button id="closeModal" style="margin-top: 20px;">닫기</button>
+  </div>
+</div>
+
+<!-- ✅ 그리고 이제 <script> 시작 -->
+
 <script>
 const messages = {
-  tired: [
-    "오늘도 여기까지 온 너, 정말 멋져우무! 😌",
-    "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"
-  ],
-  sad: [
-    "감정은 숨기지 않아도 돼... 말 없이 곁을 지켜줄게. 🌊",
-    "오늘도 많이 애썼구나... 살며시 꼬옥 안아줄게. 🐚"
-  ],
-  angry: [
-    "화났구나! 참느라 수고했우무!",
-    "속상한 일 있었지? 얘기해도 돼 우무!"
-  ],
-  lonely: [
-    "혼자 아니야, 우무가 있우무!",
-    "외로워도 괜찮아, 함께 있우무!"
-  ],
-  meh: [
-    "그냥 그런 날도 있는 거야 우무~",
-    "아무것도 안 해도 괜찮우무"
-  ]
+  tired: ["오늘도 여기까지 온 너, 정말 멋져우무! 😌", "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"],
+  sad: ["감정은 숨기지 않아도 돼... 말 없이 곁을 지켜줄게. 🌊", "오늘도 많이 애썼구나... 살며시 꼬옥 안아줄게. 🐚"],
+  angry: ["화났구나! 참느라 수고했우무!", "속상한 일 있었지? 얘기해도 돼 우무!"],
+  lonely: ["혼자 아니야, 우무가 있우무!", "외로워도 괜찮아, 함께 있우무!"],
+  meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮우무"]
 };
 
 const hiddenMessages = [
@@ -272,7 +278,7 @@ const umuImages = [
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
 ];
 
-// 요소 가져오기
+// 요소
 const msgBox = document.getElementById('messageBox');
 const resetBtn = document.getElementById('resetBtn');
 const emotionBtns = document.querySelector('.emotion-buttons');
@@ -304,7 +310,7 @@ function setMode(mode) {
   }
 }
 
-// 타이핑 효과
+// 타이핑
 function typeMessage(element, text, speed = 40) {
   element.innerText = "";
   let i = 0;
@@ -318,7 +324,7 @@ function typeMessage(element, text, speed = 40) {
   type();
 }
 
-// 감정별 메시지 보여주기
+// 감정별 메시지
 function showMessage(mood) {
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
@@ -363,7 +369,6 @@ function replayWelcome() {
   location.reload();
 }
 
-// 페이지 로드
 window.addEventListener('load', () => {
   const welcomeOverlay = document.getElementById('welcome-overlay');
   const welcomeShown = localStorage.getItem('welcomeShown');
@@ -382,7 +387,7 @@ window.addEventListener('load', () => {
   }
 });
 
-// About 모달 기능
+// About 모달 열기, 닫기
 document.getElementById('aboutBtn').onclick = function () {
   document.getElementById('aboutModal').style.display = 'block';
 };
@@ -396,13 +401,5 @@ window.onclick = function (e) {
 };
 </script>
 
-<!-- About 모달 HTML -->
-<div id="aboutModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
-  <div style="background: white; max-width: 400px; margin: 10% auto; padding: 20px; border-radius: 15px; font-family: 'Gaegu', sans-serif; line-height: 1.5; text-align: center; position: relative;">
-    <h2>우무사리란?</h2>
-    <p>우무사리는 우무문어를 모티브로 바다에서 온 부끄럼 많은 작은 문어예요.<br/>
-      항상 머리에 불가사리 친구를 붙이고 다녀서 '우무사리'라는 이름을 갖게 됐죠.<br/>
-    우무사리는 사람들의 감정을 조용히 들어주고, 말없이 위로를 건네는 친구랍니다.</p>
-    <button id="closeModal" style="margin-top: 20px;">닫기</button>
-  </div>
-</div>
+</body>
+</html>
