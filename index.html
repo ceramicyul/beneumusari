@@ -75,7 +75,6 @@
     button:active {
       transform: scale(0.96);
     }
-
     /* 감정별 버튼 색 */
     #tiredBtn { background-color: #d6ccf0; }
     #tiredBtn:hover { background-color: #c6b6e9; }
@@ -87,7 +86,6 @@
     #lonelyBtn:hover { background-color: #ecaab4; }
     #mehBtn { background-color: #cde3c8; }
     #mehBtn:hover { background-color: #b8d9b2; }
-
     #resetBtn, #replayBtn, #aboutBtn {
       position: fixed;
       font-family: 'Gaegu', sans-serif;
@@ -109,19 +107,9 @@
     #resetBtn:active, #replayBtn:active, #aboutBtn:active {
       transform: scale(0.96);
     }
-    #resetBtn {
-      bottom: 20px;
-      right: 20px;
-      display: none;
-    }
-    #replayBtn {
-      bottom: 20px;
-      left: 20px;
-    }
-    #aboutBtn {
-      top: 20px;
-      right: 20px;
-    }
+    #resetBtn { bottom: 20px; right: 20px; display: none; }
+    #replayBtn { bottom: 20px; left: 20px; }
+    #aboutBtn { top: 20px; right: 20px; }
     #messageBox {
       font-size: 1.6rem;
       background: rgba(255,255,255,0.4);
@@ -208,8 +196,8 @@
     }
   </style>
 </head>
-
 <body>
+
 <div id="background"></div>
 <img id="randomUmuImage" />
 <h1 id="title">우무사리가 전하는 말</h1>
@@ -239,8 +227,11 @@
     <img src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" class="umu-illustration" />
   </div>
 </div>
+
 <button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
 
+<!-- ✨ 여기까지가 HTML + CSS! -->
+  
 <script>
 const messages = {
   tired: [
@@ -391,7 +382,7 @@ window.addEventListener('load', () => {
   }
 });
 
-// About 모달
+// About 모달 기능
 document.getElementById('aboutBtn').onclick = function () {
   document.getElementById('aboutModal').style.display = 'block';
 };
@@ -405,3 +396,13 @@ window.onclick = function (e) {
 };
 </script>
 
+<!-- About 모달 HTML -->
+<div id="aboutModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+  <div style="background: white; max-width: 400px; margin: 10% auto; padding: 20px; border-radius: 15px; font-family: 'Gaegu', sans-serif; line-height: 1.5; text-align: center; position: relative;">
+    <h2>우무사리란?</h2>
+    <p>우무사리는 우무문어를 모티브로 바다에서 온 부끄럼 많은 작은 문어예요.<br/>
+      항상 머리에 불가사리 친구를 붙이고 다녀서 '우무사리'라는 이름을 갖게 됐죠.<br/>
+    우무사리는 사람들의 감정을 조용히 들어주고, 말없이 위로를 건네는 친구랍니다.</p>
+    <button id="closeModal" style="margin-top: 20px;">닫기</button>
+  </div>
+</div>
