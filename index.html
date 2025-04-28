@@ -279,16 +279,21 @@ function showMessage(mood) {
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
 
-  if (isHidden) {
-    hiddenLabel.style.display = 'block';
-    msgBox.classList.add("hidden");
-    typeMessage(msgBox, hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]);
-  } else {
-    hiddenLabel.style.display = 'none';
-    msgBox.classList.remove("hidden");
-    const msgList = messages[mood];
-    typeMessage(msgBox, msgList[Math.floor(Math.random() * msgList.length)]);
-  }
+  const emotionColors = {
+  tired: '#d6ccf0', // 피곤해
+  sad: '#b0d4f1',   // 속상해
+  angry: '#f5b183', // 화났어
+  lonely: '#f3c0c9',// 외로워
+  meh: '#cde3c8'    // 그냥 그래
+};
+
+ // 감정별 배경색 적용
+if (emotionColors[mood]) {
+  msgBox.style.backgroundColor = emotionColors[mood];
+  msgBox.style.backdropFilter = 'blur(2px)';
+} else {
+  msgBox.style.backgroundColor = 'rgba(255,255,255,0.4)'; // 기본값
+}
 
   msgBox.style.display = 'block';
   emotionBtns.style.display = 'none';
