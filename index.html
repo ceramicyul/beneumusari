@@ -193,8 +193,12 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       white-space: pre-wrap;
       line-height: 1.6;
-      text-align: center;
-    }
+      display: flex;          /* ✅ 추가 */
+  flex-direction: column; /* ✅ 추가 */
+  align-items: center;    /* ✅ 추가 */
+  justify-content: center; /* ✅ 추가 */
+  text-align: center;      /* ✅ 그대로 유지 */
+}
     .speech-bubble::after {
       content: "";
       position: absolute;
