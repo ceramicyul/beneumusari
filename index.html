@@ -305,6 +305,7 @@ let currentMode = '';
 function setMode(mode) {
   currentMode = mode;
   modeBtns.style.display = 'none';
+  title.style.display = 'none';
   if (mode === 'emotion') {
     emotionBtns.style.display = 'flex';
     emotionBtns.style.opacity = '1';
