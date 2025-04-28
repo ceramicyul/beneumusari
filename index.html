@@ -18,6 +18,7 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      overflow: hidden;
     }
     #background {
       position: fixed;
@@ -27,20 +28,19 @@
       height: 100vh;
       background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
       background-size: cover;
-      background-repeat: no-repeat;
       background-position: center;
+      background-repeat: no-repeat;
       z-index: -2;
     }
     #randomUmuImage {
-      display: none;
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 60vw;
-      height: auto;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
       z-index: -1;
-      pointer-events: none;
+      display: none;
     }
     h1 {
       margin-top: 20px;
@@ -72,12 +72,14 @@
     button:hover {
       background-color: #ffc6a3;
     }
-    button:active {
-      transform: scale(0.96);
-    }
     #aboutBtn {
       position: fixed;
       top: 20px;
+      right: 20px;
+    }
+    #saveBtn {
+      position: fixed;
+      bottom: 20px;
       right: 20px;
     }
     #messageBox {
@@ -91,6 +93,8 @@
       display: none;
       white-space: pre-wrap;
       min-height: 60px;
+      position: relative;
+      z-index: 1;
     }
     #hidden-label {
       font-family: 'Gaegu', sans-serif;
@@ -98,6 +102,7 @@
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
+      z-index: 1;
     }
     #welcome-overlay {
       position: fixed;
@@ -111,11 +116,6 @@
       align-items: center;
       flex-direction: column;
       z-index: 9999;
-    }
-    .welcome-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
     .umu-illustration {
       width: 60vw;
@@ -152,15 +152,13 @@
 <div id="messageBox"></div>
 
 <div id="welcome-overlay">
-  <div class="welcome-content">
-    <img class="umu-illustration" src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" alt="우무사리 일러스트">
-    <div class="speech-bubble">
-      안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐<br><small>오늘 하루 하나의 이야기만 전해줄게</small>
-    </div>
+  <img class="umu-illustration" src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" alt="우무사리 일러스트">
+  <div class="speech-bubble">
+    안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐<br><small>오늘 하루 하나의 이야기만 전해줄게</small>
   </div>
 </div>
 
-<button onclick="saveTodayImage()" style="position:fixed; bottom:20px; right:20px;">오늘 감정 저장</button>
+<button id="saveBtn" onclick="saveToday()">오늘 감정 저장</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
@@ -213,10 +211,8 @@ function chooseMode(mode) {
 }
 
 function showToday() {
-  document.getElementById('background').style.backgroundImage = `url('${todayData.image}')`;
-  const img = document.getElementById('randomUmuImage');
-  img.src = todayData.image;
-  img.style.display = 'block';
+  document.getElementById('randomUmuImage').src = todayData.image;
+  document.getElementById('randomUmuImage').style.display = 'block';
 
   if (todayData.isHidden) {
     document.getElementById('hidden-label').style.display = 'block';
@@ -228,11 +224,11 @@ function showToday() {
   document.getElementById('messageBox').style.display = 'block';
 }
 
-function saveTodayImage() {
+function saveToday() {
   html2canvas(document.body, { backgroundColor: null, scale: 2 }).then(canvas => {
     const ctx = canvas.getContext('2d');
     ctx.font = 'bold 30px Gaegu';
-    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
     ctx.textAlign = 'right';
     ctx.fillText(`${todayData.mood} - ${todayData.date}`, canvas.width - 30, canvas.height - 30);
 
@@ -250,20 +246,11 @@ window.onload = function() {
     if (todayData && todayData.date === today) {
       document.getElementById('modeButtons').style.display = 'none';
       showToday();
+    } else {
+      document.getElementById('modeButtons').style.opacity = '1';
+      document.getElementById('modeButtons').style.pointerEvents = 'auto';
     }
-  }, 1800);
-};
-
-document.getElementById('aboutBtn').onclick = function () {
-  document.getElementById('aboutModal').style.display = 'block';
-};
-document.getElementById('closeModal').onclick = function () {
-  document.getElementById('aboutModal').style.display = 'none';
-};
-window.onclick = function(e) {
-  if (e.target === document.getElementById('aboutModal')) {
-    document.getElementById('aboutModal').style.display = 'none';
-  }
+  }, 2000);
 };
 </script>
 
