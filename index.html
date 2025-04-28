@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>우무사리가 전하는 말</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
@@ -18,7 +18,6 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
-      overflow-x: hidden;
     }
     #background {
       position: fixed;
@@ -26,9 +25,10 @@
       left: 0;
       width: 100vw;
       height: 100vh;
+      background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
       background-size: cover;
-      background-position: center;
       background-repeat: no-repeat;
+      background-position: center;
       z-index: -2;
     }
     #randomUmuImage {
@@ -40,6 +40,7 @@
       max-width: 60vw;
       height: auto;
       z-index: -1;
+      pointer-events: none;
     }
     h1 {
       margin-top: 20px;
@@ -51,6 +52,9 @@
       justify-content: center;
       gap: 10px;
       margin: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
     }
     button {
       font-family: 'Gaegu', sans-serif;
@@ -58,15 +62,23 @@
       padding: 10px 16px;
       border: none;
       border-radius: 20px;
-      background-color: #fffaf0;
+      background-color: #ffedc2;
       color: #5c4631;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: all 0.2s ease;
       min-width: 100px;
     }
-    button:hover, button:active {
+    button:hover {
+      background-color: #ffc6a3;
+    }
+    button:active {
       transform: scale(0.96);
+    }
+    #aboutBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
     }
     #messageBox {
       font-size: 1.6rem;
@@ -82,7 +94,7 @@
     }
     #hidden-label {
       font-family: 'Gaegu', sans-serif;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       color: #e91e63;
       margin-bottom: 8px;
       display: none;
@@ -106,8 +118,8 @@
       align-items: center;
     }
     .umu-illustration {
-      width: 200px;
-      height: auto;
+      width: 60vw;
+      max-width: 260px;
       margin-bottom: 20px;
     }
     .speech-bubble {
@@ -129,6 +141,8 @@
 <img id="randomUmuImage" />
 <h1 id="title">우무사리가 전하는 말</h1>
 
+<button id="aboutBtn">About 우무사리</button>
+
 <div class="mode-buttons" id="modeButtons">
   <button onclick="chooseMode('emotion')">감정 모드</button>
   <button onclick="chooseMode('random')">랜덤 모드</button>
@@ -141,8 +155,7 @@
   <div class="welcome-content">
     <img class="umu-illustration" src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" alt="우무사리 일러스트">
     <div class="speech-bubble">
-      안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐<br>
-      <small>오늘 하루 하나의 이야기만 전해줄게</small>
+      안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐<br><small>오늘 하루 하나의 이야기만 전해줄게</small>
     </div>
   </div>
 </div>
@@ -239,6 +252,18 @@ window.onload = function() {
       showToday();
     }
   }, 1800);
+};
+
+document.getElementById('aboutBtn').onclick = function () {
+  document.getElementById('aboutModal').style.display = 'block';
+};
+document.getElementById('closeModal').onclick = function () {
+  document.getElementById('aboutModal').style.display = 'none';
+};
+window.onclick = function(e) {
+  if (e.target === document.getElementById('aboutModal')) {
+    document.getElementById('aboutModal').style.display = 'none';
+  }
 };
 </script>
 
