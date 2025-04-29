@@ -425,7 +425,6 @@ function saveImage() {
 
     // Draw the message box background
     ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
-    ctx.borderRadius = messageBorderRadius;
     ctx.beginPath();
     ctx.roundRect(messageX, messageY, messageBoxWidth, messageBoxHeight, messageBorderRadius);
     ctx.fill();
