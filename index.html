@@ -315,6 +315,7 @@ function setMode(mode) {
   } else {
     showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
   }
+  resetBtn.style.display = 'inline-block';
 }
 
 function typeMessage(element, text, speed = 40) {
