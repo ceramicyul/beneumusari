@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="preload" href="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" as="image">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>우무사리가 전하는 말</title>
@@ -172,6 +173,8 @@
       width: 60vw;
       max-width: 260px;
       margin-bottom: 20px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
     }
     .speech-bubble {
       font-family: 'Gaegu', sans-serif;
@@ -300,6 +303,8 @@ const emotionBtns = document.querySelector('.emotion-buttons');
 const modeBtns = document.querySelector('.mode-buttons');
 const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
+const welcomeImage = document.querySelector('.umu-illustration');
+const welcomeOverlay = document.getElementById('welcome-overlay');
 
 // 모드
 let currentMode = '';
@@ -375,8 +380,12 @@ function reset() {
 }
 
 window.addEventListener('load', () => {
+  welcomeImage.onload = () => {
+    welcomeImage.style.opacity = 1;
+  };
+
   setTimeout(() => {
-    document.getElementById('welcome-overlay').style.display = 'none';
+    welcomeOverlay.style.display = 'none';
     modeBtns.style.opacity = '1';
     modeBtns.style.pointerEvents = 'auto';
   }, 1800);
