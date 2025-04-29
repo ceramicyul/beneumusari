@@ -394,24 +394,60 @@ function saveImage() {
   const randomUmuSrc = randomUmuImage.src;
   const messageTextContent = msgBox.textContent;
 
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
-
   const umuImage = new Image();
 
   umuImage.onload = function() {
-    canvas.width = umuImage.naturalWidth;
-    canvas.height = umuImage.naturalHeight;
-    ctx.drawImage(umuImage, 0, 0, canvas.width, canvas.height);
+    // Calculate dimensions and position for the canvas
+    const umuWidth = umuImage.naturalWidth;
+    const umuHeight = umuImage.naturalHeight;
+    const messageBoxWidth = msgBox.offsetWidth;
+    const messageBoxHeight = msgBox.offsetHeight;
+    const messagePadding = 18; // Based on your CSS
+    const messageBorderRadius = 20; // Based on your CSS
+    const messageArrowHeight = 12; // Based on your CSS
+
+    const canvasWidth = Math.max(umuWidth, messageBoxWidth + 40); // Add some extra padding
+    const canvasHeight = umuHeight + messageBoxHeight + messageArrowHeight + 40; // Add spacing
+
+    const canvas = document.createElement('canvas');
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+    const ctx = canvas.getContext('2d');
+
+    // Draw the Umu image in the center
+    const umuX = (canvasWidth - umuWidth) / 2;
+    const umuY = 20; // Add some top padding
+    ctx.drawImage(umuImage, umuX, umuY, umuWidth, umuHeight);
+
+    // Calculate position for the message box above the image
+    const messageX = (canvasWidth - messageBoxWidth) / 2;
+    const messageY = umuY - messageBoxHeight - messageArrowHeight - 10; // Adjust spacing
+
+    // Draw the message box background
+    ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
+    ctx.borderRadius = messageBorderRadius;
+    ctx.beginPath();
+    ctx.roundRect(messageX, messageY, messageBoxWidth, messageBoxHeight, messageBorderRadius);
+    ctx.fill();
+
+    // Draw the message box arrow
+    ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
+    ctx.beginPath();
+    ctx.moveTo(canvasWidth / 2 - 12, messageY + messageBoxHeight);
+    ctx.lineTo(canvasWidth / 2 + 12, messageY + messageBoxHeight);
+    ctx.lineTo(canvasWidth / 2, messageY + messageBoxHeight + messageArrowHeight);
+    ctx.fill();
 
     // Draw the message text
-    ctx.font = '2rem Gaegu'; // Adjust font size to match your messageBox
+    ctx.font = getComputedStyle(msgBox).fontSize + ' ' + getComputedStyle(msgBox).fontFamily;
+    ctx.fillStyle = getComputedStyle(msgBox).color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const lines = messageTextContent.split('\n');
-    const startY = canvas.height * 0.7; // Adjust vertical position
-    lines.forEach((line, index) => {
-      ctx.fillText(line, canvas.width / 2, startY + index * 30); // Adjust line spacing
+    let currentY = messageY + messagePadding + (messageBoxHeight - lines.length * parseFloat(getComputedStyle(msgBox).lineHeight)) / 2;
+    lines.forEach(line => {
+      ctx.fillText(line, canvasWidth / 2, currentY);
+      currentY += parseFloat(getComputedStyle(msgBox).lineHeight);
     });
 
     // Trigger the download
@@ -423,15 +459,9 @@ function saveImage() {
   };
   umuImage.onerror = function() {
     console.error("Error loading Umu image for save.");
-    // Optionally handle the error (e.g., don't draw the image)
-    // Still try to save the background and text
-    // ... (draw text and trigger download)
+    // Optionally handle the error
   };
   umuImage.src = randomUmuSrc;
-
-  // Remove url() and quotes
-  const cleanedBgUrl = umuImage.slice(4, -1).replace(/"/g, "");
-  umuImage.src = cleanedBgUrl;
 }
 
 function selectAgain() {
