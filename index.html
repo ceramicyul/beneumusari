@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <link rel="preload" href="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" as="image">
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>우무사리가 전하는 말</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
-  <style>
+  <head>
+    <link rel="preload"
+      href="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true"
+      as="image">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>우무사리가 전하는 말</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap"
+      rel="stylesheet" />
+    <style>
     /* 기본 스타일 */
     body {
       margin: 0;
@@ -217,58 +220,62 @@
       }
     }
   </style>
-</head>
+  </head>
 
-<body>
+  <body>
 
-<!-- ✅ body 시작 -->
+    <!-- ✅ body 시작 -->
 
-<div id="background"></div>
-<img id="randomUmuImage" />
-<h1 id="title">우무사리가 전하는 말</h1>
+    <div id="background"></div>
+    <img id="randomUmuImage" />
+    <h1 id="title">우무사리가 전하는 말</h1>
 
-<button id="aboutBtn">About 우무사리</button>
+    <button id="aboutBtn">About 우무사리</button>
 
-<div class="mode-buttons">
-  <button onclick="setMode('emotion')">감정 모드</button>
-  <button onclick="setMode('random')">랜덤 모드</button>
-</div>
-
-<div class="emotion-buttons" style="display: none;">
-  <button id="tiredBtn" onclick="showMessage('tired')">😪 피곤해</button>
-  <button id="sadBtn" onclick="showMessage('sad')">😢 속상해</button>
-  <button id="angryBtn" onclick="showMessage('angry')">😠 화났어</button>
-  <button id="lonelyBtn" onclick="showMessage('lonely')">🥺 외로워</button>
-  <button id="mehBtn" onclick="showMessage('meh')">😶 그냥 그래</button>
-</div>
-
-<div id="hidden-label">✨ Hidden! ✨</div>
-<div id="messageBox"></div>
-<button id="selectAgainBtn" onclick="selectAgain()">다시 선택하기</button>
-<button id="resetBtn" onclick="reset()">첫 화면으로 돌아가기</button>
-
-<div id="welcome-overlay">
-  <div class="welcome-content">
-    <div class="speech-bubble">
-      안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐
+    <div class="mode-buttons">
+      <button onclick="setMode('emotion')">감정 모드</button>
+      <button onclick="setMode('random')">랜덤 모드</button>
     </div>
-    <img src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true" class="umu-illustration" />
-  </div>
-</div>
 
-<!-- About 모달 -->
-<div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
-  <div style="background:white; max-width:600px; margin:10% auto; padding:20px; border-radius:15px; text-align:center;">
-    <h2>우무사리란?</h2>
-    <p>우무문어를 모티브로<br>항상 머리에 불가사리를 붙이고 다녀<br>'우무사리'라는 이름을 갖게 됐죠.<br/>
-    우무사리는 사람들의 기분을<br/>조용히 들어주고,<br/>
-      말없이 위로를 건네는 감정 친구랍니다.</p>
-    <button id="closeModal" style="margin-top:20px;">닫기</button>
-  </div>
-</div>
+    <div class="emotion-buttons" style="display: none;">
+      <button id="tiredBtn" onclick="showMessage('tired')">😪 피곤해</button>
+      <button id="sadBtn" onclick="showMessage('sad')">😢 속상해</button>
+      <button id="angryBtn" onclick="showMessage('angry')">😠 화났어</button>
+      <button id="lonelyBtn" onclick="showMessage('lonely')">🥺 외로워</button>
+      <button id="mehBtn" onclick="showMessage('meh')">😶 그냥 그래</button>
+    </div>
 
-<!-- ✅ 스크립트 -->
-<script>
+    <div id="hidden-label">✨ Hidden! ✨</div>
+    <div id="messageBox"></div>
+    <button id="selectAgainBtn" onclick="selectAgain()">다시 선택하기</button>
+    <button id="resetBtn" onclick="reset()">첫 화면으로 돌아가기</button>
+
+    <div id="welcome-overlay">
+      <div class="welcome-content">
+        <div class="speech-bubble">
+          안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐
+        </div>
+        <img
+          src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true"
+          class="umu-illustration" />
+      </div>
+    </div>
+
+    <!-- About 모달 -->
+    <div id="aboutModal"
+      style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
+      <div
+        style="background:white; max-width:600px; margin:10% auto; padding:20px; border-radius:15px; text-align:center;">
+        <h2>우무사리란?</h2>
+        <p>우무문어를 모티브로<br>항상 머리에 불가사리를 붙이고 다녀<br>'우무사리'라는 이름을 갖게 됐죠.<br />
+          우무사리는 사람들의 기분을<br />조용히 들어주고,<br />
+          말없이 위로를 건네는 감정 친구랍니다.</p>
+        <button id="closeModal" style="margin-top:20px;">닫기</button>
+      </div>
+    </div>
+
+    <!-- ✅ 스크립트 -->
+    <script>
 const messages = {
   tired: ["오늘도 여기까지 온 너, 정말 멋져우무! 😌", "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"],
   sad: ["감정은 숨기지 않아도 돼... 말 없이 곁을 지켜줄게. 🌊", "오늘도 많이 애썼구나... 살며시 꼬옥 안아줄게. 🐚"],
@@ -399,5 +406,5 @@ window.onclick = function(e) {
 };
 </script>
 
-</body>
+  </body>
 </html>
