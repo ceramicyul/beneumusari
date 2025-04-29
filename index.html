@@ -400,12 +400,12 @@ function saveImage() {
   const umuImage = new Image();
 
   umuImage.onload = function() {
-    ctx.drawImage(umuImage, umuImage.naturalWidth, umuImage.naturalHeight, umuImage.naturalWidth, umuImage.naturalHeigh);
+    ctx.drawImage(umuImage, umuImage.naturalWidth, umuImage.naturalHeight, umuImage.naturalWidth, umuImage.naturalHeight);
 
     // Draw the message text
     ctx.font = '2rem Gaegu'; // Adjust font size to match your messageBox
-    ctx.fillStyle = '#5c4631'; // Match your messageBox color
     ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     const lines = messageTextContent.split('\n');
     const startY = canvas.height * 0.7; // Adjust vertical position
     lines.forEach((line, index) => {
