@@ -27,7 +27,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
+      background-image: url('imgs/background_color.webp');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
@@ -154,7 +154,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url('https://github.com/ceramicyul/umusari-message/blob/main/background%20color.png?raw=true');
+      background-image: url('imgs/background_color.webp');
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
@@ -235,11 +235,26 @@
     </div>
 
     <div class="emotion-buttons" style="display: none;">
-      <button id="tiredBtn" onclick="showMessage('tired')">😪 피곤해</button>
-      <button id="sadBtn" onclick="showMessage('sad')">😢 속상해</button>
-      <button id="angryBtn" onclick="showMessage('angry')">😠 화났어</button>
-      <button id="lonelyBtn" onclick="showMessage('lonely')">🥺 외로워</button>
-      <button id="mehBtn" onclick="showMessage('meh')">😶 그냥 그래</button>
+      <button id="tiredBtn" onclick="showMessage('tired')">
+        <img src="imgs/emotion_tired.webp" alt="피곤해 아이콘" style="vertical-align: middle; margin-right: 5px;">
+        😪 피곤해
+      </button>
+      <button id="sadBtn" onclick="showMessage('sad')">
+        <img src="imgs/emotion_sad.webp" alt="속상해 아이콘" style="vertical-align: middle; margin-right: 5px;">
+        😢 속상해
+      </button>
+      <button id="angryBtn" onclick="showMessage('angry')">
+        <img src="imgs/emotion_angry.webp" alt="화났어 아이콘" style="vertical-align: middle; margin-right: 5px;">
+        😠 화났어
+      </button>
+      <button id="lonelyBtn" onclick="showMessage('lonely')">
+        <img src="imgs/emotion_lonely.webp" alt="외로워 아이콘" style="vertical-align: middle; margin-right: 5px;">
+        🥺 외로워
+      </button>
+      <button id="mehBtn" onclick="showMessage('meh')">
+        <img src="imgs/emotion_soso.webp" alt="그냥 그래 아이콘" style="vertical-align: middle; margin-right: 5px;">
+        😶 그냥 그래
+      </button>
     </div>
 
     <div id="hidden-label">✨ Hidden! ✨</div>
@@ -253,7 +268,7 @@
           안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐
         </div>
         <img
-          src="https://github.com/ceramicyul/umusari-message/blob/main/%ED%95%98%ED%8A%B8%EC%9A%B0%EB%AC%B4%EC%82%AC%EB%A6%AC.gif?raw=true"
+          src="imgs/heart_anim.webp"
           class="umu-illustration" />
       </div>
     </div>
@@ -290,11 +305,11 @@ const hiddenMessages = [
 ];
 
 const umuImages = [
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_01.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_02.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250322_153719869_03.jpg?raw=true',
-  'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
+  'imgs/KakaoTalk_20250322_153719869.webp',
+  'imgs//KakaoTalk_20250322_153719869_01.webp',
+  'imgs/KakaoTalk_20250322_153719869_02.webp',
+  'imgs/KakaoTalk_20250322_153719869_03.webp',
+  'imgs/KakaoTalk_20250417_112205874.webp'
 ];
 
 // 요소 연결
