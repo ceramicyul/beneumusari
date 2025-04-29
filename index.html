@@ -349,7 +349,6 @@ function setMode(mode) {
     showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
   }
   resetBtn.style.display = 'inline-block';
-  saveImageBtn.style.display = 'inline-block'; // Show the save image button
 }
 
 function typeMessage(element, text, speed = 40) {
@@ -451,10 +450,10 @@ function saveUmuImage() {
 function selectAgain() {
   msgBox.style.display = 'none';
   randomUmuImage.style.display = 'none';
+  saveImageBtn.style.display = 'none'; // Hide the save image button
   if (currentMode === 'emotion') {
     emotionBtns.style.display = 'flex';
     selectAgainBtn.style.display = 'none';
-    saveImageBtn.style.display = 'none';
   } else {
     setMode('random');
   }
