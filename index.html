@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>우무사리가 전하는 말</title>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
     /* 기본 스타일 */
     body {
@@ -20,7 +19,6 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
-      overflow-x: hidden;
     }
     #background {
       position: fixed;
@@ -79,49 +77,44 @@
     button:active {
       transform: scale(0.96);
     }
-    #saveBtn {
+
+    /* 감정별 버튼 파스텔 색 */
+    #tiredBtn { background-color: #ffffff; }
+    #tiredBtn:hover { background-color: #d1c7ec; }
+    #sadBtn { background-color: #ffffff; }
+    #sadBtn:hover { background-color: #b7d8f4; }
+    #angryBtn { background-color: #ffffff; }
+    #angryBtn:hover { background-color: #f3b58a; }
+    #lonelyBtn { background-color: #ffffff; }
+    #lonelyBtn:hover { background-color: #f4b2c1; }
+    #mehBtn { background-color: #ffffff; }
+    #mehBtn:hover { background-color: #c7e3c4; }
+
+    #resetBtn, #replayBtn, #aboutBtn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
       font-family: 'Gaegu', sans-serif;
       font-size: 1rem;
-      padding: 10px 20px;
+      padding: 8px 14px;
       background-color: #ffedc2;
       color: #5c4631;
       border: none;
       border-radius: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       cursor: pointer;
       z-index: 10000;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
       transition: all 0.2s ease;
     }
-    #saveBtn:hover {
+    #resetBtn:hover, #replayBtn:hover, #aboutBtn:hover {
       background-color: #ffc6a3;
     }
-    #saveBtn:active {
+    #resetBtn:active, #replayBtn:active, #aboutBtn:active {
       transform: scale(0.96);
-      #aboutBtn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  font-size: 1rem;
-  padding: 8px 14px;
-  background-color: #ffedc2;
-  color: #5c4631;
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  cursor: pointer;
-  z-index: 10000;
-  transition: all 0.2s ease;
-}
-#aboutBtn:hover {
-  background-color: #ffc6a3;
-}
-#aboutBtn:active {
-  transform: scale(0.96);
-}
     }
+    #resetBtn { bottom: 20px; right: 20px; display: none; }
+    #replayBtn { bottom: 20px; left: 20px; }
+    #aboutBtn { top: 20px; right: 20px; }
+
     #messageBox {
       font-size: 1.6rem;
       background: rgba(255,255,255,0.4);
@@ -134,7 +127,6 @@
       position: relative;
       white-space: pre-wrap;
       min-height: 60px;
-      margin-top: 20px;
     }
     #messageBox::after {
       content: "";
@@ -153,6 +145,8 @@
       margin-bottom: 8px;
       display: none;
     }
+
+    /* 웰컴 오버레이 */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -206,6 +200,8 @@
       border-style: solid;
       border-color: white transparent transparent;
     }
+
+    /* ✅ 모바일 반응형 */
     @media (max-width: 768px) {
       #randomUmuImage {
         width: 100vw;
@@ -223,6 +219,8 @@
 </head>
 
 <body>
+
+<!-- ✅ body 시작 -->
 
 <div id="background"></div>
 <img id="randomUmuImage" />
@@ -245,8 +243,7 @@
 
 <div id="hidden-label">✨ Hidden! ✨</div>
 <div id="messageBox"></div>
-
-<button id="saveBtn">저장하기</button>
+<button id="resetBtn" onclick="resetPage()">다시 선택하기</button>
 
 <div id="welcome-overlay">
   <div class="welcome-content">
@@ -257,6 +254,9 @@
   </div>
 </div>
 
+<button id="replayBtn" onclick="replayWelcome()">처음부터 다시 보기</button>
+
+<!-- About 모달 -->
 <div id="aboutModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
   <div style="background:white; max-width:600px; margin:10% auto; padding:20px; border-radius:15px; text-align:center;">
     <h2>우무사리란?</h2>
@@ -266,6 +266,8 @@
     <button id="closeModal" style="margin-top:20px;">닫기</button>
   </div>
 </div>
+
+<!-- ✅ 스크립트 -->
 <script>
 const messages = {
   tired: ["오늘도 여기까지 온 너, 정말 멋져우무! 😌", "숨 고르기 타임! 우무가 옆에서 같이 쉴게요. 🌊"],
@@ -291,18 +293,18 @@ const umuImages = [
   'https://github.com/ceramicyul/umusari-message/blob/main/KakaoTalk_20250417_112205874.jpg?raw=true'
 ];
 
+// 요소 연결
 const msgBox = document.getElementById('messageBox');
+const resetBtn = document.getElementById('resetBtn');
 const emotionBtns = document.querySelector('.emotion-buttons');
 const modeBtns = document.querySelector('.mode-buttons');
 const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
-const title = document.getElementById('title');
 
+// 모드
 let currentMode = '';
-let lastMood = '';
 
 function setMode(mode) {
-  if (currentMode !== '') return; // 한 번만 모드 설정
   currentMode = mode;
   modeBtns.style.display = 'none';
   title.style.display = 'none';
@@ -329,13 +331,14 @@ function typeMessage(element, text, speed = 40) {
 }
 
 function showMessage(mood) {
-  lastMood = mood;
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
+  // ✅ 먼저 랜덤 이미지 띄우기
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
-
+  
+  // ✅ 텍스트 타이핑은 이미지 띄운 직후 시작
   if (isHidden) {
     hiddenLabel.style.display = 'block';
     msgBox.classList.add("hidden");
@@ -350,30 +353,22 @@ function showMessage(mood) {
   }
 
   emotionBtns.style.display = 'none';
+  resetBtn.style.display = 'inline-block';
 }
 
-document.getElementById('saveBtn').addEventListener('click', () => {
-  html2canvas(document.body, {
-    allowTaint: true,
-    useCORS: true,
-    backgroundColor: null,
-  }).then(canvas => {
-    const ctx = canvas.getContext('2d');
-    ctx.font = '16px Gaegu';
-    ctx.fillStyle = 'rgba(92, 70, 49, 0.8)';
-    const date = new Date();
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
-    ctx.fillText(`감정: ${lastMood} | 날짜: ${formattedDate}`, 10, canvas.height - 10);
 
-    const link = document.createElement('a');
-    link.download = `우무사리_${formattedDate}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
-});
+function resetPage() {
+  msgBox.style.display = 'none';
+  randomUmuImage.style.display = 'none';
+  if (currentMode === 'emotion') {
+    emotionBtns.style.display = 'flex';
+  } else {
+    setMode('random');
+  }
+}
 
 function replayWelcome() {
-  // 더이상 Welcome 다시 재호출 안함
+  location.reload();
 }
 
 window.addEventListener('load', () => {
@@ -384,7 +379,7 @@ window.addEventListener('load', () => {
   }, 1800);
 });
 
-// About 모달
+// About
 document.getElementById('aboutBtn').onclick = function () {
   document.getElementById('aboutModal').style.display = 'block';
 };
@@ -397,3 +392,6 @@ window.onclick = function(e) {
   }
 };
 </script>
+
+</body>
+</html>
