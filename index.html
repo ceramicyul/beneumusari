@@ -398,64 +398,46 @@ function saveImage() {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 
-  const backgroundImg = new Image();
   const umuImage = new Image();
 
-  backgroundImg.onload = function() {
-    canvas.width = backgroundImg.naturalWidth;
-    canvas.height = backgroundImg.naturalHeight;
-    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+  umuImage.onload = function() {
+    // Draw the Umu image (adjust position and size as needed)
+    const umuWidth = Math.min(canvas.width * 0.6, umuImage.naturalWidth);
+    const umuHeight = (umuWidth / umuImage.naturalWidth) * umuImage.naturalHeight;
+    const umuX = canvas.width / 2 - umuWidth / 2;
+    const umuY = canvas.height / 2 - umuHeight / 2;
+    ctx.drawImage(umuImage, umuX, umuY, umuWidth, umuHeight);
 
-    umuImage.onload = function() {
-      // Draw the Umu image (adjust position and size as needed)
-      const umuWidth = Math.min(canvas.width * 0.6, umuImage.naturalWidth);
-      const umuHeight = (umuWidth / umuImage.naturalWidth) * umuImage.naturalHeight;
-      const umuX = canvas.width / 2 - umuWidth / 2;
-      const umuY = canvas.height / 2 - umuHeight / 2;
-      ctx.drawImage(umuImage, umuX, umuY, umuWidth, umuHeight);
+    // Draw the message text
+    ctx.font = '2rem Gaegu'; // Adjust font size to match your messageBox
+    ctx.fillStyle = '#5c4631'; // Match your messageBox color
+    ctx.textAlign = 'center';
+    const lines = messageTextContent.split('\n');
+    const startY = canvas.height * 0.7; // Adjust vertical position
+    lines.forEach((line, index) => {
+      ctx.fillText(line, canvas.width / 2, startY + index * 30); // Adjust line spacing
+    });
 
-      // Draw the message text
-      ctx.font = '2rem Gaegu'; // Adjust font size to match your messageBox
-      ctx.fillStyle = '#5c4631'; // Match your messageBox color
-      ctx.textAlign = 'center';
-      const lines = messageTextContent.split('\n');
-      const startY = canvas.height * 0.7; // Adjust vertical position
-      lines.forEach((line, index) => {
-        ctx.fillText(line, canvas.width / 2, startY + index * 30); // Adjust line spacing
-      });
-
-      // Trigger the download
-      const dataURL = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.download = '우무사리_메시지.png';
-      link.href = dataURL;
-      link.click();
-    };
-    umuImage.onerror = function() {
-      console.error("Error loading Umu image for save.");
-      // Optionally handle the error (e.g., don't draw the image)
-      // Still try to save the background and text
-      // ... (draw text and trigger download)
-    };
-    umuImage.src = randomUmuSrc;
-
+    // Trigger the download
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = '우무사리_메시지.png';
+    link.href = dataURL;
+    link.click();
   };
-  backgroundImg.onerror = function() {
-    console.error("Error loading background image for save.");
-    // Optionally handle the error (e.g., use a default color)
-    canvas.width = 600; // Default width
-    canvas.height = 400; // Default height
-    ctx.fillStyle = '#fff9eb';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Still try to draw the Umu image and text
-    umuImage.onload(); // Force onload to proceed without background
+  umuImage.onerror = function() {
+    console.error("Error loading Umu image for save.");
+    // Optionally handle the error (e.g., don't draw the image)
+    // Still try to save the background and text
+    // ... (draw text and trigger download)
   };
+  umuImage.src = randomUmuSrc;
 
   // Extract background image URL from CSS
   const bgUrlWithQuotes = getComputedStyle(document.getElementById('background')).backgroundImage;
   // Remove url() and quotes
   const cleanedBgUrl = bgUrlWithQuotes.slice(4, -1).replace(/"/g, "");
-  backgroundImg.src = cleanedBgUrl;
+  umuImage.src = cleanedBgUrl;
 }
 
 function selectAgain() {
