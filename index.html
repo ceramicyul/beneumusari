@@ -400,7 +400,9 @@ function saveImage() {
   const umuImage = new Image();
 
   umuImage.onload = function() {
-    ctx.drawImage(umuImage, umuImage.naturalWidth, umuImage.naturalHeight, umuImage.naturalWidth, umuImage.naturalHeight);
+    canvas.width = randomUmuSrc.naturalWidth;
+    canvas.height = randomUmuSrc.naturalHeight;
+    ctx.drawImage(randomUmuSrc, 0, 0, canvas.width, canvas.height);
 
     // Draw the message text
     ctx.font = '2rem Gaegu'; // Adjust font size to match your messageBox
