@@ -173,8 +173,6 @@
       width: 60vw;
       max-width: 260px;
       margin-bottom: 20px;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
     }
     .speech-bubble {
       font-family: 'Gaegu', sans-serif;
@@ -380,10 +378,6 @@ function reset() {
 }
 
 window.addEventListener('load', () => {
-  welcomeImage.onload = () => {
-    welcomeImage.style.opacity = 1;
-  };
-
   setTimeout(() => {
     welcomeOverlay.style.display = 'none';
     modeBtns.style.opacity = '1';
