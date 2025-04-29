@@ -100,6 +100,27 @@
     }
     #saveBtn:active {
       transform: scale(0.96);
+      #aboutBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 1rem;
+  padding: 8px 14px;
+  background-color: #ffedc2;
+  color: #5c4631;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 10000;
+  transition: all 0.2s ease;
+}
+#aboutBtn:hover {
+  background-color: #ffc6a3;
+}
+#aboutBtn:active {
+  transform: scale(0.96);
+}
     }
     #messageBox {
       font-size: 1.6rem;
