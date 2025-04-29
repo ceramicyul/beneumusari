@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>우무사리가 전하는 말</title>
@@ -268,7 +266,7 @@
     <div id="hidden-label">✨ Hidden! ✨</div>
     <div id="messageBox"></div>
     <button id="selectAgainBtn" onclick="selectAgain()">다시 선택하기</button>
-    <button id="saveImageBtn" onclick="saveUmuImage()">저장하기</button>
+    <button id="saveImageBtn" onclick="saveImage()">저장하기</button>
     <button id="resetBtn" onclick="reset()">첫 화면으로 돌아가기</button>
 
     <div id="welcome-overlay">
@@ -392,59 +390,72 @@ function showMessage(mood) {
   resetBtn.style.display = 'inline-block';
 }
 
-function saveUmuImage() {
-  const container = document.createElement('div');
-  container.style.display = 'flex';
-  container.style.flexDirection = 'column';
-  container.style.alignItems = 'center';
-  container.style.justifyContent = 'center';
-  container.style.position = 'relative'; // Needed for absolute positioning of image
-  container.style.backgroundColor = '#fff9eb'; // Match body background
-  container.style.padding = '20px'; // Add some padding
+function saveImage() {
+  const backgroundImageUrl = getComputedStyle(document.getElementById('background')).backgroundImage.slice(4, -1).replace(/"/g, "");
+  const randomUmuSrc = randomUmuImage.src;
+  const messageTextContent = msgBox.textContent;
 
-  const messageText = document.createElement('div');
-  messageText.style.fontFamily = "'Gaegu', sans-serif";
-  messageText.style.fontSize = '1.6rem';
-  messageText.style.color = '#5c4631';
-  messageText.style.whiteSpace = 'pre-wrap';
-  messageText.style.textAlign = 'center';
-  messageText.textContent = msgBox.textContent;
-  container.appendChild(messageText);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
-  const messageBoxClone = msgBox.cloneNode(true);
-  messageBoxClone.style.position = 'static'; // Remove fixed positioning
-  messageBoxClone.style.marginTop = '10px'; // Add some space
-  messageBoxClone.style.display = 'block'; // Ensure it's visible
-  container.appendChild(messageBoxClone);
+  const backgroundImg = new Image();
+  const umuImage = new Image();
 
-  const umuImageClone = randomUmuImage.cloneNode(true);
-  umuImageClone.style.position = 'absolute'; // Position on top
-  umuImageClone.style.top = '50%';
-  umuImageClone.style.left = '50%';
-  umuImageClone.style.transform = 'translate(-50%, -50%)';
-  umuImageClone.style.maxWidth = '80vw'; // Adjust as needed
-  umuImageClone.style.zIndex = '1'; // Ensure it's on top of the box
-  umuImageClone.style.display = 'block'; // Ensure it's visible
-  container.appendChild(umuImageClone);
+  backgroundImg.onload = function() {
+    canvas.width = backgroundImg.naturalWidth;
+    canvas.height = backgroundImg.naturalHeight;
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
-  const backgroundClone = document.getElementById('background').cloneNode(true);
-  backgroundClone.style.position = 'absolute';
-  backgroundClone.style.top = '0';
-  backgroundClone.style.left = '0';
-  backgroundClone.style.width = '100%';
-  backgroundClone.style.height = '100%';
-  backgroundClone.style.zIndex = '-1';
-  container.appendChild(backgroundClone);
+    umuImage.onload = function() {
+      // Draw the Umu image (adjust position and size as needed)
+      const umuWidth = Math.min(canvas.width * 0.6, umuImage.naturalWidth);
+      const umuHeight = (umuWidth / umuImage.naturalWidth) * umuImage.naturalHeight;
+      const umuX = canvas.width / 2 - umuWidth / 2;
+      const umuY = canvas.height / 2 - umuHeight / 2;
+      ctx.drawImage(umuImage, umuX, umuY, umuWidth, umuHeight);
 
-  document.body.appendChild(container); // Append to body for rendering
+      // Draw the message text
+      ctx.font = '2rem Gaegu'; // Adjust font size to match your messageBox
+      ctx.fillStyle = '#5c4631'; // Match your messageBox color
+      ctx.textAlign = 'center';
+      const lines = messageTextContent.split('\n');
+      const startY = canvas.height * 0.7; // Adjust vertical position
+      lines.forEach((line, index) => {
+        ctx.fillText(line, canvas.width / 2, startY + index * 30); // Adjust line spacing
+      });
 
-  html2canvas(container).then(canvas => {
-    const link = document.createElement('a');
-    link.download = '우무사리_메시지.png';
-    link.href = canvas.toDataURL();
-    link.click();
-    container.remove(); // Clean up the temporary container
-  });
+      // Trigger the download
+      const dataURL = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = '우무사리_메시지.png';
+      link.href = dataURL;
+      link.click();
+    };
+    umuImage.onerror = function() {
+      console.error("Error loading Umu image for save.");
+      // Optionally handle the error (e.g., don't draw the image)
+      // Still try to save the background and text
+      // ... (draw text and trigger download)
+    };
+    umuImage.src = randomUmuSrc;
+
+  };
+  backgroundImg.onerror = function() {
+    console.error("Error loading background image for save.");
+    // Optionally handle the error (e.g., use a default color)
+    canvas.width = 600; // Default width
+    canvas.height = 400; // Default height
+    ctx.fillStyle = '#fff9eb';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Still try to draw the Umu image and text
+    umuImage.onload(); // Force onload to proceed without background
+  };
+
+  // Extract background image URL from CSS
+  const bgUrlWithQuotes = getComputedStyle(document.getElementById('background')).backgroundImage;
+  // Remove url() and quotes
+  const cleanedBgUrl = bgUrlWithQuotes.slice(4, -1).replace(/"/g, "");
+  backgroundImg.src = cleanedBgUrl;
 }
 
 function selectAgain() {
