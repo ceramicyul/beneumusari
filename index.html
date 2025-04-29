@@ -391,7 +391,6 @@ function showMessage(mood) {
 }
 
 function saveImage() {
-  const backgroundImageUrl = getComputedStyle(document.getElementById('background')).backgroundImage.slice(4, -1).replace(/"/g, "");
   const randomUmuSrc = randomUmuImage.src;
   const messageTextContent = msgBox.textContent;
 
@@ -433,10 +432,8 @@ function saveImage() {
   };
   umuImage.src = randomUmuSrc;
 
-  // Extract background image URL from CSS
-  const bgUrlWithQuotes = getComputedStyle(document.getElementById('background')).backgroundImage;
   // Remove url() and quotes
-  const cleanedBgUrl = bgUrlWithQuotes.slice(4, -1).replace(/"/g, "");
+  const cleanedBgUrl = umuImage.slice(4, -1).replace(/"/g, "");
   umuImage.src = cleanedBgUrl;
 }
 
