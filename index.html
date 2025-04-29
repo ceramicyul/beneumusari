@@ -392,10 +392,10 @@ function selectAgain() {
   randomUmuImage.style.display = 'none';
   if (currentMode === 'emotion') {
     emotionBtns.style.display = 'flex';
+    selectAgainBtn.style.display = 'none';
   } else {
     setMode('random');
   }
-  selectAgainBtn.style.display = 'none';
 }
 
 function reset() {
