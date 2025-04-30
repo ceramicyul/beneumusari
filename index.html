@@ -359,10 +359,11 @@ function typeMessage(element, text, speed = 40) {
       element.innerHTML += text.charAt(i);
       i++;
       setTimeout(type, speed);
+    } else {
+      selectAgainBtn.style.display = 'inline-block';
     }
   }
   type();
-  selectAgainBtn.style.display = 'inline-block';
 }
 
 function showMessage(mood) {
