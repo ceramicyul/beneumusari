@@ -451,7 +451,7 @@ function saveImage() {
 
     // Layer 3: Draw the message text
     ctx.font = scaledFontSize + ' ' + getComputedStyle(msgBox).fontFamily;
-    ctx.fillStyle = getComputedStyle(msgBox).color;
+    ctx.fillStyle = 'black';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     let currentY = messageY + scaledMessagePadding + (scaledDynamicMessageBoxHeight - estimatedLinesHeight) / 2;
