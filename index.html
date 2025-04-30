@@ -435,7 +435,7 @@ function saveImage() {
     ctx.font = scaledFontSize + ' ' + getComputedStyle(msgBox).fontFamily;
     ctx.fillStyle = 'black';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
+    ctx.textBaseline = 'bottom';
     let currentY = messageY + scaledMessagePadding + (scaledDynamicMessageBoxHeight - estimatedLinesHeight) / 2;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
