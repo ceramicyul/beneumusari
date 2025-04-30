@@ -371,8 +371,6 @@ function typeMessage(element, text, speed = 40) {
         lineHeight: getComputedStyle(element).lineHeight,
         textAlign: getComputedStyle(element).textAlign
       };
-      console.log("Computed fontSize in typeMessage:", currentMsgBoxState.fontSize);
-      console.log("Computed lineHeight in typeMessage:", currentMsgBoxState.lineHeight);
     }
   }
   type();
@@ -428,8 +426,8 @@ function saveImage() {
       currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
-    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'rem';
-    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'em';
+    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
+    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
