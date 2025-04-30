@@ -406,8 +406,23 @@ function saveImage() {
   umuImage.onload = function() {
     const umuWidth = umuImage.naturalWidth;
     const umuHeight = umuImage.naturalHeight;
-    const messageBoxWidth = msgBox.offsetWidth;
-    const messageBoxHeight = msgBox.offsetHeight;
+
+    const baseImageWidth = 600; // Example base width
+    const scaleFactor = umuWidth / baseImageWidth;
+
+    // --- Scaled Message Box Properties ---
+    const baseMessageBoxWidth = 0.8 * baseImageWidth; // Example: 80% of base width
+    const baseMessageBoxHeight = 100; // Example base height
+    const scaledMessageBoxWidth = baseMessageBoxWidth * scaleFactor;
+    const scaledMessageBoxHeight = baseMessageBoxHeight * scaleFactor;
+    const scaledMessagePadding = 18 * scaleFactor;
+    const scaledMessageBorderRadius = 20 * scaleFactor;
+
+    // --- Scaled Text Properties ---
+    const baseFontSize = 1.6; // Example base font size (in rem, so we'll need to convert)
+    const scaledFontSize = baseFontSize * scaleFactor + 'rem'; // Or adjust as needed
+    const baseLineHeightFactor = 1.6; // Example line height factor
+    const scaledLineHeight = baseLineHeightFactor * scaleFactor + 'em';
 
     // Create a canvas with the dimensions of the Umu image
     const canvas = document.createElement('canvas');
@@ -419,28 +434,24 @@ function saveImage() {
     ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
 
     // Layer 2: Calculate position and draw the message box with rounded corners
-    const messageX = (umuWidth - messageBoxWidth) / 2;
-    const messageY = (umuHeight - messageBoxHeight) / 2;
-    const messagePadding = 18; // Based on your CSS
-    const messageBorderRadius = 20; // Based on your CSS
+    const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
+    const messageY = (umuHeight - scaledMessageBoxHeight) / 2;
 
     ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
     ctx.beginPath();
-    ctx.roundRect(messageX, messageY, messageBoxWidth, messageBoxHeight, messageBorderRadius);
+    ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
     // Layer 3: Draw the message text
-    ctx.font = getComputedStyle(msgBox).fontSize + ' ' + getComputedStyle(msgBox).fontFamily;
+    ctx.font = scaledFontSize + ' ' + getComputedStyle(msgBox).fontFamily; // Use scaled font size
     ctx.fillStyle = getComputedStyle(msgBox).color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const lines = messageTextContent.split('\n');
-    const centerY = messageY + messageBoxHeight / 2;
-    const totalTextHeight = lines.length * parseFloat(getComputedStyle(msgBox).lineHeight) || lines.length * parseFloat(getComputedStyle(msgBox).fontSize) * 1.2;
-    let currentY = centerY - totalTextHeight / 2 + (parseFloat(getComputedStyle(msgBox).lineHeight) || parseFloat(getComputedStyle(msgBox).fontSize) * 1.2) / 2;
+    let currentY = messageY + scaledMessagePadding + (scaledMessageBoxHeight - lines.length * parseFloat(scaledLineHeight)) / 2; // Use scaled lineHeight
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += (parseFloat(getComputedStyle(msgBox).lineHeight) || parseFloat(getComputedStyle(msgBox).fontSize) * 1.2);
+      currentY += parseFloat(scaledLineHeight); // Use scaled lineHeight
     });
 
     // Trigger the download
