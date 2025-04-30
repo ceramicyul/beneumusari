@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap"
       rel="stylesheet" />
     <style>
-    /* 기본 스타일 */
     body {
       margin: 0;
       padding: 0;
@@ -34,7 +33,7 @@
       z-index: -2;
     }
     #randomUmuImage {
-      display: none;
+      display: block;
       position: fixed;
       top: 50%;
       left: 50%;
@@ -59,9 +58,9 @@
       transition: opacity 1s ease;
     }
     .emotion-icon {
-      height: 1em; /* Image height will be equal to the current font size */
-      width: auto; /* Width will scale proportionally */
-      vertical-align: middle; /* Ensure vertical alignment with text */
+      height: 1em;
+      width: auto;
+      vertical-align: middle;
     }
     button {
       font-family: 'Gaegu', sans-serif;
@@ -84,7 +83,6 @@
       transform: scale(0.96);
     }
 
-    /* 감정별 버튼 파스텔 색 */
     #tiredBtn { background-color: #ffffff; }
     #tiredBtn:hover { background-color: #d1c7ec; }
     #sadBtn { background-color: #ffffff; }
@@ -154,7 +152,6 @@
       display: none;
     }
 
-    /* 웰컴 오버레이 */
     #welcome-overlay {
       position: fixed;
       top: 0;
@@ -209,7 +206,6 @@
       border-color: white transparent transparent;
     }
 
-    /* ✅ 모바일 반응형 */
     @media (max-width: 768px) {
       #randomUmuImage {
         width: 100vw;
@@ -227,9 +223,6 @@
   </head>
 
   <body>
-
-    <!-- ✅ body 시작 -->
-
     <div id="background"></div>
     <img id="randomUmuImage" src alt="랜덤 우무 이미지" />
     <h1 id="title">우무사리가 전하는 말</h1>
@@ -284,7 +277,6 @@
       </div>
     </div>
 
-    <!-- About 모달 -->
     <div id="aboutModal"
       style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999;">
       <div
@@ -297,7 +289,6 @@
       </div>
     </div>
 
-    <!-- ✅ 스크립트 -->
     <script>
 const messages = {
   tired: ["오늘도 여기까지 온 너,\n정말 멋져우무! 😌", "숨 고르기 타임!\n우무가 옆에서 같이 쉴게요. 🌊"],
@@ -323,7 +314,6 @@ const umuImages = [
   'imgs/KakaoTalk_20250417_112205874.webp'
 ];
 
-// 요소 연결
 const msgBox = document.getElementById('messageBox');
 const selectAgainBtn = document.getElementById('selectAgainBtn');
 const saveImageBtn = document.getElementById('saveImageBtn');
@@ -335,8 +325,6 @@ const randomUmuImage = document.getElementById('randomUmuImage');
 const welcomeImage = document.querySelector('.umu-illustration');
 const welcomeOverlay = document.getElementById('welcome-overlay');
 let currentMessage = "";
-
-// 모드
 let currentMode = '';
 
 function setMode(mode) {
@@ -373,11 +361,9 @@ function showMessage(mood) {
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
-  // ✅ 먼저 랜덤 이미지 띄우기
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
   
-  // ✅ 텍스트 타이핑은 이미지 띄운 직후 시작
   if (isHidden) {
     currentMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]
     hiddenLabel.style.display = 'block';
@@ -395,7 +381,7 @@ function showMessage(mood) {
   typeMessage(msgBox, currentMessage);
 
   emotionBtns.style.display = 'none';
-  saveImageBtn.style.display = 'inline-block'; // Show the save image button
+  saveImageBtn.style.display = 'inline-block';
   resetBtn.style.display = 'inline-block';
 }
 
@@ -409,39 +395,34 @@ function saveImage() {
     const umuWidth = umuImage.naturalWidth;
     const umuHeight = umuImage.naturalHeight;
 
-    const baseImageWidth = 600; // Example base width
+    const baseImageWidth = 600;
     const scaleFactor = umuWidth / baseImageWidth;
 
-    // --- Scaled Text Properties ---
-    const baseFontSize = 1.6; // Example base font size (in rem)
+    const baseFontSize = 1.6;
     const scaledFontSize = baseFontSize * scaleFactor + 'rem';
-    const baseLineHeightFactor = 1.6; // Example line height factor
+    const baseLineHeightFactor = 1.6;
     const scaledLineHeight = baseLineHeightFactor * scaleFactor + 'em';
 
-    // --- Dynamically Calculate Scaled Message Box Height ---
     const lines = messageTextContent.split('\n');
     const estimatedLinesHeight = lines.length * parseFloat(scaledLineHeight);
-    const basePadding = 2 * 18; // Top and bottom padding
+    const basePadding = 2 * 18;
     const scaledPadding = basePadding * scaleFactor;
-    const dynamicBaseMessageBoxHeight = 60; // Minimum base height
+    const dynamicBaseMessageBoxHeight = 60;
     const scaledDynamicMessageBoxHeight = Math.max(dynamicBaseMessageBoxHeight * scaleFactor, estimatedLinesHeight + scaledPadding);
 
-    // --- Scaled Message Box Width and Border Radius ---
-    const baseMessageBoxWidth = 0.8 * baseImageWidth; // Example: 80% of base width
+
+    const baseMessageBoxWidth = 0.8 * baseImageWidth;
     const scaledMessageBoxWidth = baseMessageBoxWidth * scaleFactor;
     const scaledMessageBorderRadius = 20 * scaleFactor;
     const scaledMessagePadding = 18 * scaleFactor;
 
-    // Create a canvas with the dimensions of the Umu image
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
     canvas.height = umuHeight;
     const ctx = canvas.getContext('2d');
 
-    // Layer 1: Draw the Umu image
     ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
 
-    // Layer 2: Calculate position and draw the message box with rounded corners
     const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
     const messageY = (umuHeight - scaledDynamicMessageBoxHeight) / 2;
 
@@ -450,7 +431,6 @@ function saveImage() {
     ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledDynamicMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
-    // Layer 3: Draw the message text
     ctx.font = scaledFontSize + ' ' + getComputedStyle(msgBox).fontFamily;
     ctx.fillStyle = 'black';
     ctx.textAlign = 'center';
@@ -461,7 +441,6 @@ function saveImage() {
       currentY += parseFloat(scaledLineHeight);
     });
 
-    // Trigger the download
     const dataURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.download = '우무사리_메시지.png';
@@ -470,7 +449,6 @@ function saveImage() {
   };
   umuImage.onerror = function() {
     console.error("Error loading Umu image for save.");
-    // Optionally handle the error
   };
   umuImage.src = randomUmuSrc;
 }
@@ -478,7 +456,7 @@ function saveImage() {
 function selectAgain() {
   msgBox.style.display = 'none';
   randomUmuImage.style.display = 'none';
-  saveImageBtn.style.display = 'none'; // Hide the save image button
+  saveImageBtn.style.display = 'none';
   if (currentMode === 'emotion') {
     emotionBtns.style.display = 'flex';
     selectAgainBtn.style.display = 'none';
@@ -499,7 +477,6 @@ window.addEventListener('load', () => {
   }, 1800);
 });
 
-// About
 document.getElementById('aboutBtn').onclick = function () {
   document.getElementById('aboutModal').style.display = 'block';
 };
