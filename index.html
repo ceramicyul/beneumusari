@@ -2,81 +2,241 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>감정 위로 시스템</title>
+  <title>우무사리 감정 진단</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background-color: #fff9eb;
+      font-family: 'Gaegu', sans-serif;
+      background: #fff9eb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       text-align: center;
-      padding: 50px;
     }
-    input, select, button {
-      font-size: 1.2rem;
-      margin: 10px;
-      padding: 8px 12px;
+
+    #question-box {
+      width: 90%;
+      max-width: 500px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
-    #message {
-      margin-top: 30px;
+
+    #question {
       font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .answer-btn {
+      font-size: 1.2rem;
+      background: #fbd24d;
+      border: none;
+      padding: 12px 24px;
+      margin: 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .answer-btn:hover {
+      background: #fcb13b;
+    }
+
+    #result-card {
+      display: none;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      width: 320px;
+      background: #fefefe;
+      border-radius: 20px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      padding: 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .card::before {
+      content: "UMU#07-RESULT";
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .card h2 {
+      margin-top: 8px;
+      font-size: 1.5rem;
+      color: #444;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #fbd24d;
+      color: #333;
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .umu-face {
+      width: 100px;
+      margin: 12px auto;
+    }
+
+    .bars {
+      margin: 12px 0;
+      text-align: left;
+    }
+
+    .bar-label {
+      font-size: 0.9rem;
+      margin: 4px 0;
+      color: #555;
+    }
+
+    .bar-track {
+      background: #eee;
+      border-radius: 10px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 10px;
+      background: #fcb13b;
+      border-radius: 10px;
+    }
+
+    .comment {
+      font-size: 1.1rem;
+      color: #666;
+      margin-top: 16px;
+    }
+
+    #save-btn {
+      font-size: 1rem;
+      padding: 10px 20px;
+      background: #fcb13b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      display: none;
     }
   </style>
 </head>
 <body>
-
-  <h1>감정 위로 시스템</h1>
-
-  <div>
-    <input type="text" id="nameInput" placeholder="당신의 이름을 입력하세요">
+  <div id="question-box">
+    <div id="question">질문을 불러오는 중이에요...</div>
+    <button class="answer-btn" id="btn1"></button>
+    <button class="answer-btn" id="btn2"></button>
   </div>
 
-  <div>
-    <select id="emotionSelect">
-      <option value="">감정 모드를 선택하세요</option>
-      <option value="행복">행복</option>
-      <option value="슬픔">슬픔</option>
-      <option value="화남">화남</option>
-      <option value="불안">불안</option>
-      <option value="편안">편안</option>
-    </select>
+  <div id="result-card" class="card">
+    <div class="badge" id="result-badge">감정 성향</div>
+    <img class="umu-face" src="https://i.imgur.com/JBh3HcL.png" alt="우무사리 표정" />
+    <h2 id="result-title">성향 이름</h2>
+    <div class="bars">
+      <div class="bar-label">회복력</div>
+      <div class="bar-track"><div id="bar1" class="bar-fill"></div></div>
+      <div class="bar-label">자기표현력</div>
+      <div class="bar-track"><div id="bar2" class="bar-fill"></div></div>
+      <div class="bar-label">긍정 에너지</div>
+      <div class="bar-track"><div id="bar3" class="bar-fill"></div></div>
+    </div>
+    <div class="comment" id="result-comment">우무사리의 한마디</div>
   </div>
-
-  <div>
-    <button onclick="showMessage()">위로 받기</button>
-  </div>
-
-  <div id="message"></div>
+  <button id="save-btn" onclick="saveAsImage()">이미지로 저장하기</button>
 
   <script>
-    const messages = {
-      "행복": ["정말 빛나는 하루야, {name}님!", "행복은 퍼져나가요, {name}님."],
-      "슬픔": ["괜찮아, {name}님. 오늘은 천천히.", "울어도 괜찮아, {name}님."],
-      "화남": ["화나는 감정도 소중해요, {name}님.", "숨 한번 크게 쉬어봐요, {name}님."],
-      "불안": ["모든 걱정이 지나갈 거예요, {name}님.", "조금씩, 천천히 나아가요, {name}님."],
-      "편안": ["지금 이 순간을 누려요, {name}님.", "평온이 {name}님과 함께해요."]
-    };
+    const questions = [...Array(30)].map((_, i) => ({
+      q: `오늘의 질문 ${i + 1}`,
+      a1: "그렇다", s1: 1,
+      a2: "아니다", s2: -1
+    }));
 
-    function showMessage() {
-      const name = document.getElementById('nameInput').value.trim();
-      const emotion = document.getElementById('emotionSelect').value;
-      const messageBox = document.getElementById('message');
+    const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 6);
+    let current = 0;
+    let total = 0;
 
-      if (!name) {
-        alert('이름을 입력해주세요.');
-        return;
-      }
-      if (!emotion) {
-        alert('감정 모드를 선택해주세요.');
-        return;
-      }
+    function showQuestion() {
+      const q = shuffled[current];
+      document.getElementById('question').innerText = q.q;
+      document.getElementById('btn1').innerText = q.a1;
+      document.getElementById('btn2').innerText = q.a2;
 
-      const selectedMessages = messages[emotion];
-      const randomIndex = Math.floor(Math.random() * selectedMessages.length);
-      const rawMessage = selectedMessages[randomIndex];
-      const finalMessage = rawMessage.replace('{name}', name);
-
-      messageBox.innerText = finalMessage;
+      document.getElementById('btn1').onclick = () => next(q.s1);
+      document.getElementById('btn2').onclick = () => next(q.s2);
     }
-  </script>
 
+    function next(score) {
+      total += score;
+      current++;
+      if (current < shuffled.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('question-box').style.display = 'none';
+      document.getElementById('result-card').style.display = 'block';
+      document.getElementById('save-btn').style.display = 'inline-block';
+
+      let title = "혼합형 우무사리";
+      let comment = "기분이 오락가락했쭁? 그래도 잘 해냈쭁~";
+      let recovery = 60, expression = 50, energy = 50;
+
+      if (total >= 5) {
+        title = "밝음형 우무사리";
+        comment = "햇살 같은 하루였쭁! 긍정 에너지 최고쭁~";
+        recovery = 90; expression = 80; energy = 100;
+      } else if (total >= 3) {
+        title = "잔잔형 우무사리";
+        comment = "크게 흔들리지 않는 하루였쭁~ 안정감 최고쭁.";
+        recovery = 80; expression = 60; energy = 70;
+      } else if (total <= -4) {
+        title = "우울형 우무사리";
+        comment = "마음이 무거웠쭁... 우무가 옆에 있을게쭁.";
+        recovery = 30; expression = 20; energy = 10;
+      } else if (total <= -2) {
+        title = "지침형 우무사리";
+        comment = "많이 애썼쭁. 오늘은 진짜 푹 쉬자쭁.";
+        recovery = 40; expression = 30; energy = 20;
+      }
+
+      document.getElementById('result-title').innerText = title;
+      document.getElementById('result-comment').innerText = comment;
+      document.getElementById('bar1').style.width = recovery + '%';
+      document.getElementById('bar2').style.width = expression + '%';
+      document.getElementById('bar3').style.width = energy + '%';
+    }
+
+    function saveAsImage() {
+      html2canvas(document.querySelector("#result-card")).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'umu_emotion_card.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    showQuestion();
+  </script>
 </body>
 </html>
