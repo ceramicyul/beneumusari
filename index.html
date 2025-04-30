@@ -397,47 +397,32 @@ function saveImage() {
   const umuImage = new Image();
 
   umuImage.onload = function() {
-    // Calculate dimensions and position for the canvas
     const umuWidth = umuImage.naturalWidth;
     const umuHeight = umuImage.naturalHeight;
     const messageBoxWidth = msgBox.offsetWidth;
     const messageBoxHeight = msgBox.offsetHeight;
-    const messagePadding = 18; // Based on your CSS
-    const messageBorderRadius = 20; // Based on your CSS
-    const messageArrowHeight = 12; // Based on your CSS
 
-    const canvasWidth = Math.max(umuWidth, messageBoxWidth + 40); // Add some extra padding
-    const canvasHeight = umuHeight + messageBoxHeight + messageArrowHeight + 40; // Add spacing
-
+    // Create a canvas with the dimensions of the Umu image
     const canvas = document.createElement('canvas');
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    canvas.width = umuWidth;
+    canvas.height = umuHeight;
     const ctx = canvas.getContext('2d');
 
-    // Draw the Umu image in the center
-    const umuX = (canvasWidth - umuWidth) / 2;
-    const umuY = 20; // Add some top padding
-    ctx.drawImage(umuImage, umuX, umuY, umuWidth, umuHeight);
+    // Layer 1: Draw the Umu image
+    ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
 
-    // Calculate position for the message box above the image
-    const messageX = (canvasWidth - messageBoxWidth) / 2;
-    const messageY = umuY - messageBoxHeight - messageArrowHeight - 10; // Adjust spacing
+    // Layer 2: Calculate position and draw the message box with rounded corners
+    const messageX = (umuWidth - messageBoxWidth) / 2;
+    const messageY = (umuHeight - messageBoxHeight) / 2;
+    const messagePadding = 18; // Based on your CSS
+    const messageBorderRadius = 20; // Based on your CSS
 
-    // Draw the message box background
     ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
     ctx.beginPath();
     ctx.roundRect(messageX, messageY, messageBoxWidth, messageBoxHeight, messageBorderRadius);
     ctx.fill();
 
-    // Draw the message box arrow
-    ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
-    ctx.beginPath();
-    ctx.moveTo(canvasWidth / 2 - 12, messageY + messageBoxHeight);
-    ctx.lineTo(canvasWidth / 2 + 12, messageY + messageBoxHeight);
-    ctx.lineTo(canvasWidth / 2, messageY + messageBoxHeight + messageArrowHeight);
-    ctx.fill();
-
-    // Draw the message text
+    // Layer 3: Draw the message text
     ctx.font = getComputedStyle(msgBox).fontSize + ' ' + getComputedStyle(msgBox).fontFamily;
     ctx.fillStyle = getComputedStyle(msgBox).color;
     ctx.textAlign = 'center';
@@ -445,7 +430,7 @@ function saveImage() {
     const lines = messageTextContent.split('\n');
     let currentY = messageY + messagePadding + (messageBoxHeight - lines.length * parseFloat(getComputedStyle(msgBox).lineHeight)) / 2;
     lines.forEach(line => {
-      ctx.fillText(line, canvasWidth / 2, currentY);
+      ctx.fillText(line, umuWidth / 2, currentY);
       currentY += parseFloat(getComputedStyle(msgBox).lineHeight);
     });
 
