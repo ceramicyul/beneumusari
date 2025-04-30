@@ -426,8 +426,8 @@ function saveImage() {
       currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
-    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
-    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
+    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'rem';
+    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'em';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
@@ -452,7 +452,7 @@ function saveImage() {
     let currentY = messageY + scaledMessagePadding;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += parseFloat(scaledLineHeight);
+      currentY += parseFloat(scaledLineHeight.replace('em', ''));
     });
 
     const dataURL = canvas.toDataURL('image/png');
