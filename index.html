@@ -402,19 +402,19 @@ function saveImage() {
     const umuWidth = umuImage.naturalWidth;
     const umuHeight = umuImage.naturalHeight;
 
-    const baseImageWidth = 600;
-    const scaleFactor = umuWidth / baseImageWidth;
+    const baseWidth = 600;
+    const scaleFactor = umuWidth / baseWidth;
 
-    console.log("scaleFactor: ", scaleFactor);
     const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
     const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
     const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const scaledFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFactor) + 'rem';
-    console.log("scaledFontSize: ", scaledFontSize);
-    const scaledLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFactor) + 'em';
-    console.log("scaledLineHeight: ", scaledLineHeight);
+    const baseMsgBoxWidth = 0.8 * baseWidth;
+    const scaleFontFactor = scaledMessageBoxWidth / baseMsgBoxWidth;
+
+    const scaledFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFontFactor) + 'rem';
+    const scaledLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFontFactor) + 'em';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
