@@ -361,6 +361,7 @@ function typeMessage(element, text, speed = 40) {
     }
   }
   type();
+  resetBtn.style.display = 'none';
 }
 
 function showMessage(mood) {
@@ -386,7 +387,7 @@ function showMessage(mood) {
     msgBox.style.display = 'block'; 
     msgBox.textContent = currentMessage;
   }
-  typeMessage(msgBox, msgBox.textContent);
+  typeMessage(msgBox, currentMessage);
 
   emotionBtns.style.display = 'none';
   selectAgainBtn.style.display = 'inline-block';
