@@ -376,15 +376,17 @@ function showMessage(mood) {
     currentMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]
     hiddenLabel.style.display = 'block';
     msgBox.classList.add("hidden");
-    msgBox.style.display = 'block'; 
+    msgBox.style.display = 'block';
+    msgBox.textContent = currentMessage;
   } else {
     const msgList = messages[mood];
     currentMessage = msgList[Math.floor(Math.random() * msgList.length)]
     hiddenLabel.style.display = 'none';
     msgBox.classList.remove("hidden");
     msgBox.style.display = 'block'; 
+    msgBox.textContent = currentMessage;
   }
-  typeMessage(msgBox, currentMessage);
+  typeMessage(msgBox, msgBox.textContent);
 
   emotionBtns.style.display = 'none';
   selectAgainBtn.style.display = 'inline-block';
