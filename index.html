@@ -435,10 +435,12 @@ function saveImage() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const lines = 'TEST\nTEST\nTEST'.split('\n');
-    let currentY = messageY + messagePadding + (messageBoxHeight - lines.length * parseFloat(getComputedStyle(msgBox).lineHeight)) / 2;
+    const centerY = messageY + messageBoxHeight / 2;
+    const totalTextHeight = lines.length * parseFloat(getComputedStyle(msgBox).lineHeight) || lines.length * parseFloat(getComputedStyle(msgBox).fontSize) * 1.2;
+    let currentY = centerY - totalTextHeight / 2 + (parseFloat(getComputedStyle(msgBox).lineHeight) || parseFloat(getComputedStyle(msgBox).fontSize) * 1.2) / 2;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += parseFloat(getComputedStyle(msgBox).lineHeight);
+      currentY += (parseFloat(getComputedStyle(msgBox).lineHeight) || parseFloat(getComputedStyle(msgBox).fontSize) * 1.2);
     });
 
     // Trigger the download
