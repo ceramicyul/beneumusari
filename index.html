@@ -389,6 +389,7 @@ function showMessage(mood) {
 function saveImage() {
   const randomUmuSrc = randomUmuImage.src;
   const messageTextContent = currentMessage;
+  const msgBoxStyle = getComputedStyle(msgBox);
 
   const umuImage = new Image();
 
@@ -399,6 +400,11 @@ function saveImage() {
     const baseImageWidth = 600;
     const scaleFactor = umuWidth / baseImageWidth;
 
+    const baseMessageBoxWidth = 0.8 * baseImageWidth;
+    const scaledMessageBoxWidth = baseMessageBoxWidth * scaleFactor;
+    const scaledMessagePadding = parseFloat(msgBoxStyle.padding) * scaleFactor;
+    const scaledMessageBorderRadius = parseFloat(msgBoxStyle.borderRadius) * scaleFactor;
+
     const baseFontSize = 1.6;
     const scaledFontSize = baseFontSize * scaleFactor + 'rem';
     const baseLineHeightFactor = 1.6;
@@ -406,16 +412,7 @@ function saveImage() {
 
     const lines = messageTextContent.split('\n');
     const estimatedLinesHeight = lines.length * parseFloat(scaledLineHeight);
-    const basePadding = 2 * 18;
-    const scaledPadding = basePadding * scaleFactor;
-    const dynamicBaseMessageBoxHeight = 60;
-    const scaledDynamicMessageBoxHeight = Math.max(dynamicBaseMessageBoxHeight * scaleFactor, estimatedLinesHeight + scaledPadding);
-
-
-    const baseMessageBoxWidth = 0.8 * baseImageWidth;
-    const scaledMessageBoxWidth = baseMessageBoxWidth * scaleFactor;
-    const scaledMessageBorderRadius = 20 * scaleFactor;
-    const scaledMessagePadding = 18 * scaleFactor;
+    const scaledDynamicMessageBoxHeight = estimatedLinesHeight + 2 * scaledMessagePadding;
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
@@ -427,15 +424,15 @@ function saveImage() {
     const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
     const messageY = (umuHeight - scaledDynamicMessageBoxHeight) / 2;
 
-    ctx.fillStyle = getComputedStyle(msgBox).backgroundColor;
+    ctx.fillStyle = msgBoxStyle.backgroundColor;
     ctx.beginPath();
     ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledDynamicMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
-    ctx.font = scaledFontSize + ' ' + getComputedStyle(msgBox).fontFamily;
-    ctx.fillStyle = 'black';
+    ctx.font = scaledFontSize + ' ' + msgBoxStyle.fontFamily;
+    ctx.fillStyle = msgBoxStyle.color;
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
+    ctx.textBaseline = 'middle';
     let currentY = messageY + scaledMessagePadding + (scaledDynamicMessageBoxHeight - estimatedLinesHeight) / 2;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
