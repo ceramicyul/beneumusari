@@ -405,13 +405,16 @@ function saveImage() {
     const baseImageWidth = 600;
     const scaleFactor = umuWidth / baseImageWidth;
 
+    console.log("scaleFactor: ", scaleFactor);
     const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
     const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
     const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const scaledFontSize = currentMsgBoxState.fontSize
-    const scaledLineHeight = currentMsgBoxState.lineHeight
+    const scaledFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFactor) + 'rem';
+    console.log("scaledFontSize: ", scaledFontSize);
+    const scaledLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFactor) + 'em';
+    console.log("scaledLineHeight: ", scaledLineHeight);
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
