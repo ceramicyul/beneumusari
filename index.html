@@ -327,6 +327,7 @@ const welcomeImage = document.querySelector('.umu-illustration');
 const welcomeOverlay = document.getElementById('welcome-overlay');
 let currentMessage = "";
 let currentMode = '';
+let currentMsgBoxState = {};
 
 function setMode(mode) {
   currentMode = mode;
@@ -353,6 +354,17 @@ function typeMessage(element, text, speed = 40) {
       setTimeout(type, speed);
     } else {
       selectAgainBtn.style.display = 'inline-block';
+      currentMsgBoxState = {
+        width: element.offsetWidth,
+        height: element.offsetHeight,
+        backgroundColor: getComputedStyle(element).backgroundColor,
+        color: getComputedStyle(element).color,
+        padding: getComputedStyle(element).padding,
+        borderRadius: getComputedStyle(element).borderRadius,
+        fontFamily: getComputedStyle(element).fontFamily,
+        fontSize: getComputedStyle(element).fontSize,
+        lineHeight: getComputedStyle(element).lineHeight
+      };
     }
   }
   type();
@@ -389,7 +401,6 @@ function showMessage(mood) {
 function saveImage() {
   const randomUmuSrc = randomUmuImage.src;
   const messageTextContent = currentMessage;
-  const msgBoxStyle = getComputedStyle(msgBox);
 
   const umuImage = new Image();
 
@@ -400,19 +411,13 @@ function saveImage() {
     const baseImageWidth = 600;
     const scaleFactor = umuWidth / baseImageWidth;
 
-    const baseMessageBoxWidth = 0.8 * baseImageWidth;
-    const scaledMessageBoxWidth = baseMessageBoxWidth * scaleFactor;
-    const scaledMessagePadding = parseFloat(msgBoxStyle.padding) * scaleFactor;
-    const scaledMessageBorderRadius = parseFloat(msgBoxStyle.borderRadius) * scaleFactor;
+    const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
+    const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
+    const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
+    const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const baseFontSize = 1.6;
-    const scaledFontSize = baseFontSize * scaleFactor + 'rem';
-    const baseLineHeightFactor = 1.6;
-    const scaledLineHeight = baseLineHeightFactor * scaleFactor + 'em';
-
-    const lines = messageTextContent.split('\n');
-    const estimatedLinesHeight = lines.length * parseFloat(scaledLineHeight);
-    const scaledDynamicMessageBoxHeight = estimatedLinesHeight + 2 * scaledMessagePadding;
+    const scaledFontSize = parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFactor + 'rem';
+    const scaledLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFactor + 'em';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
@@ -422,18 +427,19 @@ function saveImage() {
     ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
 
     const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
-    const messageY = (umuHeight - scaledDynamicMessageBoxHeight) / 2;
+    const messageY = (umuHeight - scaledMessageBoxHeight) / 2;
 
-    ctx.fillStyle = msgBoxStyle.backgroundColor;
+    ctx.fillStyle = currentMsgBoxState.backgroundColor;
     ctx.beginPath();
-    ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledDynamicMessageBoxHeight, scaledMessageBorderRadius);
+    ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
-    ctx.font = scaledFontSize + ' ' + msgBoxStyle.fontFamily;
-    ctx.fillStyle = msgBoxStyle.color;
+    ctx.font = scaledFontSize + ' ' + currentMsgBoxState.fontFamily;
+    ctx.fillStyle = currentMsgBoxState.color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    let currentY = messageY + scaledMessagePadding + (scaledDynamicMessageBoxHeight - estimatedLinesHeight) / 2;
+    const lines = messageTextContent.split('\n');
+    let currentY = messageY + scaledMessagePadding + (scaledMessageBoxHeight - lines.length * parseFloat(scaledLineHeight)) / 2;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
       currentY += parseFloat(scaledLineHeight);
