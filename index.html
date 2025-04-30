@@ -471,11 +471,13 @@ function reset() {
 }
 
 window.addEventListener('load', () => {
+  title.style.display = "none"
   setTimeout(() => {
     welcomeOverlay.style.display = 'none';
     modeBtns.style.opacity = '1';
     modeBtns.style.pointerEvents = 'auto';
   }, 1800);
+  title.style.display = "inline-block"
 });
 
 document.getElementById('aboutBtn').onclick = function () {
