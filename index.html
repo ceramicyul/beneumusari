@@ -351,6 +351,7 @@ function setMode(mode) {
 }
 
 function typeMessage(element, text, speed = 40) {
+  selectAgainBtn.style.display = 'none';
   element.innerHTML = '';
   let i = 0;
   function type() {
@@ -361,7 +362,7 @@ function typeMessage(element, text, speed = 40) {
     }
   }
   type();
-  resetBtn.style.display = 'none';
+  selectAgainBtn.style.display = 'inline-block';
 }
 
 function showMessage(mood) {
@@ -390,7 +391,6 @@ function showMessage(mood) {
   typeMessage(msgBox, currentMessage);
 
   emotionBtns.style.display = 'none';
-  selectAgainBtn.style.display = 'inline-block';
   saveImageBtn.style.display = 'inline-block'; // Show the save image button
   resetBtn.style.display = 'inline-block';
 }
