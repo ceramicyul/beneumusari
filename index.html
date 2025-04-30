@@ -434,7 +434,7 @@ function saveImage() {
     ctx.font = scaledFontSize + ' ' + currentMsgBoxState.fontFamily;
     ctx.fillStyle = currentMsgBoxState.color;
     ctx.textAlign = currentMsgBoxState.textAlign;
-    ctx.textBaseline = 'ideographic';
+    ctx.textBaseline = 'middle';
     const lines = currentTextContent.split('\n');
     let currentY = messageY + scaledMessagePadding + (scaledMessageBoxHeight - lines.length * parseFloat(scaledLineHeight)) / 2;
     lines.forEach(line => {
