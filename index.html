@@ -325,9 +325,9 @@ const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
 const welcomeImage = document.querySelector('.umu-illustration');
 const welcomeOverlay = document.getElementById('welcome-overlay');
-let currentMessage = "";
 let currentMode = '';
 let currentMsgBoxState = {};
+let currentTextContent = "";
 
 function setMode(mode) {
   currentMode = mode;
@@ -346,6 +346,7 @@ function setMode(mode) {
 function typeMessage(element, text, speed = 40) {
   selectAgainBtn.style.display = 'none';
   element.innerHTML = '';
+  currentTextContent = text;
   let i = 0;
   function type() {
     if (i < text.length) {
@@ -363,7 +364,9 @@ function typeMessage(element, text, speed = 40) {
         borderRadius: getComputedStyle(element).borderRadius,
         fontFamily: getComputedStyle(element).fontFamily,
         fontSize: getComputedStyle(element).fontSize,
-        lineHeight: getComputedStyle(element).lineHeight
+        lineHeight: getComputedStyle(element).lineHeight,
+        textAlign: getComputedStyle(element).textAlign,
+        textBaseline: getComputedStyle(element).textBaseline
       };
     }
   }
@@ -372,26 +375,17 @@ function typeMessage(element, text, speed = 40) {
 
 function showMessage(mood) {
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+  const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
+  const message = isHidden ? hiddenMessages[randomIndex] : messages[mood][randomIndex];
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
 
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
-  
-  if (isHidden) {
-    currentMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]
-    hiddenLabel.style.display = 'block';
-    msgBox.classList.add("hidden");
-    msgBox.style.display = 'block';
-    msgBox.textContent = currentMessage;
-  } else {
-    const msgList = messages[mood];
-    currentMessage = msgList[Math.floor(Math.random() * msgList.length)]
-    hiddenLabel.style.display = 'none';
-    msgBox.classList.remove("hidden");
-    msgBox.style.display = 'block'; 
-    msgBox.textContent = currentMessage;
-  }
-  typeMessage(msgBox, currentMessage);
+
+  hiddenLabel.style.display = isHidden ? 'block' : 'none';
+  msgBox.classList.toggle("hidden", isHidden);
+  msgBox.style.display = 'block';
+  typeMessage(msgBox, message);
 
   emotionBtns.style.display = 'none';
   saveImageBtn.style.display = 'inline-block';
@@ -400,7 +394,6 @@ function showMessage(mood) {
 
 function saveImage() {
   const randomUmuSrc = randomUmuImage.src;
-  const messageTextContent = currentMessage;
 
   const umuImage = new Image();
 
@@ -436,9 +429,9 @@ function saveImage() {
 
     ctx.font = scaledFontSize + ' ' + currentMsgBoxState.fontFamily;
     ctx.fillStyle = currentMsgBoxState.color;
-    ctx.textAlign = 'center';
+    ctx.textAlign = currentMsgBoxState.textAlign;
     ctx.textBaseline = 'middle';
-    const lines = messageTextContent.split('\n');
+    const lines = currentTextContent.split('\n');
     let currentY = messageY + scaledMessagePadding + (scaledMessageBoxHeight - lines.length * parseFloat(scaledLineHeight)) / 2;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
