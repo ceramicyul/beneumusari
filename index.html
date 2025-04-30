@@ -19,7 +19,26 @@
       min-height: 100vh;
       text-align: center;
     }
+    #welcome-screen {
+      margin-top: 100px;
+    }
+    #welcome-screen h1 {
+      font-size: 1.7rem;
+      color: #444;
+    }
+    #start-btn {
+      display: none;
+      font-size: 1.2rem;
+      padding: 12px 20px;
+      margin-top: 24px;
+      background: #fbd24d;
+      color: #333;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
     #question-box {
+      display: none;
       width: 100%;
       max-width: 420px;
       background: #fff;
@@ -130,12 +149,21 @@
   </style>
 </head>
 <body>
+
+  <!-- 웰컴 인사 -->
+  <div id="welcome-screen">
+    <h1>안녕, 우무사리야!</h1>
+    <button id="start-btn">내 마음 알아보기</button>
+  </div>
+
+  <!-- 질문 영역 -->
   <div id="question-box">
     <div id="question">질문을 불러오는 중이에요...</div>
     <button class="answer-btn" id="btn1"></button>
     <button class="answer-btn" id="btn2"></button>
   </div>
 
+  <!-- 결과 카드 -->
   <div id="result-card" class="card">
     <div class="badge">감정 성향 진단 결과</div>
     <div id="date-label"></div>
@@ -161,14 +189,7 @@
       { q: "자신에게 친절했나요?", a1: "네, 잘해줬어요", s1: 1, a2: "아니요, 그러지 못했어요", s2: -1 },
       { q: "마음을 표현할 수 있었나요?", a1: "네, 표현했어요", s1: 1, a2: "아니요, 참았어요", s2: -1 },
       { q: "오늘 하루가 의미 있었나요?", a1: "그랬어요", s1: 1, a2: "잘 모르겠어요", s2: -1 },
-      { q: "마음이 편안했나요?", a1: "네, 평온했어요", s1: 1, a2: "아니요, 복잡했어요", s2: -1 },
-      { q: "몸 상태는 어땠나요?", a1: "가벼웠어요", s1: 1, a2: "피곤했어요", s2: -1 },
-      { q: "좋아하는 걸 할 시간이 있었나요?", a1: "있었어요", s1: 1, a2: "없었어요", s2: -1 },
-      { q: "내 감정을 알아주는 사람이 있었나요?", a1: "네, 있었어요", s1: 1, a2: "아니요, 없었어요", s2: -1 },
-      { q: "스트레스를 잘 풀었나요?", a1: "네", s1: 1, a2: "아니요", s2: -1 },
-      { q: "의미 있는 대화를 했나요?", a1: "네", s1: 1, a2: "없었어요", s2: -1 },
-      { q: "감정을 나눴나요?", a1: "나눴어요", s1: 1, a2: "혼자였어요", s2: -1 }
-      // 나머지 질문도 이 구조에 맞게 추가 가능
+      { q: "스트레스를 잘 풀었나요?", a1: "풀었어요", s1: 1, a2: "못 풀었어요", s2: -1 }
     ];
 
     const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 6);
@@ -240,7 +261,18 @@
       });
     }
 
-    showQuestion();
+    // 웰컴 인사 흐름
+    window.onload = () => {
+      setTimeout(() => {
+        document.getElementById("start-btn").style.display = "inline-block";
+      }, 2000);
+
+      document.getElementById("start-btn").onclick = () => {
+        document.getElementById("welcome-screen").style.display = "none";
+        document.getElementById("question-box").style.display = "block";
+        showQuestion();
+      };
+    };
   </script>
 </body>
 </html>
