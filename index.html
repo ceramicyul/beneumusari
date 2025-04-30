@@ -417,15 +417,15 @@ function saveImage() {
     const baseMsgBoxWidth = 3.8 * baseWidth;
     const scaleFontFactor = currentMsgBoxState.width / baseMsgBoxWidth;
 
-    const currentFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')));
-    let currentLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')));
+    const currentFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('px', '')));
+    let currentLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('px', '')));
 
     if (isNaN(currentLineHeight)) {
-      currentLineHeight = parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * parseFloat(currentMsgBoxState.lineHeight.replace('em', ''));
-    } else if (currentMsgBoxState.lineHeight.includes('em')) {
+      currentLineHeight = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
+    } else if (currentMsgBoxState.lineHeight.includes('px')) {
       currentLineHeight *= currentFontSize;
-    } else if (currentMsgBoxState.lineHeight.includes('rem')) {
-      currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('rem', ''));
+    } else if (currentMsgBoxState.lineHeight.includes('px')) {
+      currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
     const scaledFontSize = (currentFontSize * scaleFontFactor) + 'rem';
