@@ -126,6 +126,12 @@
       margin-top: 16px;
     }
 
+    #date-label {
+      font-size: 0.9rem;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
     #save-btn {
       font-size: 1rem;
       padding: 10px 20px;
@@ -147,7 +153,8 @@
   </div>
 
   <div id="result-card" class="card">
-    <div class="badge" id="result-badge">감정 성향</div>
+    <div class="badge">감정 성향 진단 결과</div>
+    <div id="date-label"></div>
     <img class="umu-face" src="https://i.imgur.com/JBh3HcL.png" alt="우무사리 표정" />
     <h2 id="result-title">성향 이름</h2>
     <div class="bars">
@@ -163,11 +170,18 @@
   <button id="save-btn" onclick="saveAsImage()">이미지로 저장하기</button>
 
   <script>
-    const questions = [...Array(30)].map((_, i) => ({
-      q: `오늘의 질문 ${i + 1}`,
-      a1: "그렇다", s1: 1,
-      a2: "아니다", s2: -1
-    }));
+    const questions = [
+      { q: "오늘 감정을 조절할 수 있었나요?", a1: "그랬어요", s1: 1, a2: "휘둘렸어요", s2: -1 },
+      { q: "자주 웃었나요?", a1: "네", s1: 1, a2: "아니요", s2: -1 },
+      { q: "나에게 집중할 수 있었나요?", a1: "집중했어요", s1: 1, a2: "흐트러졌어요", s2: -1 },
+      { q: "감정을 솔직하게 표현했나요?", a1: "표현했어요", s1: 1, a2: "참았어요", s2: -1 },
+      { q: "하루가 의미 있었나요?", a1: "의미 있었어요", s1: 1, a2: "딱히 없었어요", s2: -1 },
+      { q: "내 마음을 알아주는 사람이 있었나요?", a1: "있었어요", s1: 1, a2: "없었어요", s2: -1 },
+      { q: "기대되는 일이 있었나요?", a1: "네", s1: 1, a2: "없었어요", s2: -1 },
+      { q: "몸 상태는 괜찮았나요?", a1: "괜찮았어요", s1: 1, a2: "좀 힘들었어요", s2: -1 },
+      { q: "스스로에게 친절했나요?", a1: "그랬어요", s1: 1, a2: "잘 못했어요", s2: -1 },
+      { q: "마음이 평온했나요?", a1: "편안했어요", s1: 1, a2: "뒤숭숭했어요", s2: -1 }
+    ];
 
     const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 6);
     let current = 0;
@@ -197,6 +211,11 @@
       document.getElementById('question-box').style.display = 'none';
       document.getElementById('result-card').style.display = 'block';
       document.getElementById('save-btn').style.display = 'inline-block';
+
+      const today = new Date().toLocaleDateString('ko-KR', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+      document.getElementById('date-label').innerText = "오늘 날짜: " + today;
 
       let title = "혼합형 우무사리";
       let comment = "기분이 오락가락했쭁? 그래도 잘 해냈쭁~";
