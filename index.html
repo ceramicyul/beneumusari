@@ -450,9 +450,12 @@ function saveImage() {
     ctx.textBaseline = 'top';
     const lines = currentTextContent.split('\n');
     let currentY = messageY + scaledMessagePadding;
+    console.log("currentY init: ", currentY)
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
+      console.log("currentY in lines.forEach: ", currentY)
       currentY += parseFloat(scaledLineHeight.replace('em', ''));
+      console.log("currentY after parseFloat: ", currentY)
     });
 
     const dataURL = canvas.toDataURL('image/png');
