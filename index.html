@@ -118,7 +118,6 @@
       transform: scale(0.96);
     }
     #selectAgainBtn { bottom: 20px; right: 20px; display: none; }
-    #saveImageBtn { bottom: 20px; left: 50%; transform: translateX(-50%); display: none; transition: transform 0.2s ease; }
     #resetBtn { bottom: 20px; left: 20px; display: none; }
     #aboutBtn { top: 20px; right: 20px; }
 
@@ -266,9 +265,11 @@
 
     <div id="hidden-label">✨ Hidden! ✨</div>
     <div id="messageBox"></div>
-    <button id="selectAgainBtn" onclick="selectAgain()">다시 선택하기</button>
-    <button id="saveImageBtn" onclick="saveImage()">저장하기</button>
-    <button id="resetBtn" onclick="reset()">첫 화면으로</button>
+    <div style="position: fixed; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 10000;">
+      <button id="resetBtn" onclick="reset()">첫 화면으로</button>
+      <button id="saveImageBtn" onclick="saveImage()">저장하기</button>
+      <button id="selectAgainBtn" onclick="selectAgain()" style="display: none;">다시 선택하기</button>
+    </div>
 
     <div id="welcome-overlay">
       <div class="welcome-content">
