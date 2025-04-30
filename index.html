@@ -331,6 +331,7 @@ const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
 const welcomeImage = document.querySelector('.umu-illustration');
 const welcomeOverlay = document.getElementById('welcome-overlay');
+let currentMessage = "";
 
 // 모드
 let currentMode = '';
@@ -372,17 +373,18 @@ function showMessage(mood) {
   
   // ✅ 텍스트 타이핑은 이미지 띄운 직후 시작
   if (isHidden) {
+    currentMessage = hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]
     hiddenLabel.style.display = 'block';
     msgBox.classList.add("hidden");
     msgBox.style.display = 'block'; 
-    typeMessage(msgBox, hiddenMessages[Math.floor(Math.random() * hiddenMessages.length)]);
   } else {
+    const msgList = messages[mood];
+    currentMessage = msgList[Math.floor(Math.random() * msgList.length)]
     hiddenLabel.style.display = 'none';
     msgBox.classList.remove("hidden");
     msgBox.style.display = 'block'; 
-    const msgList = messages[mood];
-    typeMessage(msgBox, msgList[Math.floor(Math.random() * msgList.length)]);
   }
+  typeMessage(msgBox, currentMessage);
 
   emotionBtns.style.display = 'none';
   selectAgainBtn.style.display = 'inline-block';
@@ -392,7 +394,7 @@ function showMessage(mood) {
 
 function saveImage() {
   const randomUmuSrc = randomUmuImage.src;
-  const messageTextContent = msgBox.textContent;
+  const messageTextContent = currentMessage;
 
   const umuImage = new Image();
 
