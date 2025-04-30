@@ -413,19 +413,19 @@ function saveImage() {
     const baseMsgBoxWidth = 4.0 * baseWidth;
     const scaleFontFactor = currentMsgBoxState.width / baseMsgBoxWidth;
 
-    const currentFontSize = parseFloat(currentMsgBoxState.fontSize);
-    let currentLineHeight = parseFloat(currentMsgBoxState.lineHeight);
+    const currentFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')));
+    let currentLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')));
 
     if (isNaN(currentLineHeight)) {
-      currentLineHeight = parseFloat(currentMsgBoxState.fontSize) * parseFloat(currentMsgBoxState.lineHeight);
+      currentLineHeight = parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * parseFloat(currentMsgBoxState.lineHeight.replace('em', ''));
     } else if (currentMsgBoxState.lineHeight.includes('em')) {
       currentLineHeight *= currentFontSize;
     } else if (currentMsgBoxState.lineHeight.includes('rem')) {
-      currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize);
+      currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('rem', ''));
     }
 
-    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
-    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
+    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'rem';
+    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'em';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
@@ -445,9 +445,9 @@ function saveImage() {
     ctx.font = scaledFontSize + ' ' + currentMsgBoxState.fontFamily;
     ctx.fillStyle = currentMsgBoxState.color;
     ctx.textAlign = currentMsgBoxState.textAlign;
-    ctx.textBaseline = 'top'; // Change textBaseline to 'top'
+    ctx.textBaseline = 'top';
     const lines = currentTextContent.split('\n');
-    let currentY = messageY + scaledMessagePadding; // Start Y from the top padding
+    let currentY = messageY + scaledMessagePadding;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
       currentY += parseFloat(scaledLineHeight);
