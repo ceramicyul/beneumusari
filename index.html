@@ -413,8 +413,19 @@ function saveImage() {
     const baseMsgBoxWidth = 4.0 * baseWidth;
     const scaleFontFactor = currentMsgBoxState.width / baseMsgBoxWidth;
 
-    const scaledFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFontFactor) + 'rem';
-    const scaledLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFontFactor) + 'em';
+    const currentFontSize = parseFloat(currentMsgBoxState.fontSize);
+    let currentLineHeight = parseFloat(currentMsgBoxState.lineHeight);
+
+    if (isNaN(currentLineHeight)) {
+      currentLineHeight = parseFloat(currentMsgBoxState.fontSize) * parseFloat(currentMsgBoxState.lineHeight);
+    } else if (currentMsgBoxState.lineHeight.includes('em')) {
+      currentLineHeight *= currentFontSize;
+    } else if (currentMsgBoxState.lineHeight.includes('rem')) {
+      currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize);
+    }
+
+    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
+    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
