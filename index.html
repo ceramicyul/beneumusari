@@ -434,7 +434,7 @@ function saveImage() {
     ctx.fillStyle = getComputedStyle(msgBox).color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const lines = messageTextContent.split('\n');
+    const lines = 'TEST\nTEST'
     let currentY = messageY + messagePadding + (messageBoxHeight - lines.length * parseFloat(getComputedStyle(msgBox).lineHeight)) / 2;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
