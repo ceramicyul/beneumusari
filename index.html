@@ -410,8 +410,8 @@ function saveImage() {
     const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const scaledFontSize = parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFactor + 'rem';
-    const scaledLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFactor + 'em';
+    const scaledFontSize = parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * Math.min(scaleFactor, 1.5) + 'rem';
+    const scaledLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * Math.min(scaleFactor, 1.5) + 'em';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
