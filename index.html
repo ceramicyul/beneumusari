@@ -7,10 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: 'Gaegu', sans-serif;
       background: #fff9eb;
@@ -22,7 +19,6 @@
       min-height: 100vh;
       text-align: center;
     }
-
     #question-box {
       width: 100%;
       max-width: 420px;
@@ -31,12 +27,10 @@
       padding: 20px;
       box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
-
     #question {
       font-size: 1.3rem;
       margin-bottom: 20px;
     }
-
     .answer-btn {
       width: 100%;
       font-size: 1.1rem;
@@ -48,18 +42,15 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
     .answer-btn:hover {
       background: #fcb13b;
     }
-
     #result-card {
       display: none;
       margin-bottom: 20px;
       width: 100%;
       max-width: 420px;
     }
-
     .card {
       background: #fefefe;
       border-radius: 20px;
@@ -67,7 +58,6 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.1);
       position: relative;
     }
-
     .card::before {
       content: "UMU#07-RESULT";
       position: absolute;
@@ -76,13 +66,11 @@
       font-size: 0.85rem;
       color: #aaa;
     }
-
     .card h2 {
       font-size: 1.4rem;
       margin-top: 10px;
       color: #444;
     }
-
     .badge {
       display: inline-block;
       background: #fbd24d;
@@ -93,23 +81,19 @@
       font-size: 0.95rem;
       margin-bottom: 10px;
     }
-
     .umu-face {
       width: 100px;
       margin: 12px auto;
     }
-
     .bars {
       margin: 16px 0;
       text-align: left;
     }
-
     .bar-label {
       font-size: 0.9rem;
       margin: 6px 0 4px;
       color: #555;
     }
-
     .bar-track {
       background: #eee;
       border-radius: 10px;
@@ -117,25 +101,21 @@
       width: 100%;
       overflow: hidden;
     }
-
     .bar-fill {
       height: 10px;
       background: #fcb13b;
       border-radius: 10px;
     }
-
     .comment {
       font-size: 1.05rem;
       color: #666;
       margin-top: 14px;
     }
-
     #date-label {
       font-size: 0.9rem;
       color: #999;
       margin-bottom: 8px;
     }
-
     #save-btn {
       font-size: 1rem;
       padding: 12px 20px;
@@ -174,66 +154,34 @@
 
   <button id="save-btn" onclick="saveAsImage()">이미지로 저장하기</button>
 
-<script>
-  const questions = [
-    { q: "오늘 감정을 조절할 수 있었나요?", a1: "그랬어요", s1: 1, a2: "휘둘렸어요", s2: -1 },
-    { q: "자주 웃었나요?", a1: "네", s1: 1, a2: "아니요", s2: -1 },
-    { q: "감정을 솔직하게 표현했나요?", a1: "표현했어요", s1: 1, a2: "참았어요", s2: -1 },
-    { q: "하루가 의미 있었나요?", a1: "의미 있었어요", s1: 1, a2: "딱히 없었어요", s2: -1 },
-    { q: "기대되는 일이 있었나요?", a1: "네", s1: 1, a2: "없었어요", s2: -1 },
-    { q: "스스로에게 친절했나요?", a1: "그랬어요", s1: 1, a2: "못했어요", s2: -1 },
-    { q: "몸이 가볍게 느껴졌나요?", a1: "가벼웠어요", s1: 1, a2: "무거웠어요", s2: -1 },
-    { q: "마음이 평온했나요?", a1: "편안했어요", s1: 1, a2: "뒤숭숭했어요", s2: -1 },
-    { q: "내 감정에 공감받았나요?", a1: "받았어요", s1: 1, a2: "아니요", s2: -1 },
-    { q: "오늘 하루를 잘 마무리했나요?", a1: "네", s1: 1, a2: "조금 아쉬워요", s2: -1 },
-    { q: "해야 할 일을 잘 끝냈나요?", a1: "끝냈어요", s1: 1, a2: "밀렸어요", s2: -1 },
-    { q: "마음이 여유로웠나요?", a1: "여유 있었어요", s1: 1, a2: "조급했어요", s2: -1 },
-    { q: "감정의 기복이 있었나요?", a1: "없었어요", s1: 1, a2: "심했어요", s2: -1 },
-    { q: "나를 위한 시간을 가졌나요?", a1: "가졌어요", s1: 1, a2: "없었어요", s2: -1 },
-    { q: "감정을 잘 표현했나요?", a1: "잘했어요", s1: 1, a2: "못했어요", s2: -1 },
-    { q: "하고 싶은 일을 했나요?", a1: "했어요", s1: 1, a2: "못했어요", s2: -1 },
-    { q: "오늘 하루가 짧게 느껴졌나요?", a1: "네", s1: 1, a2: "길게 느껴졌어요", s2: -1 },
-    { q: "긍정적인 말을 많이 했나요?", a1: "많이 했어요", s1: 1, a2: "별로요", s2: -1 },
-    { q: "스스로를 칭찬하고 싶나요?", a1: "응", s1: 1, a2: "글쎄요", s2: -1 },
-    { q: "감정 기복을 조절했나요?", a1: "그랬어요", s1: 1, a2: "어려웠어요", s2: -1 },
-    { q: "마음에 드는 순간이 있었나요?", a1: "있었어요", s1: 1, a2: "없었어요", s2: -1 },
-    { q: "나를 아껴준 사람이 있었나요?", a1: "있었어요", s1: 1, a2: "없었어요", s2: -1 },
-    { q: "오늘 하루가 내 뜻대로 흘렀나요?", a1: "그랬어요", s1: 1, a2: "아니요", s2: -1 },
-    { q: "스트레스를 잘 풀었나요?", a1: "풀었어요", s1: 1, a2: "아니요", s2: -1 },
-    { q: "하루 중 기억에 남는 순간이 있었나요?", a1: "있었어요", s1: 1, a2: "없었어요", s2: -1 },
-    { q: "감정을 누군가와 나눴나요?", a1: "나눴어요", s1: 1, a2: "혼자였어요", s2: -1 },
-    { q: "오늘 하루에 만족하나요?", a1: "만족해요", s1: 1, a2: "아쉬워요", s2: -1 },
-    { q: "의미 있는 대화를 했나요?", a1: "했어요", s1: 1, a2: "없었어요", s2: -1 },
-    { q: "감정이 나를 도와줬다고 느끼나요?", a1: "네", s1: 1, a2: "아니요", s2: -1 },
-    { q: "오늘의 나는 나다웠나요?", a1: "그랬어요", s1: 1, a2: "잘 모르겠어요", s2: -1 }
-  ];
+  <script>
+    const questions = Array.from({length: 30}, (_, i) => ({
+      q: `오늘 하루 어땠나요? (${i + 1})`,
+      a1: "좋았어요", s1: 1,
+      a2: "별로였어요", s2: -1
+    }));
 
-  const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 6);
-  let current = 0, total = 0;
+    const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 6);
+    let current = 0, total = 0;
 
-  function showQuestion() {
-    const q = shuffled[current];
-    document.getElementById('question').innerText = q.q;
-    document.getElementById('btn1').innerText = q.a1;
-    document.getElementById('btn2').innerText = q.a2;
-    document.getElementById('btn1').onclick = () => next(q.s1);
-    document.getElementById('btn2').onclick = () => next(q.s2);
-  }
-
-  function next(score) {
-    total += score;
-    current++;
-    if (current < 6) {
-      showQuestion();
-    } else {
-      showResult();
+    function showQuestion() {
+      const q = shuffled[current];
+      document.getElementById('question').innerText = q.q;
+      document.getElementById('btn1').innerText = q.a1;
+      document.getElementById('btn2').innerText = q.a2;
+      document.getElementById('btn1').onclick = () => next(q.s1);
+      document.getElementById('btn2').onclick = () => next(q.s2);
     }
-  }
 
-  // ... showResult(), saveAsImage() 등은 동일하게 유지
-
-  showQuestion();
-</script>
+    function next(score) {
+      total += score;
+      current++;
+      if (current < shuffled.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
 
     function showResult() {
       document.getElementById('question-box').style.display = 'none';
