@@ -411,7 +411,7 @@ function saveImage() {
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
     const baseMsgBoxWidth = 0.8 * baseWidth;
-    const scaleFontFactor = scaledMessageBoxWidth / baseMsgBoxWidth;
+    const scaleFontFactor = currentMsgBoxState.width / baseMsgBoxWidth;
 
     const scaledFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('rem', '')) * scaleFontFactor) + 'rem';
     const scaledLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('em', '')) * scaleFontFactor) + 'em';
