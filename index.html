@@ -414,14 +414,22 @@ function saveImage() {
 
     const baseMsgBoxWidth = 3.2 * currentMsgBoxState.width;
     const baseMsgBoxHeight = 3.2 * currentMsgBoxState.height;
+    console.log("baseMsgBoxWidth: ", baseMsgBoxWidth);
+    console.log("baseMsgBoxHeight: ", baseMsgBoxHeight);
 
     const scaleFontWidth = scaledMessageBoxWidth / baseMsgBoxWidth;
     const scaleFontHeight = scaledMessageBoxHeight / baseMsgBoxHeight;
+    console.log("scaledMessageBoxWidth: ", scaledMessageBoxWidth);
+    console.log("scaledMessageBoxHeight: ", scaledMessageBoxHeight);
+    console.log("scaleFontWidth: ", baseMsgBoxWidth);
+    console.log("scaleFontHeight: ", baseMsgBoxHeight);
 
     const scaleFontFactor = Math.min(scaleFontWidth, scaleFontHeight);
 
     const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', ''));
     let currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
+    console.log("currentFontSize: ", currentFontSize);
+    console.log("currentLineHeight: ", currentLineHeight);
 
     if (isNaN(currentLineHeight)) {
       currentLineHeight = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
