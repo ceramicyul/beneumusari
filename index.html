@@ -439,8 +439,8 @@ function saveImage() {
       currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
-    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'rem';
-    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'em';
+    const scaledFontSize = (currentFontSize / scaleFontFactor) + 'rem';
+    const scaledLineHeight = (currentLineHeight / scaleFontFactor) + 'em';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
