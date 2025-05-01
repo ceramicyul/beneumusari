@@ -412,11 +412,16 @@ function saveImage() {
     const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const baseMsgBoxWidth = 3.8 * baseWidth;
-    const scaleFontFactor = currentMsgBoxState.width / baseMsgBoxWidth;
+    const baseMsgBoxWidth = 0.8 * baseWidth;
+    const baseMsgBoxHeight = currentMsgBoxState.height;
 
-    const currentFontSize = (parseFloat(currentMsgBoxState.fontSize.replace('px', '')));
-    let currentLineHeight = (parseFloat(currentMsgBoxState.lineHeight.replace('px', '')));
+    const scaleFontWidth = scaledMessageBoxWidth / baseMsgBoxWidth;
+    const scaleFontHeight = scaledMessageBoxHeight / baseMsgBoxHeight;
+
+    const scaleFontFactor = Math.min(scaleFontWidth, scaleFontHeight);
+
+    const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', ''));
+    let currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
 
     if (isNaN(currentLineHeight)) {
       currentLineHeight = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
@@ -449,10 +454,10 @@ function saveImage() {
     ctx.textAlign = currentMsgBoxState.textAlign;
     ctx.textBaseline = 'top';
     const lines = currentTextContent.split('\n');
-    let currentY = messageY;
+    let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += parseFloat(scaledLineHeight.replace('em', ''));
+      currentY += parseFloat(scaledLineHeight.replace('em', '')) * parseFloat(scaledFontSize.replace('rem', ''));
     });
 
     const dataURL = canvas.toDataURL('image/png');
