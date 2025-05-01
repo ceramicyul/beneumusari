@@ -449,7 +449,7 @@ function saveImage() {
     ctx.textAlign = currentMsgBoxState.textAlign;
     ctx.textBaseline = 'top';
     const lines = currentTextContent.split('\n');
-    let currentY = messageY + scaledMessagePadding;
+    let currentY = messageY;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
       currentY += parseFloat(scaledLineHeight.replace('em', ''));
