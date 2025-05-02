@@ -329,6 +329,14 @@ const currentmoods = {
   meh: ["그저그런"]
 };
 
+const currentmoodsForImg = {
+  tired: ["피곤해"],
+  sad: ["슬퍼"],
+  angry: ["화나"],
+  lonely: ["외로워"],
+  meh: ["그저그래"]
+};
+
 const hiddenMessages = [
   "우무만 알고 있는 비밀 응원이야!\n우무무!✨",
   "진짜 괜찮아,\n우무가 확인했우무!✅",
@@ -481,11 +489,16 @@ function saveImage() {
       const y = n.getFullYear();
       const m = n.getMonth() + 1;
       const d = n.getDate();
+      const date = y + '.' + m + '.' + d;
       const mood = currentmoods[currentMood]
+      const moodForImg = currentmoodsForImg[currentMood]
+
+      ctx.font = (currentFontSize / 2) + 'px' + ' ' + currentMsgBoxState.fontFamily;
+      ctx.fillText(date + ' ' + moodForImg, 30, 30);
 
       const dataURL = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.download = y + '.' + m + '.' + d + '_' + mood + '_' + '우무사리.png';
+      link.download = date + '_' + mood + '_' + '우무사리.png';
       link.href = dataURL;
       link.click();
     };
