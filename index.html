@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <link rel="preload" href="fonts/Gaegu/Gaegu-Regular.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="fonts/NotoColorEmoji/NotoColorEmoji-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/Gaegu/Gaegu-Regular.woff2" as="font"
+      type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/NotoColorEmoji/NotoColorEmoji-Regular.woff2"
+      as="font" type="font/woff2" crossorigin>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>우무사리가 전하는 말</title>
@@ -278,10 +280,12 @@
 
     <div id="hidden-label">✨ Hidden! ✨</div>
     <div id="messageBox"></div>
-    <div style="position: fixed; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 10000;">
+    <div
+      style="position: fixed; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 10000;">
       <button id="resetBtn" onclick="reset()">첫 화면으로</button>
       <button id="saveImageBtn" onclick="saveImage()">저장하기</button>
-      <button id="selectAgainBtn" onclick="selectAgain()" style="display: none;">다시 선택하기</button>
+      <button id="selectAgainBtn" onclick="selectAgain()"
+        style="display: none;">다시 선택하기</button>
     </div>
 
     <div id="welcome-overlay">
@@ -415,59 +419,61 @@ function saveImage() {
 
   const umuImage = new Image();
 
-  umuImage.onload = function() {
-    const umuWidth = umuImage.naturalWidth;
-    const umuHeight = umuImage.naturalHeight;
-
-    const baseWidth = 600;
-    const scaleFactor = umuWidth / baseWidth;
-
-    const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
-    const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
-    const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
-    const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
-
-    const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 3;
-    const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', '')) * 3;
-    console.log("currentFontSize: ", currentFontSize);
-    console.log("currentLineHeight: ", currentLineHeight);
-
-    const canvas = document.createElement('canvas');
-    canvas.width = umuWidth;
-    canvas.height = umuHeight;
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
-
-    const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
-    const messageY = (umuHeight - scaledMessageBoxHeight) / 2;
-
-    ctx.fillStyle = currentMsgBoxState.backgroundColor;
-    ctx.beginPath();
-    ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
-    ctx.fill();
-
-    ctx.font = currentFontSize + ' ' + 'Gaegu, NotoColorEmoji, sans-serif';
-    console.log("ctx.font: ", ctx.font);
-    console.log("currentMsgBoxState.fontFamily: ", currentMsgBoxState.fontFamily);
-    ctx.fillStyle = currentMsgBoxState.color;
-    ctx.textAlign = currentMsgBoxState.textAlign;
-    ctx.textBaseline = 'top';
-    const lines = currentTextContent.split('\n');
-    let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
-    console.log("currentY before lines: ", currentY);
-    lines.forEach(line => {
-      ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
-      console.log("currentY in lines: ", currentY);
-    });
-
-    const dataURL = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = '우무사리_메시지.png';
-    link.href = dataURL;
-    link.click();
-  };
+  document.fonts.ready.then(() => {
+    umuImage.onload = function() {
+      const umuWidth = umuImage.naturalWidth;
+      const umuHeight = umuImage.naturalHeight;
+  
+      const baseWidth = 600;
+      const scaleFactor = umuWidth / baseWidth;
+  
+      const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
+      const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
+      const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
+      const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
+  
+      const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 3;
+      const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', '')) * 3;
+      console.log("currentFontSize: ", currentFontSize);
+      console.log("currentLineHeight: ", currentLineHeight);
+  
+      const canvas = document.createElement('canvas');
+      canvas.width = umuWidth;
+      canvas.height = umuHeight;
+      const ctx = canvas.getContext('2d');
+  
+      ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
+  
+      const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
+      const messageY = (umuHeight - scaledMessageBoxHeight) / 2;
+  
+      ctx.fillStyle = currentMsgBoxState.backgroundColor;
+      ctx.beginPath();
+      ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
+      ctx.fill();
+  
+      ctx.font = currentFontSize + ' ' + currentMsgBoxState.fontFamily;
+      console.log("ctx.font: ", ctx.font);
+      console.log("currentMsgBoxState.fontFamily: ", currentMsgBoxState.fontFamily);
+      ctx.fillStyle = currentMsgBoxState.color;
+      ctx.textAlign = currentMsgBoxState.textAlign;
+      ctx.textBaseline = 'top';
+      const lines = currentTextContent.split('\n');
+      let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
+      console.log("currentY before lines: ", currentY);
+      lines.forEach(line => {
+        ctx.fillText(line, umuWidth / 2, currentY);
+        currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
+        console.log("currentY in lines: ", currentY);
+      });
+  
+      const dataURL = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = '우무사리_메시지.png';
+      link.href = dataURL;
+      link.click();
+    };
+  });
   umuImage.onerror = function() {
     console.error("Error loading Umu image for save.");
   };
