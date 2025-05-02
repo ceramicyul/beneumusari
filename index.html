@@ -375,10 +375,10 @@ function setMode(mode) {
     emotionBtns.style.display = 'flex';
     emotionBtns.style.opacity = '1';
     emotionBtns.style.pointerEvents = 'auto';
+    resetBtn.style.display = 'inline-block';
   } else {
     showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
   }
-  resetBtn.style.display = 'inline-block';
 }
 
 function typeMessage(element, text, speed = 40) {
@@ -415,6 +415,7 @@ function typeMessage(element, text, speed = 40) {
 }
 
 function showMessage(mood) {
+  resetBtn.style.display = 'none';
   randomUmuImage.style.display = 'none';
 
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
@@ -430,7 +431,6 @@ function showMessage(mood) {
     msgBox.classList.toggle("hidden", isHidden);
     msgBox.style.display = 'block';
     emotionBtns.style.display = 'none';
-    resetBtn.style.display = 'inline-block';
   };
 
   randomUmuImage.onerror = function() {
@@ -440,7 +440,6 @@ function showMessage(mood) {
     msgBox.classList.toggle("hidden", isHidden);
     msgBox.style.display = 'block';  
     emotionBtns.style.display = 'none';
-    resetBtn.style.display = 'inline-block';
   };
 
   randomUmuImage.src = randomImg;
