@@ -417,12 +417,10 @@ function saveImage() {
     console.log("baseMsgBoxWidth: ", baseMsgBoxWidth);
     console.log("baseMsgBoxHeight: ", baseMsgBoxHeight);
 
-    const scaleFontWidth = scaledMessageBoxWidth * baseMsgBoxWidth;
-    const scaleFontHeight = scaledMessageBoxHeight * baseMsgBoxHeight;
-    console.log("scaledMessageBoxWidth: ", scaledMessageBoxWidth);
-    console.log("scaledMessageBoxHeight: ", scaledMessageBoxHeight);
-    console.log("scaleFontWidth: ", baseMsgBoxWidth);
-    console.log("scaleFontHeight: ", baseMsgBoxHeight);
+    const scaleFontWidth = 3.2 * scaledMessageBoxWidth;
+    const scaleFontHeight = 3.2 * scaledMessageBoxHeight;
+    console.log("scaleFontWidth: ", scaleFontWidth);
+    console.log("scaleFontHeight: ", scaleFontHeight);
 
     const scaleFontFactor = Math.min(scaleFontWidth, scaleFontHeight);
     console.log("scaleFontFactor: ", scaleFontFactor);
@@ -440,8 +438,8 @@ function saveImage() {
       currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
-    const scaledFontSize = (currentFontSize / scaleFontFactor) + 'px';
-    const scaledLineHeight = (currentLineHeight / scaleFontFactor) + 'px';
+    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
+    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
