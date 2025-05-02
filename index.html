@@ -371,7 +371,6 @@ function setMode(mode) {
   } else {
     showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
   }
-  currentMood = mode
   resetBtn.style.display = 'inline-block';
 }
 
@@ -411,6 +410,7 @@ function showMessage(mood) {
   const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
   const message = isHidden ? hiddenMessages[randomIndex] : messages[mood][randomIndex];
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
+  currentMood = mood
 
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
