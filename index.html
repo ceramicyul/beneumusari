@@ -433,8 +433,8 @@ function saveImage() {
       currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
-    const scaledFontSize = (currentFontSize / scaleFontFactor) + 'px';
-    const scaledLineHeight = (currentLineHeight / scaleFontFactor) + 'px';
+    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
+    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
     console.log("scaledFontSize: ", scaledFontSize);
     console.log("scaledLineHeight: ", scaledLineHeight);
 
@@ -458,7 +458,7 @@ function saveImage() {
     ctx.textAlign = currentMsgBoxState.textAlign;
     ctx.textBaseline = 'top';
     const lines = currentTextContent.split('\n');
-    let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFontFactor;
+    let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
     console.log("currentY before lines: ", currentY);
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
