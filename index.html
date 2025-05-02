@@ -466,10 +466,15 @@ function saveImage() {
         currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
         console.log("currentY in lines: ", currentY);
       });
-  
+
+      const n =  new Date();
+      const y = n.getFullYear();
+      const m = n.getMonth() + 1;
+      const d = n.getDate();
+
       const dataURL = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.download = '우무사리_메시지.png';
+      link.download = y + '.' + m + '.' + d + '_' +'우무사리_메시지.png';
       link.href = dataURL;
       link.click();
     };
