@@ -384,6 +384,7 @@ function setMode(mode) {
 function typeMessage(element, text, speed = 40) {
   selectAgainBtn.style.display = 'none';
   saveImageBtn.style.display = 'none';
+  resetBtn.style.display = 'none';
   element.innerHTML = '';
   currentTextContent = text;
   let i = 0;
@@ -395,6 +396,7 @@ function typeMessage(element, text, speed = 40) {
     } else {
       selectAgainBtn.style.display = 'inline-block';
       saveImageBtn.style.display = 'inline-block';
+      resetBtn.style.display = 'inline-block';
       currentMsgBoxState = {
         width: element.offsetWidth,
         height: element.offsetHeight,
