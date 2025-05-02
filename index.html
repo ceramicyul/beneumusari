@@ -321,6 +321,14 @@ const messages = {
   meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮우무"]
 };
 
+const currentmoods = {
+  tired: ["피곤한"],
+  sad: ["슬픈"],
+  angry: ["화난"],
+  lonely: ["외로운"],
+  meh: ["그저그런"]
+};
+
 const hiddenMessages = [
   "우무만 알고 있는 비밀 응원이야!\n우무무!✨",
   "진짜 괜찮아,\n우무가 확인했우무!✅",
@@ -350,6 +358,7 @@ const welcomeOverlay = document.getElementById('welcome-overlay');
 let currentMode = '';
 let currentMsgBoxState = {};
 let currentTextContent = "";
+let currentMood = "";
 
 function setMode(mode) {
   currentMode = mode;
@@ -362,6 +371,7 @@ function setMode(mode) {
   } else {
     showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
   }
+  currentMood = mode
   resetBtn.style.display = 'inline-block';
 }
 
@@ -471,10 +481,11 @@ function saveImage() {
       const y = n.getFullYear();
       const m = n.getMonth() + 1;
       const d = n.getDate();
+      const mood = currentmoods[currentMood]
 
       const dataURL = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.download = y + '.' + m + '.' + d + '_' +'우무사리_메시지.png';
+      link.download = y + '.' + m + '.' + d + '_' + mood + '_' + '우무사리.png';
       link.href = dataURL;
       link.click();
     };
