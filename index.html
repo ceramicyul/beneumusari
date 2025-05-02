@@ -297,7 +297,7 @@
     <script>
 const messages = {
   tired: ["오늘도 여기까지 온 너,\n정말 멋져우무! 😌", "숨 고르기 타임!\n우무가 옆에서 같이 쉴게요. 🌊"],
-  sad: ["감정은 숨기지 않아도 돼...\n말 없이 곁을 지켜줄게. 🌊", "오늘도 많이 애썼구나...\n살며시 꼬옥 안아줄게. 🐚"],
+  sad: ["감정은 숨기지 않아도 돼...\n말 없이 곁을 지켜줄게z. 🌊", "오늘도 많이 애썼구나...\n살며시 꼬옥 안아줄게. 🐚"],
   angry: ["화났구나! 참느라 수고했우무!", "속상한 일 있었지?\n얘기해도 돼 우무!"],
   lonely: ["혼자 아니야,\n우무가 있우무!", "외로워도 괜찮아,\n함께 있우무!"],
   meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮우무"]
@@ -439,8 +439,8 @@ function saveImage() {
       currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
     }
 
-    const scaledFontSize = (currentFontSize / scaleFontFactor) + 'rem';
-    const scaledLineHeight = (currentLineHeight / scaleFontFactor) + 'em';
+    const scaledFontSize = (currentFontSize / scaleFontFactor) + 'px';
+    const scaledLineHeight = (currentLineHeight / scaleFontFactor) + 'px';
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
@@ -465,7 +465,7 @@ function saveImage() {
     let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += parseFloat(scaledLineHeight.replace('em', '')) * parseFloat(scaledFontSize.replace('rem', ''));
+      currentY += parseFloat(scaledLineHeight.replace('px', '')) * parseFloat(scaledFontSize.replace('px', ''));
     });
 
     const dataURL = canvas.toDataURL('image/png');
