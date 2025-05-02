@@ -448,6 +448,7 @@ function saveImage() {
     ctx.fill();
 
     ctx.font = currentFontSize + ' ' + currentMsgBoxState.fontFamily;
+    console.log("ctx.font: ", ctx.font);
     ctx.fillStyle = currentMsgBoxState.color;
     ctx.textAlign = currentMsgBoxState.textAlign;
     ctx.textBaseline = 'top';
