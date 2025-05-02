@@ -462,7 +462,7 @@ function saveImage() {
       ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
       ctx.fill();
   
-      ctx.font = currentFontSize + 'px' + ' ' + currentMsgBoxState.fontFamily;
+      ctx.font = currentFontSize + 'rem' + ' ' + currentMsgBoxState.fontFamily;
       console.log("ctx.font: ", ctx.font);
       console.log("currentMsgBoxState.fontFamily: ", currentMsgBoxState.fontFamily);
       ctx.fillStyle = currentMsgBoxState.color;
