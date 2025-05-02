@@ -477,7 +477,7 @@ function saveImage() {
       ctx.textAlign = currentMsgBoxState.textAlign;
       ctx.textBaseline = 'top';
       const lines = currentTextContent.split('\n');
-      let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
+      let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor + 30;
       console.log("currentY before lines: ", currentY);
       lines.forEach(line => {
         ctx.fillText(line, umuWidth / 2, currentY);
@@ -494,6 +494,7 @@ function saveImage() {
       const moodForImg = currentmoodsForImg[currentMood]
 
       ctx.font = (currentFontSize / 2) + 'px' + ' ' + currentMsgBoxState.fontFamily;
+      ctx.textAlign = 'start';
       ctx.fillText(date + ' ' + moodForImg, 30, 30);
 
       const dataURL = canvas.toDataURL('image/png');
