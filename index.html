@@ -474,6 +474,10 @@ function saveImage() {
   umuImage.src = randomUmuSrc;
 }
 
+saveImageBtn.onclick = function() {
+  setTimeout(saveImage, 200);
+};
+
 function selectAgain() {
   msgBox.style.display = 'none';
   randomUmuImage.style.display = 'none';
