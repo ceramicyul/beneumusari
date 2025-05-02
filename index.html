@@ -450,7 +450,7 @@ function saveImage() {
       const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
       const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
   
-      const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 1.8;
+      const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 1.6;
       const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
       console.log("currentFontSize: ", currentFontSize);
       console.log("currentLineHeight: ", currentLineHeight);
@@ -477,7 +477,7 @@ function saveImage() {
       ctx.textAlign = currentMsgBoxState.textAlign;
       ctx.textBaseline = 'top';
       const lines = currentTextContent.split('\n');
-      let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor + 30;
+      let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor + 10;
       console.log("currentY before lines: ", currentY);
       lines.forEach(line => {
         ctx.fillText(line, umuWidth / 2, currentY);
@@ -493,7 +493,7 @@ function saveImage() {
       const mood = currentmoods[currentMood]
       const moodForImg = currentmoodsForImg[currentMood]
 
-      ctx.font = (currentFontSize / 2) + 'px' + ' ' + currentMsgBoxState.fontFamily;
+      ctx.font = (currentFontSize * 0.8) + 'px' + ' ' + currentMsgBoxState.fontFamily;
       ctx.textAlign = 'start';
       ctx.fillText(date + ' ' + moodForImg, 30, 30);
 
