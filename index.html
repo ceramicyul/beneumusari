@@ -427,8 +427,8 @@ function saveImage() {
     const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * scaleFactor * scaleFactor;
-    const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', '')) * scaleFactor * scaleFactor;
+    const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) / scaleFactor;
+    const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', '')) / scaleFactor;
     console.log("currentFontSize: ", currentFontSize);
     console.log("currentLineHeight: ", currentLineHeight);
 
