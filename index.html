@@ -326,7 +326,8 @@ const currentmoods = {
   sad: ["슬픈"],
   angry: ["화난"],
   lonely: ["외로운"],
-  meh: ["그저그런"]
+  meh: ["그저그런"],
+  hidden: ["숨은"]
 };
 
 const currentmoodsForImg = {
@@ -334,7 +335,8 @@ const currentmoodsForImg = {
   sad: ["슬퍼"],
   angry: ["화나"],
   lonely: ["외로워"],
-  meh: ["그저그래"]
+  meh: ["그저그래"],
+  hidden: ["✨"]
 };
 
 const hiddenMessages = [
@@ -418,7 +420,7 @@ function showMessage(mood) {
   const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
   const message = isHidden ? hiddenMessages[randomIndex] : messages[mood][randomIndex];
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
-  currentMood = mood
+  currentMood = isHidden ? 'hidden' : mood;
 
   randomUmuImage.src = randomImg;
   randomUmuImage.style.display = 'block';
