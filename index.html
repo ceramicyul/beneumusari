@@ -425,6 +425,7 @@ function saveImage() {
     console.log("scaleFontHeight: ", baseMsgBoxHeight);
 
     const scaleFontFactor = Math.min(scaleFontWidth, scaleFontHeight);
+    console.log("scaleFontFactor: ", scaleFontFactor);
 
     const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', ''));
     let currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
