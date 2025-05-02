@@ -456,7 +456,7 @@ function saveImage() {
     console.log("currentY before lines: ", currentY);
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += parseFloat(currentLineHeight.replace('px', '')) * parseFloat(currentFontSize.replace('px', ''));
+      currentY += parseFloat(currentLineHeight) * parseFloat(currentFontSize);
       console.log("currentY in lines: ", currentY);
     });
 
