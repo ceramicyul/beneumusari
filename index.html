@@ -180,10 +180,6 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-image: url('imgs/background_color.webp');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -536,9 +532,9 @@ window.addEventListener('load', () => {
     welcomeOverlay.style.display = 'none';
     modeBtns.style.opacity = '1';
     modeBtns.style.pointerEvents = 'auto';
+    title.style.display = "inline-block"
+    aboutBtn.style.display = "inline-block"
   }, 1800);
-  title.style.display = "inline-block"
-  aboutBtn.style.display = "inline-block"
 });
 
 document.getElementById('aboutBtn').onclick = function () {
