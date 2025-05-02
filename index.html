@@ -413,22 +413,35 @@ function typeMessage(element, text, speed = 40) {
 }
 
 function showMessage(mood) {
+  randomUmuImage.style.display = 'none';
+
   const isHidden = (currentMode === 'random' && Math.random() < 0.1);
   const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
   const message = isHidden ? hiddenMessages[randomIndex] : messages[mood][randomIndex];
   const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
   currentMood = isHidden ? 'hidden' : mood;
 
+  randomUmuImage.onload = function() {
+    randomUmuImage.style.display = 'block';
+    typeMessage(msgBox, message);
+    hiddenLabel.style.display = isHidden ? 'block' : 'none';
+    msgBox.classList.toggle("hidden", isHidden);
+    msgBox.style.display = 'block';
+    emotionBtns.style.display = 'none';
+    resetBtn.style.display = 'inline-block';
+  };
+
+  randomUmuImage.onerror = function() {
+    randomUmuImage.style.display = 'none';
+    typeMessage(msgBox, message);
+    hiddenLabel.style.display = isHidden ? 'block' : 'none';
+    msgBox.classList.toggle("hidden", isHidden);
+    msgBox.style.display = 'block';  
+    emotionBtns.style.display = 'none';
+    resetBtn.style.display = 'inline-block';
+  };
+
   randomUmuImage.src = randomImg;
-  randomUmuImage.style.display = 'block';
-
-  hiddenLabel.style.display = isHidden ? 'block' : 'none';
-  msgBox.classList.toggle("hidden", isHidden);
-  msgBox.style.display = 'block';
-  typeMessage(msgBox, message);
-
-  emotionBtns.style.display = 'none';
-  resetBtn.style.display = 'inline-block';
 }
 
 function saveImage() {
@@ -451,9 +464,7 @@ function saveImage() {
   
       const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 1.75;
       const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
-      console.log("currentFontSize: ", currentFontSize);
-      console.log("currentLineHeight: ", currentLineHeight);
-  
+
       const canvas = document.createElement('canvas');
       canvas.width = umuWidth;
       canvas.height = umuHeight;
@@ -470,18 +481,14 @@ function saveImage() {
       ctx.fill();
   
       ctx.font = currentFontSize + 'px' + ' ' + currentMsgBoxState.fontFamily;
-      console.log("ctx.font: ", ctx.font);
-      console.log("currentMsgBoxState.fontFamily: ", currentMsgBoxState.fontFamily);
       ctx.fillStyle = currentMsgBoxState.color;
       ctx.textAlign = currentMsgBoxState.textAlign;
       ctx.textBaseline = 'top';
       const lines = currentTextContent.split('\n');
       let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor + 10;
-      console.log("currentY before lines: ", currentY);
       lines.forEach(line => {
         ctx.fillText(line, umuWidth / 2, currentY);
         currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
-        console.log("currentY in lines: ", currentY);
       });
 
       const n =  new Date();
@@ -503,9 +510,6 @@ function saveImage() {
       link.click();
     };
   });
-  umuImage.onerror = function() {
-    console.error("Error loading Umu image for save.");
-  };
   umuImage.src = randomUmuSrc;
 }
 
