@@ -412,31 +412,10 @@ function saveImage() {
     const scaledMessagePadding = parseFloat(currentMsgBoxState.padding) * scaleFactor;
     const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
 
-    const scaleFontWidth = 0.8 * currentMsgBoxState.width;
-    const scaleFontHeight = 0.8 * currentMsgBoxState.height;
-    console.log("scaleFontWidth: ", scaleFontWidth);
-    console.log("scaleFontHeight: ", scaleFontHeight);
-
-    const scaleFontFactor = Math.min(scaleFontWidth, scaleFontHeight);
-    console.log("scaleFontFactor: ", scaleFontFactor);
-
     const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', ''));
     let currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
     console.log("currentFontSize: ", currentFontSize);
     console.log("currentLineHeight: ", currentLineHeight);
-
-    if (isNaN(currentLineHeight)) {
-      currentLineHeight = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
-    } else if (currentMsgBoxState.lineHeight.includes('px')) {
-      currentLineHeight *= currentFontSize;
-    } else if (currentMsgBoxState.lineHeight.includes('px')) {
-      currentLineHeight *= parseFloat(getComputedStyle(msgBox).fontSize.replace('px', ''));
-    }
-
-    const scaledFontSize = (currentFontSize * scaleFontFactor) + 'px';
-    const scaledLineHeight = (currentLineHeight * scaleFontFactor) + 'px';
-    console.log("scaledFontSize: ", scaledFontSize);
-    console.log("scaledLineHeight: ", scaledLineHeight);
 
     const canvas = document.createElement('canvas');
     canvas.width = umuWidth;
@@ -453,7 +432,7 @@ function saveImage() {
     ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
-    ctx.font = scaledFontSize + ' ' + currentMsgBoxState.fontFamily;
+    ctx.font = currentFontSize + ' ' + currentMsgBoxState.fontFamily;
     ctx.fillStyle = currentMsgBoxState.color;
     ctx.textAlign = currentMsgBoxState.textAlign;
     ctx.textBaseline = 'top';
@@ -462,7 +441,7 @@ function saveImage() {
     console.log("currentY before lines: ", currentY);
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
-      currentY += parseFloat(scaledLineHeight.replace('px', '')) * parseFloat(scaledFontSize.replace('px', ''));
+      currentY += parseFloat(currentLineHeight.replace('px', '')) * parseFloat(currentFontSize.replace('px', ''));
       console.log("currentY in lines: ", currentY);
     });
 
