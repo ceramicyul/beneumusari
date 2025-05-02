@@ -447,7 +447,7 @@ function saveImage() {
     ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
-    ctx.font = currentFontSize + ' ' + currentMsgBoxState.fontFamily;
+    ctx.font = currentFontSize + ' ' + '\'Gaegu\', \'NotoColorEmoji\', sans-serif';
     console.log("ctx.font: ", ctx.font);
     console.log("currentMsgBoxState.fontFamily: ", currentMsgBoxState.fontFamily);
     ctx.fillStyle = currentMsgBoxState.color;
@@ -473,10 +473,6 @@ function saveImage() {
   };
   umuImage.src = randomUmuSrc;
 }
-
-saveImageBtn.onclick = function() {
-  setTimeout(saveImage, 200);
-};
 
 function selectAgain() {
   msgBox.style.display = 'none';
