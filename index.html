@@ -447,7 +447,7 @@ function saveImage() {
     ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
     ctx.fill();
 
-    ctx.font = currentFontSize + ' ' + '\'Gaegu\', \'NotoColorEmoji\', sans-serif';
+    ctx.font = currentFontSize + ' ' + 'Gaegu, NotoColorEmoji, sans-serif';
     console.log("ctx.font: ", ctx.font);
     console.log("currentMsgBoxState.fontFamily: ", currentMsgBoxState.fontFamily);
     ctx.fillStyle = currentMsgBoxState.color;
