@@ -463,9 +463,11 @@ function saveImage() {
     ctx.textBaseline = 'top';
     const lines = currentTextContent.split('\n');
     let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor;
+    console.log("currentY before lines: ", currentY);
     lines.forEach(line => {
       ctx.fillText(line, umuWidth / 2, currentY);
       currentY += parseFloat(scaledLineHeight.replace('px', '')) * parseFloat(scaledFontSize.replace('px', ''));
+      console.log("currentY in lines: ", currentY);
     });
 
     const dataURL = canvas.toDataURL('image/png');
