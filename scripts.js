@@ -332,6 +332,13 @@ window.addEventListener('load', () => {
             title.style.display = "inline-block"
             aboutBtn.style.display = "inline-block"
         }, 1800);
+    } else {
+        if (!shouldLimitMode()) {
+            modeBtns.style.opacity = '1';
+            modeBtns.style.pointerEvents = 'auto';
+        } else {
+            modeBtns.style.display = 'none';
+        }
     }
 });
 
