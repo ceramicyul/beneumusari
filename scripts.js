@@ -315,6 +315,7 @@ function showGallery() {
     modeBtns.style.display = 'none';
     updateGalleryModeBtn(false);
     title.style.display = 'none';
+    subtitle.style.display = "none";
     msgBox.style.display = 'none';
     emotionBtns.style.display = 'none';
     resetBtn.style.display = 'inline-block';
