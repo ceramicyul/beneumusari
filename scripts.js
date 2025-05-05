@@ -50,6 +50,7 @@ const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
 const welcomeImage = document.querySelector('.umu-illustration');
 const welcomeOverlay = document.getElementById('welcome-overlay');
+const subtitle = document.getElementById('subtitle');
 let currentMode = '';
 let currentMsgBoxState = {};
 let currentTextContent = "";
@@ -58,6 +59,7 @@ let today = "";
 const dateKey = 'umu-today';
 const countKey = 'umu-count';
 let modePlayCount = 0;
+let shouldShowWelcome = false;
 
 function getDateInFormat() {
     const n = new Date();
@@ -75,9 +77,11 @@ function setDate() {
     if (storedDate !== newDate) {
         today = newDate;
         modePlayCount = 0;
+        shouldShowWelcome = true;
     } else {
         today = storedDate;
         modePlayCount = parseInt(localStorage.getItem(countKey)) || 0;
+        shouldShowWelcome = false;
     }
 
     localStorage.setItem(dateKey, today);
@@ -271,7 +275,9 @@ function reset() {
         modeBtns.style.display = 'flex';
         modeBtns.style.opacity = '1';
         modeBtns.style.pointerEvents = 'auto';
+        subtitle.style.display = 'none';
     } else {
+        modeBtns.style.display = 'none';
         subtitle.style.display = "inline-block"
     }
 
@@ -293,10 +299,16 @@ function reset() {
 window.addEventListener('load', () => {
     setDate();
 
-    if (!shouldLimitMode()) {
+    if (shouldShowWelcome) {
         welcomeOverlay.style.display = 'flex';
     } else {
         welcomeOverlay.style.display = 'none';
+    }
+
+    if (shouldLimitMode()) {
+        subtitle.style.display = 'inline-block';
+    } else {
+        subtitle.style.display = 'none';
     }
 
     title.style.display = "none"
@@ -307,7 +319,7 @@ window.addEventListener('load', () => {
             modeBtns.style.opacity = '1';
             modeBtns.style.pointerEvents = 'auto';
         } else {
-            subtitle.style.display = "inline-block"
+            modeBtns.style.display = 'none';
         }
         title.style.display = "inline-block"
         aboutBtn.style.display = "inline-block"
