@@ -55,6 +55,8 @@ const title = document.getElementById('title');
 const aboutBtn = document.getElementById('aboutBtn');
 const aboutModal = document.getElementById('aboutModal');
 const closeModal = document.getElementById('closeModal');
+const galleryBtn = document.getElementById('galleryBtn');
+const galleryModeBtn = document.getElementById('galleryModeBtn');
 
 let currentMode = '';
 let currentMsgBoxState = {};
@@ -110,6 +112,28 @@ function shouldLimitMode() {
         return true;
     }
     return false;
+}
+
+function updateGalleryModeBtn(show) {
+    if (savedImageDataURL == null) {
+        galleryModeBtn.style.display = 'none';
+        galleryBtn.style.display = 'none';
+        return;
+    }
+
+    if (show) {
+        if (!shouldLimitMode()) {
+            galleryModeBtn.style.display = 'inline-block';
+            galleryBtn.style.display = 'none';
+        } else {
+            galleryModeBtn.style.display = 'none';
+            galleryBtn.style.display = 'inline-block';
+        }
+        return;
+    }
+
+    galleryModeBtn.style.display = 'none';
+    galleryBtn.style.display = 'none';
 }
 
 function generateImage() {
@@ -184,6 +208,7 @@ function setMode(mode) {
 
     currentMode = mode;
     modeBtns.style.display = 'none';
+    updateGalleryModeBtn(false);
     title.style.display = 'none';
     if (mode === 'emotion') {
         emotionBtns.style.display = 'flex';
@@ -283,6 +308,7 @@ function showMessage(mood) {
 
 function showGallery() {
     modeBtns.style.display = 'none';
+    updateGalleryModeBtn(false);
     title.style.display = 'none';
     msgBox.style.display = 'none';
     emotionBtns.style.display = 'none';
@@ -342,9 +368,11 @@ function reset() {
         modeBtns.style.display = 'flex';
         modeBtns.style.opacity = '1';
         modeBtns.style.pointerEvents = 'auto';
+        updateGalleryModeBtn(true);
         subtitle.style.display = 'none';
     } else {
         modeBtns.style.display = 'none';
+        updateGalleryModeBtn(true);
         subtitle.style.display = "inline-block";
     }
 
@@ -387,8 +415,10 @@ window.addEventListener('load', () => {
             if (!shouldLimitMode()) {
                 modeBtns.style.opacity = '1';
                 modeBtns.style.pointerEvents = 'auto';
+                updateGalleryModeBtn(true);
             } else {
                 modeBtns.style.display = 'none';
+                updateGalleryModeBtn(true);
             }
             title.style.display = "inline-block";
             aboutBtn.style.display = "inline-block";
@@ -398,8 +428,10 @@ window.addEventListener('load', () => {
             modeBtns.style.opacity = '1';
             modeBtns.style.pointerEvents = 'auto';
             modeBtns.style.display = "inline-block";
+            updateGalleryModeBtn(true);
         } else {
             modeBtns.style.display = 'none';
+            updateGalleryModeBtn(true);
         }
     }
 });

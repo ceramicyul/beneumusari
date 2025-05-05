@@ -77,7 +77,8 @@ body {
 }
 
 .mode-buttons,
-.emotion-buttons {
+.emotion-buttons,
+#galleryBtn {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
