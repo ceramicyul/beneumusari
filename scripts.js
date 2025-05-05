@@ -283,7 +283,7 @@ function reset() {
         subtitle.style.display = 'none';
     } else {
         modeBtns.style.display = 'none';
-        subtitle.style.display = "inline-block"
+        subtitle.style.display = "inline-block";
     }
 
     emotionBtns.style.display = 'none';
@@ -310,8 +310,8 @@ window.addEventListener('load', () => {
         aboutBtn.style.display = "none"
     } else {
         welcomeOverlay.style.display = 'none';
-        title.style.display = "inline-block"
-        aboutBtn.style.display = "inline-block"
+        title.style.display = "inline-block";
+        aboutBtn.style.display = "inline-block";
     }
 
     if (shouldLimitMode()) {
@@ -329,13 +329,14 @@ window.addEventListener('load', () => {
             } else {
                 modeBtns.style.display = 'none';
             }
-            title.style.display = "inline-block"
-            aboutBtn.style.display = "inline-block"
+            title.style.display = "inline-block";
+            aboutBtn.style.display = "inline-block";
         }, 1800);
     } else {
         if (!shouldLimitMode()) {
             modeBtns.style.opacity = '1';
             modeBtns.style.pointerEvents = 'auto';
+            modeBtns.style.display = "inline-block";
         } else {
             modeBtns.style.display = 'none';
         }
