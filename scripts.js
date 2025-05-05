@@ -115,7 +115,7 @@ function shouldLimitMode() {
 }
 
 function updateGalleryModeBtn(show) {
-    if (savedImageDataURL == null) {
+    if (savedImageDataURL === null) {
         galleryModeBtn.style.display = 'none';
         galleryBtn.style.display = 'none';
         return;
