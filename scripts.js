@@ -205,6 +205,9 @@ function generateImage() {
 
 function setMode(mode) {
     if (shouldLimitMode()) {
+        if (mode === 'gallery') {
+            showGallery();
+        }
         return;
     }
 
