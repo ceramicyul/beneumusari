@@ -215,7 +215,27 @@ function selectAgain() {
 }
 
 function reset() {
-    location.reload();
+    msgBox.style.display = 'none';
+    randomUmuImage.style.display = 'none';
+    hiddenLabel.style.display = 'none';
+
+    modeBtns.style.display = 'flex';
+    modeBtns.style.opacity = '1';
+    modeBtns.style.pointerEvents = 'auto';
+
+    emotionBtns.style.display = 'none';
+
+    selectAgainBtn.style.display = 'none';
+    saveImageBtn.style.display = 'none';
+    resetBtn.style.display = 'none';
+
+    title.style.display = 'inline-block';
+    aboutBtn.style.display = 'inline-block';
+
+    currentMode = '';
+    currentMood = '';
+    currentTextContent = '';
+    currentMsgBoxState = {};
 }
 
 window.addEventListener('load', () => {
