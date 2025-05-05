@@ -293,6 +293,12 @@ function reset() {
 window.addEventListener('load', () => {
     setDate();
 
+    if (!shouldLimitMode()) {
+        welcomeOverlay.style.display = 'flex';
+    } else {
+        welcomeOverlay.style.display = 'none';
+    }
+
     title.style.display = "none"
     aboutBtn.style.display = "none"
     setTimeout(() => {
