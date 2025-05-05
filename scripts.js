@@ -64,9 +64,11 @@ let today = "";
 const dateKey = 'umu-today';
 const countKey = 'umu-count';
 const savedImageKey = 'umu-saved-image';
+const savedImageTitleKey = 'umu-saved-image-title';
 let modePlayCount = 0;
 let shouldShowWelcome = false;
 let savedImageDataURL = null;
+let savedImageTitle = "";
 
 function getDateInFormat() {
     const n = new Date();
@@ -90,7 +92,8 @@ function setDate() {
         today = storedDate;
         modePlayCount = parseInt(localStorage.getItem(countKey)) || 0;
         savedImageDataURL = localStorage.getItem(savedImageKey);
-        if (savedImageDataURL) {
+        savedImageTitle = localStorage.getItem(savedImageTitleKey);
+        if (savedImageDataURL && savedImageTitle) {
             saveImageBtn.style.display = 'inline-block';
         } else {
             saveImageBtn.style.display = 'none';
@@ -168,6 +171,8 @@ function generateImage() {
                 ctx.fillText(today + ' ' + moodForImg, 30, 30);
 
                 const dataURL = canvas.toDataURL('image/png');
+                savedImageTitle = today + '_' + mood + '_' + '우무사리.png';
+
                 resolve(dataURL);
             };
 
@@ -229,6 +234,7 @@ function typeMessage(element, text, speed = 40) {
             generateImage().then(dataURL => {
                 savedImageDataURL = dataURL;
                 localStorage.setItem(savedImageKey, savedImageDataURL);
+                localStorage.setItem(savedImageTitleKey, savedImageTitle);
                 saveImageBtn.style.display = 'inline-block';
             }).catch(error => {
                 console.error("Error generating image:", error);
@@ -281,7 +287,7 @@ function showMessage(mood) {
 function saveImage() {
     if (savedImageDataURL) {
         const link = document.createElement('a');
-        link.download = today + '_' + currentmoods[currentMood] + '_' + '우무사리.png';
+        link.download = savedImageTitle;
         link.href = savedImageDataURL;
         link.click();
     } else {
