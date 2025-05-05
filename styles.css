@@ -27,11 +27,6 @@ body {
     justify-content: center;
     min-height: 100vh;
     text-align: center;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    cursor: default;
 }
 
 #background {
@@ -64,11 +59,21 @@ body {
     display: none;
     margin-top: 20px;
     font-size: 2rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 #subtitle {
     display: none;
     font-size: 1.2rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 .mode-buttons,
@@ -82,6 +87,11 @@ body {
     pointer-events: none;
     transition: opacity 1s ease;
     z-index: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 .emotion-icon {
@@ -104,6 +114,11 @@ button {
     transition: all 0.2s ease;
     min-width: 100px;
     z-index: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 button:hover {
@@ -182,6 +197,11 @@ button:active {
     z-index: auto;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
     transition: all 0.2s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 #aboutModal {
@@ -202,10 +222,20 @@ button:active {
     padding: 20px;
     border-radius: 15px;
     text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 #closeModal {
     margin-top: 20px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 #selectAgainBtn:hover,
@@ -258,6 +288,11 @@ button:active {
     position: relative;
     white-space: pre-wrap;
     min-height: 60px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 #messageBox::after {
@@ -277,6 +312,11 @@ button:active {
     color: #e91e63;
     margin-bottom: 8px;
     display: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 #welcome-overlay {
@@ -320,6 +360,11 @@ button:active {
     align-items: center;
     justify-content: center;
     text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 .speech-bubble::after {
