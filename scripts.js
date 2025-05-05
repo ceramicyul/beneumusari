@@ -114,6 +114,20 @@ function shouldLimitMode() {
     return false;
 }
 
+function updateSubtitle(show) {
+    if (show) {
+        if (shouldLimitMode()) {
+            subtitle.textContent = '오늘도 고생 했어! 내일 또 만나!';
+        } else {
+            subtitle.textContent = '하루 세번! 우무가 위로해 줄게!';
+        }
+        subtitle.style.display = 'inline-block';
+        return;
+    }
+
+    subtitle.style.display = 'none';
+}
+
 function updateGalleryModeBtn(show) {
     if (savedImageDataURL === null) {
         galleryModeBtn.style.display = 'none';
@@ -315,7 +329,7 @@ function showGallery() {
     modeBtns.style.display = 'none';
     updateGalleryModeBtn(false);
     title.style.display = 'none';
-    subtitle.style.display = "none";
+    updateSubtitle(false);
     msgBox.style.display = 'none';
     emotionBtns.style.display = 'none';
     resetBtn.style.display = 'inline-block';
@@ -330,7 +344,7 @@ function showGallery() {
         randomUmuImage.onerror = function() {
             randomUmuImage.style.display = 'none';
             saveImageBtn.style.display = 'none';
-            alert("우무가 저장한 이미지를 가져오는데 실패했어요...");
+            alert("우무가 저장한 이미지를 가져오지 못했어요...");
         };
 
         randomUmuImage.src = savedImageDataURL;
@@ -375,12 +389,12 @@ function reset() {
         modeBtns.style.opacity = '1';
         modeBtns.style.pointerEvents = 'auto';
         updateGalleryModeBtn(true);
-        subtitle.style.display = 'none';
     } else {
         modeBtns.style.display = 'none';
         updateGalleryModeBtn(true);
-        subtitle.style.display = "inline-block";
     }
+
+    updateSubtitle(true);
 
     emotionBtns.style.display = 'none';
 
@@ -409,11 +423,7 @@ window.addEventListener('load', () => {
         aboutBtn.style.display = "inline-block";
     }
 
-    if (shouldLimitMode()) {
-        subtitle.style.display = 'inline-block';
-    } else {
-        subtitle.style.display = 'none';
-    }
+    updateSubtitle(true);
 
     if (shouldShowWelcome) {
         setTimeout(() => {
