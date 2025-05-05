@@ -51,6 +51,11 @@ const randomUmuImage = document.getElementById('randomUmuImage');
 const welcomeImage = document.querySelector('.umu-illustration');
 const welcomeOverlay = document.getElementById('welcome-overlay');
 const subtitle = document.getElementById('subtitle');
+const title = document.getElementById('title');
+const aboutBtn = document.getElementById('aboutBtn');
+const aboutModal = document.getElementById('aboutModal');
+const closeModal = document.getElementById('closeModal');
+
 let currentMode = '';
 let currentMsgBoxState = {};
 let currentTextContent = "";
@@ -326,14 +331,14 @@ window.addEventListener('load', () => {
     }, 1800);
 });
 
-document.getElementById('aboutBtn').onclick = function() {
-    document.getElementById('aboutModal').style.display = 'block';
+aboutBtn.onclick = function() {
+    aboutModal.style.display = 'block';
 };
-document.getElementById('closeModal').onclick = function() {
-    document.getElementById('aboutModal').style.display = 'none';
+closeModal.onclick = function() {
+    aboutModal.style.display = 'none';
 };
 window.onclick = function(e) {
-    if (e.target === document.getElementById('aboutModal')) {
-        document.getElementById('aboutModal').style.display = 'none';
+    if (e.target === aboutModal) {
+        aboutModal.style.display = 'none';
     }
 };
