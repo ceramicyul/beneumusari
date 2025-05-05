@@ -127,7 +127,9 @@ function updateGalleryModeBtn(show) {
             galleryBtn.style.display = 'none';
         } else {
             galleryModeBtn.style.display = 'none';
-            galleryBtn.style.display = 'inline-block';
+            galleryBtn.style.opacity = '1';
+            galleryBtn.style.pointerEvents = 'auto';
+            galleryBtn.style.display = "inline-block";
         }
         return;
     }
