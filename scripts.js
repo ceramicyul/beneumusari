@@ -63,8 +63,10 @@ let currentMood = "";
 let today = "";
 const dateKey = 'umu-today';
 const countKey = 'umu-count';
+const savedImageKey = 'umu-saved-image';
 let modePlayCount = 0;
 let shouldShowWelcome = false;
+let savedImageDataURL = null;
 
 function getDateInFormat() {
     const n = new Date();
@@ -82,10 +84,17 @@ function setDate() {
     if (storedDate !== newDate) {
         today = newDate;
         modePlayCount = 0;
+        localStorage.removeItem(savedImageKey);
         shouldShowWelcome = true;
     } else {
         today = storedDate;
         modePlayCount = parseInt(localStorage.getItem(countKey)) || 0;
+        savedImageDataURL = localStorage.getItem(savedImageKey);
+        if (savedImageDataURL) {
+            saveImageBtn.style.display = 'inline-block';
+        } else {
+            saveImageBtn.style.display = 'none';
+        }
         shouldShowWelcome = false;
     }
 
@@ -103,6 +112,69 @@ function shouldLimitMode() {
         return true;
     }
     return false;
+}
+
+function generateImage() {
+    return new Promise((resolve, reject) => {
+        const randomUmuSrc = randomUmuImage.src;
+        const umuImage = new Image();
+
+        document.fonts.ready.then(() => {
+            umuImage.onload = function() {
+                const umuWidth = umuImage.naturalWidth;
+                const umuHeight = umuImage.naturalHeight;
+
+                const baseWidth = 600;
+                const scaleFactor = umuWidth / baseWidth;
+
+                const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
+                const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
+                const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
+
+                const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 1.75;
+                const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
+
+                const canvas = document.createElement('canvas');
+                canvas.width = umuWidth;
+                canvas.height = umuHeight;
+                const ctx = canvas.getContext('2d');
+
+                ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
+
+                const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
+                const messageY = (umuHeight - scaledMessageBoxHeight) / 2;
+
+                ctx.fillStyle = currentMsgBoxState.backgroundColor;
+                ctx.beginPath();
+                ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
+                ctx.fill();
+
+                ctx.font = currentFontSize + 'px' + ' ' + currentMsgBoxState.fontFamily;
+                ctx.fillStyle = currentMsgBoxState.color;
+                ctx.textAlign = currentMsgBoxState.textAlign;
+                ctx.textBaseline = 'top';
+                const lines = currentTextContent.split('\n');
+                let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor + 10;
+                lines.forEach(line => {
+                    ctx.fillText(line, umuWidth / 2, currentY);
+                    currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
+                });
+
+                const mood = currentmoods[currentMood];
+                const moodForImg = currentmoodsForImg[currentMood];
+
+                ctx.font = (currentFontSize * 0.8) + 'px' + ' ' + currentMsgBoxState.fontFamily;
+                ctx.textAlign = 'start';
+                ctx.fillText(today + ' ' + moodForImg, 30, 30);
+
+                const dataURL = canvas.toDataURL('image/png');
+                resolve(dataURL);
+            };
+
+            umuImage.onerror = reject;
+        });
+        umuImage.src = randomUmuSrc;
+    });
 }
 
 function setMode(mode) {
@@ -154,6 +226,14 @@ function typeMessage(element, text, speed = 40) {
                 lineHeight: getComputedStyle(element).lineHeight,
                 textAlign: getComputedStyle(element).textAlign
             };
+            generateImage().then(dataURL => {
+                savedImageDataURL = dataURL;
+                localStorage.setItem(savedImageKey, savedImageDataURL);
+                saveImageBtn.style.display = 'inline-block';
+            }).catch(error => {
+                console.error("Error generating image:", error);
+                saveImageBtn.style.display = 'none';
+            });
         }
     }
     type();
@@ -166,6 +246,7 @@ function showMessage(mood) {
 
     resetBtn.style.display = 'none';
     randomUmuImage.style.display = 'none';
+    saveImageBtn.style.display = 'none';
 
     const isHidden = (currentMode === 'random' && Math.random() < 0.1);
     const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
@@ -189,6 +270,7 @@ function showMessage(mood) {
         msgBox.classList.toggle("hidden", isHidden);
         msgBox.style.display = 'block';
         emotionBtns.style.display = 'none';
+        saveImageBtn.style.display = 'none';
     };
 
     randomUmuImage.src = randomImg;
@@ -197,66 +279,14 @@ function showMessage(mood) {
 }
 
 function saveImage() {
-    const randomUmuSrc = randomUmuImage.src;
-
-    const umuImage = new Image();
-
-    document.fonts.ready.then(() => {
-        umuImage.onload = function() {
-            const umuWidth = umuImage.naturalWidth;
-            const umuHeight = umuImage.naturalHeight;
-
-            const baseWidth = 600;
-            const scaleFactor = umuWidth / baseWidth;
-
-            const scaledMessageBoxWidth = currentMsgBoxState.width * scaleFactor;
-            const scaledMessageBoxHeight = currentMsgBoxState.height * scaleFactor;
-            const scaledMessageBorderRadius = parseFloat(currentMsgBoxState.borderRadius) * scaleFactor;
-
-            const currentFontSize = parseFloat(currentMsgBoxState.fontSize.replace('px', '')) * 1.75;
-            const currentLineHeight = parseFloat(currentMsgBoxState.lineHeight.replace('px', ''));
-
-            const canvas = document.createElement('canvas');
-            canvas.width = umuWidth;
-            canvas.height = umuHeight;
-            const ctx = canvas.getContext('2d');
-
-            ctx.drawImage(umuImage, 0, 0, umuWidth, umuHeight);
-
-            const messageX = (umuWidth - scaledMessageBoxWidth) / 2;
-            const messageY = (umuHeight - scaledMessageBoxHeight) / 2;
-
-            ctx.fillStyle = currentMsgBoxState.backgroundColor;
-            ctx.beginPath();
-            ctx.roundRect(messageX, messageY, scaledMessageBoxWidth, scaledMessageBoxHeight, scaledMessageBorderRadius);
-            ctx.fill();
-
-            ctx.font = currentFontSize + 'px' + ' ' + currentMsgBoxState.fontFamily;
-            ctx.fillStyle = currentMsgBoxState.color;
-            ctx.textAlign = currentMsgBoxState.textAlign;
-            ctx.textBaseline = 'top';
-            const lines = currentTextContent.split('\n');
-            let currentY = messageY + parseFloat(getComputedStyle(msgBox).paddingTop.replace('px', '')) * scaleFactor + 10;
-            lines.forEach(line => {
-                ctx.fillText(line, umuWidth / 2, currentY);
-                currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
-            });
-
-            const mood = currentmoods[currentMood]
-            const moodForImg = currentmoodsForImg[currentMood]
-
-            ctx.font = (currentFontSize * 0.8) + 'px' + ' ' + currentMsgBoxState.fontFamily;
-            ctx.textAlign = 'start';
-            ctx.fillText(today + ' ' + moodForImg, 30, 30);
-
-            const dataURL = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.download = today + '_' + mood + '_' + '우무사리.png';
-            link.href = dataURL;
-            link.click();
-        };
-    });
-    umuImage.src = randomUmuSrc;
+    if (savedImageDataURL) {
+        const link = document.createElement('a');
+        link.download = today + '_' + currentmoods[currentMood] + '_' + '우무사리.png';
+        link.href = savedImageDataURL;
+        link.click();
+    } else {
+        alert("우무가 열심히 이미지를 저장 중이에요!");
+    }
 }
 
 function selectAgain() {
@@ -275,6 +305,7 @@ function reset() {
     msgBox.style.display = 'none';
     randomUmuImage.style.display = 'none';
     hiddenLabel.style.display = 'none';
+    saveImageBtn.style.display = 'none';
 
     if (!shouldLimitMode()) {
         modeBtns.style.display = 'flex';
