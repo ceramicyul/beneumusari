@@ -306,8 +306,10 @@ window.addEventListener('load', () => {
 
     if (shouldShowWelcome) {
         welcomeOverlay.style.display = 'flex';
+        title.style.display = "none"
     } else {
         welcomeOverlay.style.display = 'none';
+        title.style.display = "inline-block"
     }
 
     if (shouldLimitMode()) {
@@ -316,7 +318,6 @@ window.addEventListener('load', () => {
         subtitle.style.display = 'none';
     }
 
-    title.style.display = "none"
     aboutBtn.style.display = "none"
     setTimeout(() => {
         welcomeOverlay.style.display = 'none';
