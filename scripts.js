@@ -326,7 +326,11 @@ function reset() {
     emotionBtns.style.display = 'none';
 
     selectAgainBtn.style.display = 'none';
-    saveImageBtn.style.display = 'none';
+    if (savedImageDataURL && savedImageTitle) {
+        saveImageBtn.style.display = 'inline-block';
+    } else {
+        saveImageBtn.style.display = 'none';
+    }
     resetBtn.style.display = 'none';
 
     title.style.display = 'inline-block';
