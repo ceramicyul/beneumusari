@@ -54,8 +54,53 @@ let currentMode = '';
 let currentMsgBoxState = {};
 let currentTextContent = "";
 let currentMood = "";
+let today = "";
+const dateKey = 'umu-today';
+const countKey = 'umu-count';
+let modePlayCount = 0;
+
+function getDateInFormat() {
+    const n = new Date();
+    const y = n.getFullYear();
+    const m = n.getMonth() + 1;
+    const d = n.getDate();
+
+    return y + '.' + m + '.' + d;
+}
+
+function setDate() {
+    const storedDate = localStorage.getItem(dateKey);
+    const newDate = getDateInFormat();
+
+    if (storedDate !== newDate) {
+        today = newDate;
+        modePlayCount = 0;
+    } else {
+        today = storedDate;
+        modePlayCount = parseInt(localStorage.getItem(countKey)) || 0;
+    }
+
+    localStorage.setItem(dateKey, today);
+    localStorage.setItem(countKey, modePlayCount);
+}
+
+function updateCount() {
+    modePlayCount += 1;
+    localStorage.setItem(countKey, modePlayCount);
+}
+
+function shouldLimitMode() {
+    if (modePlayCount >= 3) {
+        return true;
+    }
+    return false;
+}
 
 function setMode(mode) {
+    if (shouldLimitMode()) {
+        return;
+    }
+
     currentMode = mode;
     modeBtns.style.display = 'none';
     title.style.display = 'none';
@@ -83,7 +128,9 @@ function typeMessage(element, text, speed = 40) {
             i++;
             setTimeout(type, speed);
         } else {
-            selectAgainBtn.style.display = 'inline-block';
+            if (!shouldLimitMode()) {
+                selectAgainBtn.style.display = 'inline-block';
+            }
             saveImageBtn.style.display = 'inline-block';
             resetBtn.style.display = 'inline-block';
             currentMsgBoxState = {
@@ -104,6 +151,10 @@ function typeMessage(element, text, speed = 40) {
 }
 
 function showMessage(mood) {
+    if (shouldLimitMode()) {
+        return;
+    }
+
     resetBtn.style.display = 'none';
     randomUmuImage.style.display = 'none';
 
@@ -132,6 +183,8 @@ function showMessage(mood) {
     };
 
     randomUmuImage.src = randomImg;
+
+    updateCount();
 }
 
 function saveImage() {
@@ -180,21 +233,16 @@ function saveImage() {
                 currentY += (parseFloat(currentLineHeight) + parseFloat(currentFontSize));
             });
 
-            const n = new Date();
-            const y = n.getFullYear();
-            const m = n.getMonth() + 1;
-            const d = n.getDate();
-            const date = y + '.' + m + '.' + d;
             const mood = currentmoods[currentMood]
             const moodForImg = currentmoodsForImg[currentMood]
 
             ctx.font = (currentFontSize * 0.8) + 'px' + ' ' + currentMsgBoxState.fontFamily;
             ctx.textAlign = 'start';
-            ctx.fillText(date + ' ' + moodForImg, 30, 30);
+            ctx.fillText(today + ' ' + moodForImg, 30, 30);
 
             const dataURL = canvas.toDataURL('image/png');
             const link = document.createElement('a');
-            link.download = date + '_' + mood + '_' + '우무사리.png';
+            link.download = today + '_' + mood + '_' + '우무사리.png';
             link.href = dataURL;
             link.click();
         };
@@ -219,9 +267,13 @@ function reset() {
     randomUmuImage.style.display = 'none';
     hiddenLabel.style.display = 'none';
 
-    modeBtns.style.display = 'flex';
-    modeBtns.style.opacity = '1';
-    modeBtns.style.pointerEvents = 'auto';
+    if (!shouldLimitMode()) {
+        modeBtns.style.display = 'flex';
+        modeBtns.style.opacity = '1';
+        modeBtns.style.pointerEvents = 'auto';
+    } else {
+        subtitle.style.display = "inline-block"
+    }
 
     emotionBtns.style.display = 'none';
 
@@ -239,12 +291,18 @@ function reset() {
 }
 
 window.addEventListener('load', () => {
+    setDate();
+
     title.style.display = "none"
     aboutBtn.style.display = "none"
     setTimeout(() => {
         welcomeOverlay.style.display = 'none';
-        modeBtns.style.opacity = '1';
-        modeBtns.style.pointerEvents = 'auto';
+        if (!shouldLimitMode()) {
+            modeBtns.style.opacity = '1';
+            modeBtns.style.pointerEvents = 'auto';
+        } else {
+            subtitle.style.display = "inline-block"
+        }
         title.style.display = "inline-block"
         aboutBtn.style.display = "inline-block"
     }, 1800);

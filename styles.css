@@ -61,6 +61,11 @@ body {
     font-size: 2rem;
 }
 
+#subtitle {
+    display: none;
+    font-size: 1.2rem;
+}
+
 .mode-buttons,
 .emotion-buttons {
     display: flex;
