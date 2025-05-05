@@ -225,6 +225,7 @@ function setMode(mode) {
         return;
     }
 
+    updateSubtitle(false);
     currentMode = mode;
     modeBtns.style.display = 'none';
     updateGalleryModeBtn(false);
