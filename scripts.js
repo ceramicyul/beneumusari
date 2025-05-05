@@ -93,11 +93,6 @@ function setDate() {
         modePlayCount = parseInt(localStorage.getItem(countKey)) || 0;
         savedImageDataURL = localStorage.getItem(savedImageKey);
         savedImageTitle = localStorage.getItem(savedImageTitleKey);
-        if (savedImageDataURL && savedImageTitle) {
-            saveImageBtn.style.display = 'inline-block';
-        } else {
-            saveImageBtn.style.display = 'none';
-        }
         shouldShowWelcome = false;
     }
 
@@ -195,8 +190,10 @@ function setMode(mode) {
         emotionBtns.style.opacity = '1';
         emotionBtns.style.pointerEvents = 'auto';
         resetBtn.style.display = 'inline-block';
-    } else {
+    } else if (mode === 'random') {
         showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
+    } else if (mode === 'gallery') {
+        showGallery();
     }
 }
 
@@ -284,6 +281,34 @@ function showMessage(mood) {
     updateCount();
 }
 
+function showGallery() {
+    modeBtns.style.display = 'none';
+    title.style.display = 'none';
+    msgBox.style.display = 'none';
+    emotionBtns.style.display = 'none';
+    resetBtn.style.display = 'inline-block';
+    selectAgainBtn.style.display = 'none';
+
+    if (savedImageDataURL) {
+        randomUmuImage.onload = function() {
+            randomUmuImage.style.display = 'block';
+            saveImageBtn.style.display = 'inline-block';
+        };
+
+        randomUmuImage.onerror = function() {
+            randomUmuImage.style.display = 'none';
+            saveImageBtn.style.display = 'none';
+            alert("우무가 저장한 이미지를 가져오는데 실패했어요...");
+        };
+
+        randomUmuImage.src = savedImageDataURL;
+    } else {
+        randomUmuImage.style.display = 'none';
+        saveImageBtn.style.display = 'none';
+        alert("아직 우무가 저장한 이미지가 없어요!");
+    }
+}
+
 function saveImage() {
     if (savedImageDataURL) {
         const link = document.createElement('a');
@@ -326,11 +351,6 @@ function reset() {
     emotionBtns.style.display = 'none';
 
     selectAgainBtn.style.display = 'none';
-    if (savedImageDataURL && savedImageTitle) {
-        saveImageBtn.style.display = 'inline-block';
-    } else {
-        saveImageBtn.style.display = 'none';
-    }
     resetBtn.style.display = 'none';
 
     title.style.display = 'inline-block';
