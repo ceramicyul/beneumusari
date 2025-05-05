@@ -307,9 +307,11 @@ window.addEventListener('load', () => {
     if (shouldShowWelcome) {
         welcomeOverlay.style.display = 'flex';
         title.style.display = "none"
+        aboutBtn.style.display = "none"
     } else {
         welcomeOverlay.style.display = 'none';
         title.style.display = "inline-block"
+        aboutBtn.style.display = "inline-block"
     }
 
     if (shouldLimitMode()) {
@@ -318,18 +320,19 @@ window.addEventListener('load', () => {
         subtitle.style.display = 'none';
     }
 
-    aboutBtn.style.display = "none"
-    setTimeout(() => {
-        welcomeOverlay.style.display = 'none';
-        if (!shouldLimitMode()) {
-            modeBtns.style.opacity = '1';
-            modeBtns.style.pointerEvents = 'auto';
-        } else {
-            modeBtns.style.display = 'none';
-        }
-        title.style.display = "inline-block"
-        aboutBtn.style.display = "inline-block"
-    }, 1800);
+    if (shouldShowWelcome) {
+        setTimeout(() => {
+            welcomeOverlay.style.display = 'none';
+            if (!shouldLimitMode()) {
+                modeBtns.style.opacity = '1';
+                modeBtns.style.pointerEvents = 'auto';
+            } else {
+                modeBtns.style.display = 'none';
+            }
+            title.style.display = "inline-block"
+            aboutBtn.style.display = "inline-block"
+        }, 1800);
+    }
 });
 
 aboutBtn.onclick = function() {
