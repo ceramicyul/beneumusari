@@ -88,7 +88,6 @@ function setDate() {
     if (storedDate !== newDate) {
         today = newDate;
         modePlayCount = 0;
-        localStorage.removeItem(savedImageKey);
         shouldShowWelcome = true;
     } else {
         today = storedDate;
