@@ -92,10 +92,11 @@ function setDate() {
     } else {
         today = storedDate;
         modePlayCount = parseInt(localStorage.getItem(countKey)) || 0;
-        savedImageDataURL = localStorage.getItem(savedImageKey);
         savedImageTitle = localStorage.getItem(savedImageTitleKey);
         shouldShowWelcome = false;
     }
+
+    savedImageDataURL = localStorage.getItem(savedImageKey);
 
     localStorage.setItem(dateKey, today);
     localStorage.setItem(countKey, modePlayCount);
