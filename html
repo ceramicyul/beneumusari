@@ -1,82 +1,87 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>감정 위로 시스템</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #fff9eb;
-      text-align: center;
-      padding: 50px;
-    }
-    input, select, button {
-      font-size: 1.2rem;
-      margin: 10px;
-      padding: 8px 12px;
-    }
-    #message {
-      margin-top: 30px;
-      font-size: 1.5rem;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <link rel="preload" href="fonts/Gaegu/Gaegu-Regular.woff2" as="font"
+      type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/NotoColorEmoji/NotoColorEmoji-Regular.woff2"
+      as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="imgs/background_color.webp" as="image">
+    <script src="scripts/github-pages-local-storage.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>우무사리가 전하는 말</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
 
-  <h1>감정 위로 시스템</h1>
+  <body>
+    <div id="background"></div>
+    <img id="randomUmuImage" src alt="랜덤 우무 이미지" />
+    <div id="title">우무사리가 전하는 말</div>
 
-  <div>
-    <input type="text" id="nameInput" placeholder="당신의 이름을 입력하세요">
-  </div>
+    <button id="aboutBtn">About 우무사리</button>
 
-  <div>
-    <select id="emotionSelect">
-      <option value="">감정 모드를 선택하세요</option>
-      <option value="행복">행복</option>
-      <option value="슬픔">슬픔</option>
-      <option value="화남">화남</option>
-      <option value="불안">불안</option>
-      <option value="편안">편안</option>
-    </select>
-  </div>
+    <div id="subtitle"></div>
+    <div class="mode-buttons">
+      <button onclick="setMode('emotion')">감정 모드</button>
+      <button onclick="setMode('random')">랜덤 모드</button>
+      <button id="galleryModeBtn" onclick="setMode('gallery')">갤러리</button>
+    </div>
+    <button id="galleryBtn" onclick="setMode('gallery')">갤러리</button>
 
-  <div>
-    <button onclick="showMessage()">위로 받기</button>
-  </div>
+    <div class="emotion-buttons" style="display: none;">
+      <button id="tiredBtn" onclick="showMessage('tired')">
+        <img src="imgs/emotion_tired.webp" alt="피곤해 아이콘" class="emotion-icon">
+        피곤해
+      </button>
+      <button id="sadBtn" onclick="showMessage('sad')">
+        <img src="imgs/emotion_sad.webp" alt="속상해 아이콘" class="emotion-icon">
+        속상해
+      </button>
+      <button id="angryBtn" onclick="showMessage('angry')">
+        <img src="imgs/emotion_angry.webp" alt="화났어 아이콘" class="emotion-icon">
+        화났어
+      </button>
+      <button id="lonelyBtn" onclick="showMessage('lonely')">
+        <img src="imgs/emotion_lonely.webp" alt="외로워 아이콘" class="emotion-icon">
+        외로워
+      </button>
+      <button id="mehBtn" onclick="showMessage('meh')">
+        <img src="imgs/emotion_soso.webp" alt="그냥 그래 아이콘" class="emotion-icon">
+        그냥 그래
+      </button>
+    </div>
 
-  <div id="message"></div>
+    <div id="hidden-label">✨ Hidden! ✨</div>
+    <div id="messageBox"></div>
+    <div id="btnContainer">
+      <button id="resetBtn" onclick="reset()">첫 화면으로</button>
+      <button id="saveImageBtn" onclick="saveImage()">저장하기</button>
+      <button id="selectAgainBtn" onclick="selectAgain()"
+        style="display: none;">다시 선택하기</button>
+    </div>
 
-  <script>
-    const messages = {
-      "행복": ["정말 빛나는 하루야, {name}님!", "행복은 퍼져나가요, {name}님."],
-      "슬픔": ["괜찮아, {name}님. 오늘은 천천히.", "울어도 괜찮아, {name}님."],
-      "화남": ["화나는 감정도 소중해요, {name}님.", "숨 한번 크게 쉬어봐요, {name}님."],
-      "불안": ["모든 걱정이 지나갈 거예요, {name}님.", "조금씩, 천천히 나아가요, {name}님."],
-      "편안": ["지금 이 순간을 누려요, {name}님.", "평온이 {name}님과 함께해요."]
-    };
+    <div id="welcome-overlay">
+      <div class="welcome-content">
+        <div class="speech-bubble">
+          <p>안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐</p>
+        </div>
+        <img
+          src="imgs/heart_anim.webp"
+          alt="우무 하트 애니메이션"
+          class="umu-illustration" />
+      </div>
+    </div>
 
-    function showMessage() {
-      const name = document.getElementById('nameInput').value.trim();
-      const emotion = document.getElementById('emotionSelect').value;
-      const messageBox = document.getElementById('message');
+    <div id="aboutModal">
+      <div id="aboutModalBg">
+        <h2>우무사리란?</h2>
+        <p>우무문어를 모티브로<br>항상 머리에 불가사리를 붙이고 다녀<br>'우무사리'라는 이름을 갖게 됐죠.<br />
+          우무사리는 사람들의 기분을<br />조용히 들어주고,<br />
+          말없이 위로를 건네는 감정 친구랍니다.</p>
+        <button id="closeModal">닫기</button>
+      </div>
+    </div>
 
-      if (!name) {
-        alert('이름을 입력해주세요.');
-        return;
-      }
-      if (!emotion) {
-        alert('감정 모드를 선택해주세요.');
-        return;
-      }
-
-      const selectedMessages = messages[emotion];
-      const randomIndex = Math.floor(Math.random() * selectedMessages.length);
-      const rawMessage = selectedMessages[randomIndex];
-      const finalMessage = rawMessage.replace('{name}', name);
-
-      messageBox.innerText = finalMessage;
-    }
-  </script>
-
-</body>
+    <script src="scripts.js"></script>
+  </body>
 </html>
