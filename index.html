@@ -3,30 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>위치 권한 확인</title>
+  <title>우무사리 위치 기반 감정 시작</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #fefae0;
+      font-family: 'sans-serif';
       text-align: center;
+      background-color: #fffaf2;
       padding: 2rem;
     }
+
     #status {
-      margin-top: 2rem;
-      font-size: 1.5rem;
-      font-weight: bold;
+      margin: 2rem 0;
+      font-size: 1.3rem;
+    }
+
+    #startBtn {
+      display: none;
+      font-size: 1.4rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      background-color: #ffcab0;
+      color: #333;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #startBtn:hover {
+      background-color: #ffb89c;
     }
   </style>
 </head>
 <body>
-  <h1>우무사리 위치 확인</h1>
-  <p>당신의 위치 서비스를 사용할 수 있는지 확인 중이에요.</p>
-  <div id="status">⏳ 위치 서비스 확인 중...</div>
+  <h1>우무사리가 당신의 위치를 확인하고 있어요</h1>
+  <div id="status">⏳ 위치 정보 불러오는 중...</div>
+  <button id="startBtn">내 감정 알아보기</button>
 
   <script>
     const statusEl = document.getElementById("status");
+    const startBtn = document.getElementById("startBtn");
 
-    // 위치 권한 확인 함수
     function checkGeolocationPermission() {
       if (!navigator.permissions || !navigator.geolocation) {
         statusEl.innerText = "❌ 이 브라우저는 위치 서비스를 지원하지 않아요.";
@@ -35,54 +51,49 @@
 
       navigator.permissions.query({ name: "geolocation" }).then(function(result) {
         if (result.state === "granted") {
-          statusEl.innerText = "✅ 위치 서비스가 이미 허용되어 있어요!";
-          getLocation(); // 위치 정보 받아오기
+          statusEl.innerText = "✅ 위치 서비스 허용됨!";
+          getLocation();
         } else if (result.state === "prompt") {
-          statusEl.innerText = "❔ 위치 서비스 사용 허가를 요청합니다.";
-          requestLocation(); // 위치 요청하면서 물어봄
+          statusEl.innerText = "❔ 위치 서비스 요청 중...";
+          requestLocation();
         } else if (result.state === "denied") {
-          statusEl.innerText = "🚫 위치 서비스 사용이 차단되어 있어요. 브라우저 설정을 확인해 주세요.";
+          statusEl.innerText = "🚫 위치 서비스가 차단되어 있어요.";
         }
 
-        // 권한 상태가 바뀔 때도 감지
-        result.onchange = () => {
-          checkGeolocationPermission();
-        };
+        result.onchange = () => checkGeolocationPermission();
       });
     }
 
-    // 위치 요청 함수
     function requestLocation() {
       navigator.geolocation.getCurrentPosition(
         function (position) {
           const lat = position.coords.latitude.toFixed(5);
           const lon = position.coords.longitude.toFixed(5);
-          statusEl.innerText = `📍 위치 허용됨! 위도: ${lat}, 경도: ${lon}`;
+          statusEl.innerText = `📍 위치 확인 완료! 위도: ${lat}, 경도: ${lon}`;
+          startBtn.style.display = "inline-block";
         },
         function (error) {
-          if (error.code === error.PERMISSION_DENIED) {
-            statusEl.innerText = "🙅 위치 접근이 거부되었어요.";
-          } else if (error.code === error.POSITION_UNAVAILABLE) {
-            statusEl.innerText = "📡 위치 정보를 사용할 수 없어요.";
-          } else if (error.code === error.TIMEOUT) {
-            statusEl.innerText = "⏱️ 위치 요청이 시간 초과되었어요.";
-          } else {
-            statusEl.innerText = "⚠️ 위치 오류가 발생했어요.";
-          }
+          statusEl.innerText = "위치 접근이 거부되었어요.";
         }
       );
     }
 
-    // 권한이 허용된 경우 위치를 불러옴
     function getLocation() {
       navigator.geolocation.getCurrentPosition(function (position) {
         const lat = position.coords.latitude.toFixed(5);
         const lon = position.coords.longitude.toFixed(5);
         statusEl.innerText = `📍 현재 위치: 위도 ${lat}, 경도 ${lon}`;
+        startBtn.style.display = "inline-block";
       });
     }
 
-    // 페이지 로드시 자동 실행
+    // 감정 질문으로 이동하는 동작
+    startBtn.addEventListener("click", function () {
+      alert("이제 감정 선택 페이지로 이동합니다! 🎈");
+      // 여기에 실제 감정 선택 페이지 링크 연결 가능
+      // location.href = "emotion.html";
+    });
+
     checkGeolocationPermission();
   </script>
 </body>
