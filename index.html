@@ -101,36 +101,38 @@
         const lon = position.coords.longitude;
 
         try {
-          const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(
-  `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
-)}`);
-const data = await res.json();
-const region = data.address.state || "default";
+          function getLocation() {
+  navigator.geolocation.getCurrentPosition(async function(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
 
-          savedLocation = region;
-          statusEl.innerText = `📍 위치 확인 완료: ${region}`;
-          showEmotionButtons();
-        } catch {
-          savedLocation = "default";
-          statusEl.innerText = "⚠️ 주소 변환 실패. 기본 메시지를 사용합니다.";
-          showEmotionButtons();
+    try {
+      const kakaoKey = "KakaoAK 여기에_복사한_키_붙여넣기";
+
+      const res = await fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lon}&y=${lat}`, {
+        headers: {
+          Authorization: kakaoKey
         }
-      }, function(error) {
-        savedLocation = "default";
-        statusEl.innerText = "🙅 위치 정보를 확인할 수 없어요. 기본 메시지를 사용합니다.";
-        showEmotionButtons();
       });
-    }
 
-    function init() {
-      if (navigator.geolocation) {
-        getLocation();
-      } else {
-        statusEl.innerText = "❌ 위치 서비스를 지원하지 않는 브라우저입니다.";
-      }
-    }
+      const data = await res.json();
+      const region = data.documents[0].address.region_1depth_name;
 
-    init();
+      savedLocation = region;
+      statusEl.innerText = `📍 위치 확인 완료: ${region}`;
+      showEmotionButtons();
+    } catch {
+      savedLocation = "";
+      statusEl.innerText = "⚠️ 주소 변환 실패. 감정 선택만 가능합니다.";
+      showEmotionButtons();
+    }
+  }, function(error) {
+    savedLocation = "";
+    statusEl.innerText = "🙅 위치 정보를 확인할 수 없어요. 감정 선택만 가능합니다.";
+    showEmotionButtons();
+  });
+}
+
   </script>
 </body>
 </html>
