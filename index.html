@@ -101,7 +101,7 @@
         const lon = position.coords.longitude;
 
     try {
-      const kakaoKey = "30a9f5d550e7a705af15c31bdfdfe183";
+      const kakaoKey = const kakaoKey = "KakaoAK MY_API_KEY";
 
       const res = await fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lon}&y=${lat}`, {
         headers: {
@@ -127,6 +127,91 @@
   });
 }
 
-  </script>
+  <script>
+  const statusEl = document.getElementById("status");
+  const buttonsEl = document.getElementById("buttons");
+  const messageEl = document.getElementById("message");
+
+  let savedLocation = ""; // 위치 저장용
+
+  const comfortingMessages = {
+    "행복": {
+      "서울특별시": "서울의 햇살만큼 당신의 기분도 빛나고 있어요 🌞",
+      "부산광역시": "부산의 바다처럼 드넓은 행복이 가득하길 💙",
+      "default": "지금 이 순간의 행복을 꼭 꾹 눌러서 기억해요 🎈"
+    },
+    "슬픔": {
+      "서울특별시": "서울의 바쁜 길 위에도, 당신을 위한 쉼표는 필요해요 🕊️",
+      "부산광역시": "부산의 파도처럼 슬픔도 지나갈 거예요 🌊",
+      "default": "지금 느끼는 슬픔은, 언젠가 당신을 더 따뜻하게 만들 거예요 💧"
+    },
+    "불안": {
+      "서울특별시": "서울의 불빛 속에서도 당신은 충분히 괜찮아요 🌃",
+      "부산광역시": "부산처럼 뜨거운 마음일수록 흔들리기 쉬워요, 괜찮아요 🤍",
+      "default": "불안은 변화의 신호일지도 몰라요. 천천히, 한 걸음씩 🐢"
+    },
+    "화남": {
+      "서울특별시": "화난 당신도 소중해요. 감정은 나쁜 게 아니에요 🔥",
+      "부산광역시": "부산의 바람처럼 훅 하고 털어버려요 💨",
+      "default": "화는 나를 지키려는 마음의 표현이기도 해요. 잠깐만 쉬어가요 🧘"
+    },
+    "지침": {
+      "서울특별시": "서울의 속도에 지쳤다면, 오늘은 한 템포 늦춰도 괜찮아요 ⏳",
+      "부산광역시": "파도도 밀려와야 다시 나가요. 쉬어도 괜찮아요 🐚",
+      "default": "지칠 땐 아무 것도 하지 않아도 괜찮아요. 그 자체로 충분해요 🌱"
+    }
+  };
+
+  function showEmotionButtons() {
+    const emotions = ["행복", "슬픔", "불안", "화남", "지침"];
+    buttonsEl.innerHTML = "";
+    emotions.forEach(emotion => {
+      const btn = document.createElement("button");
+      btn.className = "emotion-btn";
+      btn.innerText = emotion;
+      btn.addEventListener("click", () => {
+        const msgSet = comfortingMessages[emotion];
+        const message = msgSet[savedLocation] || msgSet["default"];
+        messageEl.innerText = `🧡 ${message}`;
+      });
+      buttonsEl.appendChild(btn);
+    });
+  }
+
+  function getLocation() {
+    navigator.geolocation.getCurrentPosition(async function (position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      try {
+        const kakaoKey = "KakaoAK 30a9f5d550e7a705af15c31bdfdfe183";
+
+        const res = await fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lon}&y=${lat}`, {
+          headers: {
+            Authorization: kakaoKey
+          }
+        });
+
+        const data = await res.json();
+        const region = data.documents[0].address.region_1depth_name;
+
+        savedLocation = region;
+        statusEl.innerText = `📍 위치 확인 완료: ${region}`;
+        showEmotionButtons();
+      } catch {
+        savedLocation = "";
+        statusEl.innerText = "⚠️ 주소 변환 실패. 감정 선택만 가능합니다.";
+        showEmotionButtons();
+      }
+    }, function (error) {
+      savedLocation = "";
+      statusEl.innerText = "🙅 위치 정보를 확인할 수 없어요. 감정 선택만 가능합니다.";
+      showEmotionButtons();
+    });
+  }
+
+  getLocation(); // 꼭 호출해야 작동함!
+</script>
+
 </body>
 </html>
