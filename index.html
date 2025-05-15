@@ -1,278 +1,87 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>우무사리 감정 진단</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet" />
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Gaegu', sans-serif;
-      background: #fff9eb;
-      margin: 0;
-      padding: 20px 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-    #welcome-screen {
-      margin-top: 100px;
-    }
-    #welcome-screen h1 {
-      font-size: 1.7rem;
-      color: #444;
-    }
-    #start-btn {
-      display: none;
-      font-size: 1.2rem;
-      padding: 12px 20px;
-      margin-top: 24px;
-      background: #fbd24d;
-      color: #333;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-    #question-box {
-      display: none;
-      width: 100%;
-      max-width: 420px;
-      background: #fff;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    }
-    #question {
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-    }
-    .answer-btn {
-      width: 100%;
-      font-size: 1.1rem;
-      background: #fbd24d;
-      border: none;
-      padding: 14px;
-      margin: 8px 0;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .answer-btn:hover {
-      background: #fcb13b;
-    }
-    #result-card {
-      display: none;
-      margin-bottom: 20px;
-      width: 100%;
-      max-width: 420px;
-    }
-    .card {
-      background: #fefefe;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      position: relative;
-    }
-    .card::before {
-      content: "UMU#07-RESULT";
-      position: absolute;
-      top: 12px;
-      left: 16px;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-    .card h2 {
-      font-size: 1.4rem;
-      margin-top: 10px;
-      color: #444;
-    }
-    .badge {
-      display: inline-block;
-      background: #fbd24d;
-      color: #333;
-      font-weight: bold;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      margin-bottom: 10px;
-    }
-    .umu-face {
-      width: 100px;
-      margin: 12px auto;
-    }
-    .bars {
-      margin: 16px 0;
-      text-align: left;
-    }
-    .bar-label {
-      font-size: 0.9rem;
-      margin: 6px 0 4px;
-      color: #555;
-    }
-    .bar-track {
-      background: #eee;
-      border-radius: 10px;
-      height: 10px;
-      width: 100%;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 10px;
-      background: #fcb13b;
-      border-radius: 10px;
-    }
-    .comment {
-      font-size: 1.05rem;
-      color: #666;
-      margin-top: 14px;
-    }
-    #date-label {
-      font-size: 0.9rem;
-      color: #999;
-      margin-bottom: 8px;
-    }
-    #save-btn {
-      font-size: 1rem;
-      padding: 12px 20px;
-      background: #fcb13b;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 10px auto;
-      display: none;
-    }
-  </style>
-</head>
-<body>
+  <head>
+    <link rel="preload" href="fonts/Gaegu/Gaegu-Regular.woff2" as="font"
+      type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/NotoColorEmoji/NotoColorEmoji-Regular.woff2"
+      as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="imgs/background_color.webp" as="image">
+    <script src="scripts/github-pages-local-storage.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>우무사리가 전하는 말</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
 
-  <!-- 웰컴 인사 -->
-  <div id="welcome-screen">
-    <h1>안녕, 우무사리야!</h1>
-    <button id="start-btn">내 마음 알아보기</button>
-  </div>
+  <body>
+    <div id="background"></div>
+    <img id="randomUmuImage" src alt="랜덤 우무 이미지" />
+    <div id="title">우무사리가 전하는 말</div>
 
-  <!-- 질문 영역 -->
-  <div id="question-box">
-    <div id="question">질문을 불러오는 중이에요...</div>
-    <button class="answer-btn" id="btn1"></button>
-    <button class="answer-btn" id="btn2"></button>
-  </div>
+    <button id="aboutBtn">About 우무사리</button>
 
-  <!-- 결과 카드 -->
-  <div id="result-card" class="card">
-    <div class="badge">감정 성향 진단 결과</div>
-    <div id="date-label"></div>
-    <img class="umu-face" src="https://i.imgur.com/JBh3HcL.png" alt="우무사리 표정" />
-    <h2 id="result-title">성향 이름</h2>
-    <div class="bars">
-      <div class="bar-label">회복력</div>
-      <div class="bar-track"><div id="bar1" class="bar-fill"></div></div>
-      <div class="bar-label">자기표현력</div>
-      <div class="bar-track"><div id="bar2" class="bar-fill"></div></div>
-      <div class="bar-label">긍정 에너지</div>
-      <div class="bar-track"><div id="bar3" class="bar-fill"></div></div>
+    <div id="subtitle"></div>
+    <div class="mode-buttons">
+      <button onclick="setMode('emotion')">감정 모드</button>
+      <button onclick="setMode('random')">랜덤 모드</button>
+      <button id="galleryModeBtn" onclick="setMode('gallery')">갤러리</button>
     </div>
-    <div class="comment" id="result-comment">우무사리의 한마디</div>
-  </div>
+    <button id="galleryBtn" onclick="setMode('gallery')">갤러리</button>
 
-  <button id="save-btn" onclick="saveAsImage()">이미지로 저장하기</button>
+    <div class="emotion-buttons" style="display: none;">
+      <button id="tiredBtn" onclick="showMessage('tired')">
+        <img src="imgs/emotion_tired.webp" alt="피곤해 아이콘" class="emotion-icon">
+        피곤해
+      </button>
+      <button id="sadBtn" onclick="showMessage('sad')">
+        <img src="imgs/emotion_sad.webp" alt="속상해 아이콘" class="emotion-icon">
+        속상해
+      </button>
+      <button id="angryBtn" onclick="showMessage('angry')">
+        <img src="imgs/emotion_angry.webp" alt="화났어 아이콘" class="emotion-icon">
+        화났어
+      </button>
+      <button id="lonelyBtn" onclick="showMessage('lonely')">
+        <img src="imgs/emotion_lonely.webp" alt="외로워 아이콘" class="emotion-icon">
+        외로워
+      </button>
+      <button id="mehBtn" onclick="showMessage('meh')">
+        <img src="imgs/emotion_soso.webp" alt="그냥 그래 아이콘" class="emotion-icon">
+        그냥 그래
+      </button>
+    </div>
 
-  <script>
-    const questions = [
-      { q: "오늘 감정을 잘 조절할 수 있었나요?", a1: "네, 조절했어요", s1: 1, a2: "아니요, 휘둘렸어요", s2: -1 },
-      { q: "자주 웃는 순간이 있었나요?", a1: "네, 자주 웃었어요", s1: 1, a2: "별로 없었어요", s2: -1 },
-      { q: "자신에게 친절했나요?", a1: "네, 잘해줬어요", s1: 1, a2: "아니요, 그러지 못했어요", s2: -1 },
-      { q: "마음을 표현할 수 있었나요?", a1: "네, 표현했어요", s1: 1, a2: "아니요, 참았어요", s2: -1 },
-      { q: "오늘 하루가 의미 있었나요?", a1: "그랬어요", s1: 1, a2: "잘 모르겠어요", s2: -1 },
-      { q: "스트레스를 잘 풀었나요?", a1: "풀었어요", s1: 1, a2: "못 풀었어요", s2: -1 }
-    ];
+    <div id="hidden-label">✨ Hidden! ✨</div>
+    <div id="messageBox"></div>
+    <div id="btnContainer">
+      <button id="resetBtn" onclick="reset()">첫 화면으로</button>
+      <button id="saveImageBtn" onclick="saveImage()">저장하기</button>
+      <button id="selectAgainBtn" onclick="selectAgain()"
+        style="display: none;">다시 선택하기</button>
+    </div>
 
-    const shuffled = questions.sort(() => 0.5 - Math.random()).slice(0, 6);
-    let current = 0, total = 0;
+    <div id="welcome-overlay">
+      <div class="welcome-content">
+        <div class="speech-bubble">
+          <p>안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐</p>
+        </div>
+        <img
+          src="imgs/heart_anim.webp"
+          alt="우무 하트 애니메이션"
+          class="umu-illustration" />
+      </div>
+    </div>
 
-    function showQuestion() {
-      const q = shuffled[current];
-      document.getElementById('question').innerText = q.q;
-      document.getElementById('btn1').innerText = q.a1;
-      document.getElementById('btn2').innerText = q.a2;
-      document.getElementById('btn1').onclick = () => next(q.s1);
-      document.getElementById('btn2').onclick = () => next(q.s2);
-    }
+    <div id="aboutModal">
+      <div id="aboutModalBg">
+        <h2>우무사리란?</h2>
+        <p>우무문어를 모티브로<br>항상 머리에 불가사리를 붙이고 다녀<br>'우무사리'라는 이름을 갖게 됐죠.<br />
+          우무사리는 사람들의 기분을<br />조용히 들어주고,<br />
+          말없이 위로를 건네는 감정 친구랍니다.</p>
+        <button id="closeModal">닫기</button>
+      </div>
+    </div>
 
-    function next(score) {
-      total += score;
-      current++;
-      if (current < shuffled.length) {
-        showQuestion();
-      } else {
-        showResult();
-      }
-    }
-
-    function showResult() {
-      document.getElementById('question-box').style.display = 'none';
-      document.getElementById('result-card').style.display = 'block';
-      document.getElementById('save-btn').style.display = 'inline-block';
-
-      const today = new Date().toLocaleDateString('ko-KR', {
-        year: 'numeric', month: 'long', day: 'numeric'
-      });
-      document.getElementById('date-label').innerText = "오늘 날짜: " + today;
-
-      let title = "혼합형 우무사리", comment = "기분이 오락가락했쭁? 그래도 잘 해냈쭁~";
-      let recovery = 60, expression = 50, energy = 50;
-
-      if (total >= 5) {
-        title = "밝음형 우무사리";
-        comment = "햇살 같은 하루였쭁! 긍정 에너지 최고쭁~";
-        recovery = 90; expression = 80; energy = 100;
-      } else if (total >= 3) {
-        title = "잔잔형 우무사리";
-        comment = "크게 흔들리지 않는 하루였쭁~ 안정감 최고쭁.";
-        recovery = 80; expression = 60; energy = 70;
-      } else if (total <= -4) {
-        title = "우울형 우무사리";
-        comment = "마음이 무거웠쭁... 우무가 옆에 있을게쭁.";
-        recovery = 30; expression = 20; energy = 10;
-      } else if (total <= -2) {
-        title = "지침형 우무사리";
-        comment = "많이 애썼쭁. 오늘은 진짜 푹 쉬자쭁.";
-        recovery = 40; expression = 30; energy = 20;
-      }
-
-      document.getElementById('result-title').innerText = title;
-      document.getElementById('result-comment').innerText = comment;
-      document.getElementById('bar1').style.width = recovery + '%';
-      document.getElementById('bar2').style.width = expression + '%';
-      document.getElementById('bar3').style.width = energy + '%';
-    }
-
-    function saveAsImage() {
-      html2canvas(document.querySelector("#result-card")).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'umu_emotion_card.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-
-    // 웰컴 인사 흐름
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("start-btn").style.display = "inline-block";
-      }, 2000);
-
-      document.getElementById("start-btn").onclick = () => {
-        document.getElementById("welcome-screen").style.display = "none";
-        document.getElementById("question-box").style.display = "block";
-        showQuestion();
-      };
-    };
-  </script>
-</body>
+    <script src="scripts.js"></script>
+  </body>
 </html>
