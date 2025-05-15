@@ -3,98 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>우무사리 위치 기반 감정 시작</title>
+  <title>우무사리 감정 위로</title>
   <style>
     body {
-      font-family: 'sans-serif';
+      font-family: sans-serif;
+      background-color: #fefae0;
       text-align: center;
-      background-color: #fffaf2;
       padding: 2rem;
     }
-
     #status {
-      margin: 2rem 0;
-      font-size: 1.3rem;
+      margin: 1.5rem 0;
+      font-size: 1.2rem;
+      font-weight: bold;
     }
-
-    #startBtn {
-      display: none;
-      font-size: 1.4rem;
-      padding: 0.8rem 1.5rem;
+    .emotion-btn {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      font-size: 1rem;
       border: none;
-      border-radius: 10px;
-      background-color: #ffcab0;
+      border-radius: 8px;
+      background-color: #ffd8b1;
       color: #333;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background 0.2s;
     }
-
-    #startBtn:hover {
-      background-color: #ffb89c;
+    .emotion-btn:hover {
+      background-color: #ffc69e;
+    }
+    #message {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      color: #444;
     }
   </style>
 </head>
 <body>
-  <h1>우무사리가 당신의 위치를 확인하고 있어요</h1>
-  <div id="status">⏳ 위치 정보 불러오는 중...</div>
-  <button id="startBtn">내 감정 알아보기</button>
+  <h1>우무사리 위치 기반 감정 위로</h1>
+  <div id="status">⏳ 위치 확인 중입니다...</div>
+  <div id="buttons"></div>
+  <div id="message"></div>
 
   <script>
     const statusEl = document.getElementById("status");
-    const startBtn = document.getElementById("startBtn");
+    const buttonsEl = document.getElementById("buttons");
+    const messageEl = document.getElementById("message");
 
-    function checkGeolocationPermission() {
-      if (!navigator.permissions || !navigator.geolocation) {
-        statusEl.innerText = "❌ 이 브라우저는 위치 서비스를 지원하지 않아요.";
-        return;
+    let savedLocation = ""; // 위치 저장용
+
+    const comfortingMessages = {
+      "행복": {
+        "서울특별시": "서울의 햇살만큼 당신의 기분도 빛나고 있어요 🌞",
+        "부산광역시": "부산의 바다처럼 드넓은 행복이 가득하길 💙",
+        "default": "지금 이 순간의 행복을 꼭 꾹 눌러서 기억해요 🎈"
+      },
+      "슬픔": {
+        "서울특별시": "서울의 바쁜 길 위에도, 당신을 위한 쉼표는 필요해요 🕊️",
+        "부산광역시": "부산의 파도처럼 슬픔도 지나갈 거예요 🌊",
+        "default": "지금 느끼는 슬픔은, 언젠가 당신을 더 따뜻하게 만들 거예요 💧"
+      },
+      "불안": {
+        "서울특별시": "서울의 불빛 속에서도 당신은 충분히 괜찮아요 🌃",
+        "부산광역시": "부산처럼 뜨거운 마음일수록 흔들리기 쉬워요, 괜찮아요 🤍",
+        "default": "불안은 변화의 신호일지도 몰라요. 천천히, 한 걸음씩 🐢"
+      },
+      "화남": {
+        "서울특별시": "화난 당신도 소중해요. 감정은 나쁜 게 아니에요 🔥",
+        "부산광역시": "부산의 바람처럼 훅 하고 털어버려요 💨",
+        "default": "화는 나를 지키려는 마음의 표현이기도 해요. 잠깐만 쉬어가요 🧘"
+      },
+      "지침": {
+        "서울특별시": "서울의 속도에 지쳤다면, 오늘은 한 템포 늦춰도 괜찮아요 ⏳",
+        "부산광역시": "파도도 밀려와야 다시 나가요. 쉬어도 괜찮아요 🐚",
+        "default": "지칠 땐 아무 것도 하지 않아도 괜찮아요. 그 자체로 충분해요 🌱"
       }
+    };
 
-      navigator.permissions.query({ name: "geolocation" }).then(function(result) {
-        if (result.state === "granted") {
-          statusEl.innerText = "✅ 위치 서비스 허용됨!";
-          getLocation();
-        } else if (result.state === "prompt") {
-          statusEl.innerText = "❔ 위치 서비스 요청 중...";
-          requestLocation();
-        } else if (result.state === "denied") {
-          statusEl.innerText = "🚫 위치 서비스가 차단되어 있어요.";
-        }
-
-        result.onchange = () => checkGeolocationPermission();
+    function showEmotionButtons() {
+      const emotions = ["행복", "슬픔", "불안", "화남", "지침"];
+      buttonsEl.innerHTML = "";
+      emotions.forEach(emotion => {
+        const btn = document.createElement("button");
+        btn.className = "emotion-btn";
+        btn.innerText = emotion;
+        btn.addEventListener("click", () => {
+          const msgSet = comfortingMessages[emotion];
+          const message = msgSet[savedLocation] || msgSet["default"];
+          messageEl.innerText = `🧡 ${message}`;
+        });
+        buttonsEl.appendChild(btn);
       });
-    }
-
-    function requestLocation() {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          const lat = position.coords.latitude.toFixed(5);
-          const lon = position.coords.longitude.toFixed(5);
-          statusEl.innerText = `📍 위치 확인 완료! 위도: ${lat}, 경도: ${lon}`;
-          startBtn.style.display = "inline-block";
-        },
-        function (error) {
-          statusEl.innerText = "위치 접근이 거부되었어요.";
-        }
-      );
     }
 
     function getLocation() {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const lat = position.coords.latitude.toFixed(5);
-        const lon = position.coords.longitude.toFixed(5);
-        statusEl.innerText = `📍 현재 위치: 위도 ${lat}, 경도 ${lon}`;
-        startBtn.style.display = "inline-block";
+      navigator.geolocation.getCurrentPosition(async function(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+          const data = await res.json();
+          const region = data.address.state || "default";
+
+          savedLocation = region;
+          statusEl.innerText = `📍 위치 확인 완료: ${region}`;
+          showEmotionButtons();
+        } catch {
+          savedLocation = "default";
+          statusEl.innerText = "⚠️ 주소 변환 실패. 기본 메시지를 사용합니다.";
+          showEmotionButtons();
+        }
+      }, function(error) {
+        savedLocation = "default";
+        statusEl.innerText = "🙅 위치 정보를 확인할 수 없어요. 기본 메시지를 사용합니다.";
+        showEmotionButtons();
       });
     }
 
-    // 감정 질문으로 이동하는 동작
-    startBtn.addEventListener("click", function () {
-      alert("이제 감정 선택 페이지로 이동합니다! 🎈");
-      // 여기에 실제 감정 선택 페이지 링크 연결 가능
-      // location.href = "emotion.html";
-    });
+    function init() {
+      if (navigator.geolocation) {
+        getLocation();
+      } else {
+        statusEl.innerText = "❌ 위치 서비스를 지원하지 않는 브라우저입니다.";
+      }
+    }
 
-    checkGeolocationPermission();
+    init();
   </script>
 </body>
 </html>
