@@ -235,7 +235,7 @@ function setMode(mode) {
         emotionBtns.style.opacity = '1';
         emotionBtns.style.pointerEvents = 'auto';
         resetBtn.style.display = 'inline-block';
-    } else if (mode === 'random') {
+    } else if (mode === 'trip') {
         showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
     } else if (mode === 'gallery') {
         showGallery();
@@ -296,7 +296,7 @@ function showMessage(mood) {
     randomUmuImage.style.display = 'none';
     saveImageBtn.style.display = 'none';
 
-    const isHidden = (currentMode === 'random' && Math.random() < 0.1);
+    const isHidden = (currentMode === 'trip' && Math.random() < 0.1);
     const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
     const message = isHidden ? hiddenMessages[randomIndex] : messages[mood][randomIndex];
     const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
@@ -375,7 +375,7 @@ function selectAgain() {
         emotionBtns.style.display = 'flex';
         selectAgainBtn.style.display = 'none';
     } else {
-        setMode('random');
+        setMode('trip');
     }
 }
 
