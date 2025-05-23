@@ -9,16 +9,17 @@
     <script src="scripts/github-pages-local-storage.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>우무사리가 전하는 말</title>
+    <title>우무사리의 감정 여행</title>
     <link rel="stylesheet" href="styles.css">
   </head>
 
   <body>
     <div id="background"></div>
     <img id="randomUmuImage" src alt="랜덤 우무 이미지" />
-    <div id="title">우무사리가 전하는 말</div>
+    <div id="status">⏳ 우무가 지도를 확인하는 중이에요.</div>
+    <div id="title">오늘 하루 어땠어?</div>
 
-    <button id="aboutBtn">About 우무사리</button>
+    <button id="aboutBtn">더 알아보기</button>
 
     <div id="subtitle"></div>
     <div class="mode-buttons">
@@ -47,7 +48,30 @@
       </button>
       <button id="mehBtn" onclick="showMessage('meh')">
         <img src="imgs/emotion_soso.webp" alt="그냥 그래 아이콘" class="emotion-icon">
-        그냥 그래
+        그저 그래
+      </button>
+    </div>
+
+    <div class="emotion-buttons-loc" style="display: none;">
+      <button id="tiredBtn" onclick="showMessage('tired')">
+        <img src="imgs/emotion_tired.webp" alt="피곤해 아이콘" class="emotion-icon">
+        피곤해
+      </button>
+      <button id="happyBtn" onclick="showMessage('happy')">
+        <img src="imgs/emotion_happy.webp" alt="행복해 아이콘" class="emotion-icon">
+        행복해
+      </button>
+      <button id="sadBtn" onclick="showMessage('sad')">
+        <img src="imgs/emotion_sad.webp" alt="속상해 아이콘" class="emotion-icon">
+        속상해
+      </button>
+      <button id="anxiousBtn" onclick="showMessage('anxious')">
+        <img src="imgs/emotion_anxious.webp" alt="불안해 아이콘" class="emotion-icon">
+        불안해
+      </button>
+      <button id="angryBtn" onclick="showMessage('angry')">
+        <img src="imgs/emotion_angry.webp" alt="화났어 아이콘" class="emotion-icon">
+        화났어
       </button>
     </div>
 
@@ -63,7 +87,7 @@
     <div id="welcome-overlay">
       <div class="welcome-content">
         <div class="speech-bubble">
-          <p>안녕! 내이름은 우무사리!<br>오늘은 어땠어? 나한테 말해봐</p>
+          <p>나랑 같이 떠나 보지 않을래?</p>
         </div>
         <img
           src="imgs/heart_anim.webp"

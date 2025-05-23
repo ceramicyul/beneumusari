@@ -1,38 +1,89 @@
 const messages = {
-    tired: ["오늘도 여기까지 온 너,\n정말 멋져우무! 😌", "숨 고르기 타임!\n우무가 옆에서 같이 쉴게요. 🌊"],
-    sad: ["감정은 숨기지 않아도 돼...\n말 없이 곁을 지켜줄게. 🌊", "오늘도 많이 애썼구나...\n살며시 꼬옥 안아줄게. 🐚"],
-    angry: ["화났구나! 참느라 수고했우무!", "속상한 일 있었지?\n얘기해도 돼 우무!"],
-    lonely: ["혼자 아니야,\n우무가 있우무!", "외로워도 괜찮아,\n함께 있우무!"],
-    meh: ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮우무"]
+    angry: {
+        "서울": "화난 너도 소중해. 감정은 나쁜 게 아니야 🔥",
+        "부산": "부산의 바람처럼 훅 하고 털어버리자 💨",
+        "default": [
+            "화났구나! 참느라 수고했우무!",
+            "속상한 일 있었지?\n얘기해도 돼 우무!",
+            "화는 나를 지키려는\n마음의 표현이기도 해.\n잠깐 쉬어가자 🧘"
+        ]
+    },
+    anxious: {
+        "서울": "서울의 불빛 속에서도\n넌 충분히 괜찮우무 🌃",
+        "부산": "부산처럼 뜨거운 마음일수록 흔들리기 쉬워, 괜찮우무 🤍",
+        "default": "불안은 변화의 신호일지도 몰라. 천천히, 한 걸음씩 🐢"
+    },
+    happy: {
+        "서울": "서울의 햇살만큼 너의 기분도 빛나고 있우무 🌞",
+        "부산": "부산의 바다처럼 드넓은 행복이 가득하길 💙",
+        "default": "지금 이 순간의 행복을 꼭 꾹 눌러서 기억해 우무 🎈"
+    },
+    hidden: {
+        "default": [
+            "우무만 알고 있는 비밀 응원이야!\n우무무!✨",
+            "진짜 괜찮아,\n우무가 확인했우무!✅",
+            "이건 히든 메시지야.\n너에게만 주는거야 우무!💝",
+            "무거울텐데 그 짐 내려우무!\n멋짐~😘",
+            "당신은 사슴이에요 우무!\n내 마음을 녹용~🫎"
+        ]
+    },
+    lonely: {
+        "default": ["혼자 아니야,\n우무가 있우무!", "외로워도 괜찮아,\n함께 있우무!"]
+    },
+    meh: {
+        "default": ["그냥 그런 날도 있는 거야 우무~", "아무것도 안 해도 괜찮우무"]
+    },
+    sad: {
+        "서울": "서울의 바쁜 길 위에도,\n널 위한 쉼표는 필요해 🕊️",
+        "부산": "부산의 파도처럼\n슬픔도 지나갈 거야 🌊",
+        "default": [
+            "감정은 숨기지 않아도 돼...\n말 없이 곁을 지켜줄게. 🌊",
+            "오늘도 많이 애썼구나...\n살며시 꼬옥 안아줄게. 🐚",
+            "지금 느끼는 슬픔은,\n언젠가 널 더 따뜻하게 만들 거야 💧"
+        ]
+    },
+    tired: {
+        "서울": "서울의 속도에 지쳤다면,\n오늘은 한 템포 늦춰도 괜찮우무 ⏳",
+        "부산": "파도도 밀려와야 다시 나가는 거니까.\n쉬어도 괜찮우무 🐚",
+        "default": [
+            "오늘도 여기까지 온 너,\n정말 멋져우무! 😌",
+            "숨 고르기 타임!\n우무가 옆에서 같이 쉴게요. 🌊",
+            "지칠 땐 아무 것도 하지 않아도 괜찮우무.\n그 자체로 충분해 🌱"
+        ]
+    },
 };
 
 const currentmoods = {
-    tired: ["피곤한"],
-    sad: ["슬픈"],
     angry: ["화난"],
+    anxious: ["불안한"],
+    happy: ["행복한"],
+    hidden: ["숨은"],
     lonely: ["외로운"],
     meh: ["그저그런"],
-    hidden: ["숨은"]
+    sad: ["속상한"],
+    tired: ["피곤한"]
 };
 
 const currentmoodsForImg = {
-    tired: ["피곤해"],
-    sad: ["슬퍼"],
     angry: ["화나"],
+    anxious: ["불안해"],
+    happy: ["행복해"],
+    hidden: ["✨"],
     lonely: ["외로워"],
     meh: ["그저그래"],
-    hidden: ["✨"]
+    sad: ["속상해"],
+    tired: ["피곤해"],
 };
 
-const hiddenMessages = [
-    "우무만 알고 있는 비밀 응원이야!\n우무무!✨",
-    "진짜 괜찮아,\n우무가 확인했우무!✅",
-    "이건 히든 메시지야.\n너에게만 주는거야 우무!💝",
-    "무거울텐데 그 짐 내려우무!\n멋짐~😘",
-    "당신은 사슴이에요 우무!\n내 마음을 녹용~🫎"
+const umuImages = [
+    'imgs/KakaoTalk_20250322_153719869.webp',
+    'imgs/KakaoTalk_20250322_153719869_01.webp',
+    'imgs/KakaoTalk_20250322_153719869_02.webp',
+    'imgs/KakaoTalk_20250322_153719869_03.webp',
+    'imgs/KakaoTalk_20250417_112205874.webp'
 ];
 
-const umuImages = [
+const umuImagesLoc = [
     'imgs/KakaoTalk_20250322_153719869.webp',
     'imgs/KakaoTalk_20250322_153719869_01.webp',
     'imgs/KakaoTalk_20250322_153719869_02.webp',
@@ -45,6 +96,7 @@ const selectAgainBtn = document.getElementById('selectAgainBtn');
 const saveImageBtn = document.getElementById('saveImageBtn');
 const resetBtn = document.getElementById('resetBtn');
 const emotionBtns = document.querySelector('.emotion-buttons');
+const emotionBtnsLoc = document.querySelector('.emotion-buttons-loc');
 const modeBtns = document.querySelector('.mode-buttons');
 const hiddenLabel = document.getElementById('hidden-label');
 const randomUmuImage = document.getElementById('randomUmuImage');
@@ -63,6 +115,7 @@ let currentMsgBoxState = {};
 let currentTextContent = "";
 let currentMood = "";
 let today = "";
+let savedLocation = "";
 const dateKey = 'umu-today';
 const countKey = 'umu-count';
 const savedImageKey = 'umu-saved-image';
@@ -119,7 +172,7 @@ function updateSubtitle(show) {
         if (shouldLimitMode()) {
             subtitle.textContent = '오늘도 고생 했어! 내일 또 만나!';
         } else {
-            subtitle.textContent = '하루 세번! 우무가 위로해 줄게!';
+            subtitle.textContent = '하루 세 번! 우무가 들어 줄게!';
         }
         subtitle.style.display = 'inline-block';
         return;
@@ -231,12 +284,17 @@ function setMode(mode) {
     updateGalleryModeBtn(false);
     title.style.display = 'none';
     if (mode === 'emotion') {
+        emotionBtnsLoc.style.display = 'none';
         emotionBtns.style.display = 'flex';
         emotionBtns.style.opacity = '1';
         emotionBtns.style.pointerEvents = 'auto';
         resetBtn.style.display = 'inline-block';
     } else if (mode === 'trip') {
-        showMessage(Object.keys(messages)[Math.floor(Math.random() * 5)]);
+        emotionBtns.style.display = 'none';
+        emotionBtnsLoc.style.display = 'flex';
+        emotionBtnsLoc.style.opacity = '1';
+        emotionBtnsLoc.style.pointerEvents = 'auto';
+        resetBtn.style.display = 'inline-block';
     } else if (mode === 'gallery') {
         showGallery();
     }
@@ -296,28 +354,26 @@ function showMessage(mood) {
     randomUmuImage.style.display = 'none';
     saveImageBtn.style.display = 'none';
 
-    const isHidden = (currentMode === 'trip' && Math.random() < 0.1);
-    const randomIndex = Math.floor(Math.random() * (isHidden ? hiddenMessages.length : messages[mood].length));
-    const message = isHidden ? hiddenMessages[randomIndex] : messages[mood][randomIndex];
-    const randomImg = umuImages[Math.floor(Math.random() * umuImages.length)];
-    currentMood = isHidden ? 'hidden' : mood;
+    const isTrip = (currentMode === 'trip');
+    const randomIndex = isTrip ? Math.floor(Math.random() * (messages[mood][savedLocation].length)) : Math.floor(Math.random() * (messages[mood]["default"].length));
+    const message = isTrip ? messages[mood][savedLocation][randomIndex] : messages[mood]["default"][randomIndex];
+    const randomImg = isTrip ? umuImagesLoc[Math.floor(Math.random() * umuImagesLoc.length)] : umuImages[Math.floor(Math.random() * umuImages.length)];
+    currentMood = mood;
 
     randomUmuImage.onload = function() {
         randomUmuImage.style.display = 'block';
         typeMessage(msgBox, message);
-        hiddenLabel.style.display = isHidden ? 'block' : 'none';
-        msgBox.classList.toggle("hidden", isHidden);
         msgBox.style.display = 'block';
         emotionBtns.style.display = 'none';
+        emotionBtnsLoc.style.display = 'none';
     };
 
     randomUmuImage.onerror = function() {
         randomUmuImage.style.display = 'none';
         typeMessage(msgBox, message);
-        hiddenLabel.style.display = isHidden ? 'block' : 'none';
-        msgBox.classList.toggle("hidden", isHidden);
         msgBox.style.display = 'block';
         emotionBtns.style.display = 'none';
+        emotionBtnsLoc.style.display = 'none';
         saveImageBtn.style.display = 'none';
     };
 
@@ -333,6 +389,7 @@ function showGallery() {
     updateSubtitle(false);
     msgBox.style.display = 'none';
     emotionBtns.style.display = 'none';
+    emotionBtnsLoc.style.display = 'none';
     resetBtn.style.display = 'inline-block';
     selectAgainBtn.style.display = 'none';
 
@@ -374,8 +431,9 @@ function selectAgain() {
     if (currentMode === 'emotion') {
         emotionBtns.style.display = 'flex';
         selectAgainBtn.style.display = 'none';
-    } else {
-        setMode('trip');
+    } else if (currentMode === 'trip') {
+        emotionBtnsLoc.style.display = 'flex';
+        selectAgainBtn.style.display = 'none';
     }
 }
 
@@ -398,6 +456,7 @@ function reset() {
     updateSubtitle(true);
 
     emotionBtns.style.display = 'none';
+    emotionBtnsLoc.style.display = 'none';
 
     selectAgainBtn.style.display = 'none';
     resetBtn.style.display = 'none';
@@ -462,5 +521,35 @@ closeModal.onclick = function() {
 window.onclick = function(e) {
     if (e.target === aboutModal) {
         aboutModal.style.display = 'none';
+    }
+};
+window.onload = function() {
+    const statusEl = document.getElementById("status");
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                try {
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+                    );
+                    const data = await response.json();
+                    const region = data.address.state || data.address.city;
+                    savedLocation = region;
+
+                    statusEl.innerText = `📍 ${region}`;
+                } catch (error) {
+                    savedLocation = "";
+                    statusEl.innerText = "⚠️ 우무가 지도 읽기에 실패했어요...";
+                }
+            },
+            function() {
+                savedLocation = "";
+                statusEl.innerText = "⚠️ 우무가 지도 읽기에 실패했어요...";
+            });
+    } else {
+        savedLocation = "";
+        statusEl.innerText = "🙅 이 기기에서는 위치 정보를 사용할 수 없어요...";
     }
 };

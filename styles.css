@@ -55,6 +55,12 @@ body {
     pointer-events: none;
 }
 
+#status {
+    margin: 1.5rem 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
 #title {
     display: none;
     margin-top: 20px;
@@ -78,6 +84,7 @@ body {
 
 .mode-buttons,
 .emotion-buttons,
+.emotion-buttons-loc,
 #galleryBtn {
     display: flex;
     flex-wrap: wrap;
@@ -138,12 +145,28 @@ button:active {
     background-color: #d1c7ec;
 }
 
+#happyBtn {
+    background-color: #ffffff;
+}
+
+#happyBtn:hover {
+    background-color: #fffa60;
+}
+
 #sadBtn {
     background-color: #ffffff;
 }
 
 #sadBtn:hover {
     background-color: #b7d8f4;
+}
+
+#anxiousBtn {
+    background-color: #ffffff;
+}
+
+#anxiousBtn:hover {
+    background-color: #a5d1ff;
 }
 
 #angryBtn {
